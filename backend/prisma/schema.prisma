@@ -1,0 +1,366 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ──────────────────────────────────────────────
+// ENUMS
+// ──────────────────────────────────────────────
+
+enum Role {
+  SUPER_ADMIN
+  BRANCH_MANAGER
+  SALESMAN
+}
+
+enum StockStatus {
+  IN_STOCK
+  SOLD
+  IN_TRANSIT
+  RESERVED
+  RETURNED
+}
+
+enum SaleStatus {
+  COMPLETED
+  RETURNED
+  PARTIALLY_RETURNED
+}
+
+enum WarrantyStatus {
+  ACTIVE
+  EXPIRED
+  VOID
+}
+
+enum PurchaseOrderStatus {
+  DRAFT
+  SENT
+  PARTIALLY_RECEIVED
+  RECEIVED
+  CANCELLED
+}
+
+enum MovementType {
+  INTAKE
+  SALE
+  RETURN
+  TRANSFER_OUT
+  TRANSFER_IN
+  ADJUSTMENT
+  BULK_INTAKE
+}
+
+// ──────────────────────────────────────────────
+// TENANT FOUNDATION
+// ──────────────────────────────────────────────
+
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String
+  plan      String   @default("single")
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+
+  branches       Branch[]
+  users          User[]
+  products       Product[]
+  stockItems     StockItem[]
+  sales          Sale[]
+  customers      Customer[]
+  warranties     Warranty[]
+  suppliers      Supplier[]
+  purchaseOrders PurchaseOrder[]
+  expenses       Expense[]
+  stockMovements StockMovement[]
+
+  @@map("tenants")
+}
+
+model Branch {
+  id        String   @id @default(uuid())
+  tenantId  String
+  name      String
+  address   String?
+  createdAt DateTime @default(now())
+
+  tenant         Tenant          @relation(fields: [tenantId], references: [id])
+  users          User[]
+  stockItems     StockItem[]
+  sales          Sale[]
+  customers      Customer[]
+  expenses       Expense[]
+  stockMovements StockMovement[]
+
+  @@index([tenantId])
+  @@map("branches")
+}
+
+// ──────────────────────────────────────────────
+// USERS & AUTH
+// ──────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(uuid())
+  tenantId     String
+  branchId     String?  // null = Super Admin (head office)
+  role         Role
+  email        String
+  passwordHash String
+  name         String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  tenant Tenant  @relation(fields: [tenantId], references: [id])
+  branch Branch? @relation(fields: [branchId], references: [id])
+
+  sales          Sale[]
+  stockMovements StockMovement[]
+
+  @@unique([tenantId, email]) // email har tenant ke andar unique
+  @@index([tenantId])
+  @@map("users")
+}
+
+// ──────────────────────────────────────────────
+// CATALOGUE (shared across branches)
+// ──────────────────────────────────────────────
+
+model Product {
+  id        String   @id @default(uuid())
+  tenantId  String
+  brand     String
+  model     String
+  specs     String?
+  category  String
+  sku       String
+  barcode   String?
+  createdAt DateTime @default(now())
+
+  tenant     Tenant      @relation(fields: [tenantId], references: [id])
+  stockItems StockItem[]
+  poLines    POLine[]
+
+  @@unique([tenantId, sku])
+  @@index([tenantId])
+  @@map("products")
+}
+
+// ──────────────────────────────────────────────
+// INVENTORY
+// ──────────────────────────────────────────────
+
+model StockItem {
+  id           String      @id @default(uuid())
+  tenantId     String
+  branchId     String
+  productId    String
+  serialNumber String?     // laptops = serial; accessories = null
+  quantity     Int         @default(1) // accessories ke liye qty; serialised = 1
+  status       StockStatus @default(IN_STOCK)
+  costPrice    Decimal?    @db.Decimal(12, 2) // salesman-facing endpoints mein kabhi select na karein
+  createdAt    DateTime    @default(now())
+
+  tenant    Tenant     @relation(fields: [tenantId], references: [id])
+  branch    Branch     @relation(fields: [branchId], references: [id])
+  product   Product    @relation(fields: [productId], references: [id])
+  saleLines SaleLine[]
+  warranties Warranty[]
+
+  @@unique([tenantId, serialNumber]) // serial poore tenant mein unique
+  @@index([tenantId, branchId])
+  @@index([productId])
+  @@map("stock_items")
+}
+
+// ──────────────────────────────────────────────
+// SALES
+// ──────────────────────────────────────────────
+
+model Sale {
+  id         String     @id @default(uuid())
+  tenantId   String
+  branchId   String
+  salesmanId String
+  customerId String?
+  total      Decimal    @db.Decimal(12, 2)
+  status     SaleStatus @default(COMPLETED)
+  createdAt  DateTime   @default(now())
+
+  tenant   Tenant    @relation(fields: [tenantId], references: [id])
+  branch   Branch    @relation(fields: [branchId], references: [id])
+  salesman User      @relation(fields: [salesmanId], references: [id])
+  customer Customer? @relation(fields: [customerId], references: [id])
+
+  lines    SaleLine[]
+  payments Payment[]
+
+  @@index([tenantId, branchId])
+  @@index([createdAt])
+  @@map("sales")
+}
+
+model SaleLine {
+  id          String  @id @default(uuid())
+  saleId      String
+  stockItemId String?
+  productId   String?
+  price       Decimal @db.Decimal(12, 2)
+  discount    Decimal @default(0) @db.Decimal(12, 2)
+
+  sale      Sale       @relation(fields: [saleId], references: [id])
+  stockItem StockItem? @relation(fields: [stockItemId], references: [id])
+
+  @@index([saleId])
+  @@map("sale_lines")
+}
+
+model Payment {
+  id     String  @id @default(uuid())
+  saleId String
+  method String  // cash, card, transfer
+  amount Decimal @db.Decimal(12, 2)
+
+  sale Sale @relation(fields: [saleId], references: [id])
+
+  @@index([saleId])
+  @@map("payments")
+}
+
+// ──────────────────────────────────────────────
+// CRM & WARRANTY
+// ──────────────────────────────────────────────
+
+model Customer {
+  id        String   @id @default(uuid())
+  tenantId  String
+  branchId  String   // creating branch
+  name      String
+  contact   String?
+  type      String?  // individual, business
+  tags      String[]
+  createdAt DateTime @default(now())
+
+  tenant     Tenant      @relation(fields: [tenantId], references: [id])
+  branch     Branch      @relation(fields: [branchId], references: [id])
+  sales      Sale[]
+  warranties Warranty[]
+
+  @@index([tenantId, branchId])
+  @@index([contact])
+  @@map("customers")
+}
+
+model Warranty {
+  id          String         @id @default(uuid())
+  tenantId    String
+  customerId  String
+  stockItemId String?
+  serial      String?
+  startDate   DateTime
+  endDate     DateTime
+  status      WarrantyStatus @default(ACTIVE)
+
+  tenant    Tenant     @relation(fields: [tenantId], references: [id])
+  customer  Customer   @relation(fields: [customerId], references: [id])
+  stockItem StockItem? @relation(fields: [stockItemId], references: [id])
+
+  @@index([tenantId])
+  @@map("warranties")
+}
+
+// ──────────────────────────────────────────────
+// PURCHASING
+// ──────────────────────────────────────────────
+
+model Supplier {
+  id       String  @id @default(uuid())
+  tenantId String
+  name     String
+  contact  String?
+  terms    String?
+
+  tenant         Tenant          @relation(fields: [tenantId], references: [id])
+  purchaseOrders PurchaseOrder[]
+
+  @@index([tenantId])
+  @@map("suppliers")
+}
+
+model PurchaseOrder {
+  id                  String              @id @default(uuid())
+  tenantId            String
+  supplierId          String
+  destinationBranchId String
+  status              PurchaseOrderStatus @default(DRAFT)
+  createdAt           DateTime            @default(now())
+
+  tenant   Tenant   @relation(fields: [tenantId], references: [id])
+  supplier Supplier @relation(fields: [supplierId], references: [id])
+  lines    POLine[]
+
+  @@index([tenantId])
+  @@map("purchase_orders")
+}
+
+model POLine {
+  id        String  @id @default(uuid())
+  poId      String
+  productId String
+  quantity  Int
+  costPrice Decimal @db.Decimal(12, 2)
+
+  po      PurchaseOrder @relation(fields: [poId], references: [id])
+  product Product       @relation(fields: [productId], references: [id])
+
+  @@index([poId])
+  @@map("po_lines")
+}
+
+// ──────────────────────────────────────────────
+// FINANCE
+// ──────────────────────────────────────────────
+
+model Expense {
+  id       String   @id @default(uuid())
+  tenantId String
+  branchId String
+  category String
+  amount   Decimal  @db.Decimal(12, 2)
+  date     DateTime
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  branch Branch @relation(fields: [branchId], references: [id])
+
+  @@index([tenantId, branchId])
+  @@map("expenses")
+}
+
+// ──────────────────────────────────────────────
+// AUDIT / STOCK MOVEMENT (append-only)
+// ──────────────────────────────────────────────
+
+model StockMovement {
+  id        String       @id @default(uuid())
+  tenantId  String
+  branchId  String
+  userId    String
+  type      MovementType
+  reason    String?
+  stockItemId String?
+  metadata  Json?
+  timestamp DateTime     @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  branch Branch @relation(fields: [branchId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@index([tenantId, branchId])
+  @@index([timestamp])
+  @@map("stock_movements")
+}
