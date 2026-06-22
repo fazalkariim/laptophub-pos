@@ -7,6 +7,7 @@ import { TenantMiddleware } from './context/tenant.middleware';
 import { BranchesModule } from './modules/branches/branches.module';
 import { UsersModule } from './modules/users/users.module';
 import { CatalogModule } from './modules/catalog/catalog.module';
+import { InventoryModule } from './modules/inventory/inventory.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { CatalogModule } from './modules/catalog/catalog.module';
     BranchesModule,
     UsersModule,
     CatalogModule,
+    InventoryModule,
   ],
   controllers: [],
   providers: [],
