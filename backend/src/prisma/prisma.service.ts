@@ -2,8 +2,8 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '../generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 
-// Wo models jin par tenant scoping NAHI lagani (Tenant table khud tenantId nahi rakhti)
-const TENANT_EXEMPT_MODELS = ['Tenant'];
+// Wo models jinke paas tenantId column NAHI hai — scoping inpe nahi lagani
+const TENANT_EXEMPT_MODELS = ['Tenant', 'SaleLine', 'Payment', 'POLine'];
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {

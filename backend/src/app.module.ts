@@ -8,6 +8,7 @@ import { BranchesModule } from './modules/branches/branches.module';
 import { UsersModule } from './modules/users/users.module';
 import { CatalogModule } from './modules/catalog/catalog.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
+import { SalesModule } from './modules/sales/sales.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { InventoryModule } from './modules/inventory/inventory.module';
     UsersModule,
     CatalogModule,
     InventoryModule,
+    SalesModule,
   ],
   controllers: [],
   providers: [],
