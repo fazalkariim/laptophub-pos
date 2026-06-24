@@ -10,6 +10,7 @@
  */
 export type * from './models/Tenant.js'
 export type * from './models/Branch.js'
+export type * from './models/Counter.js'
 export type * from './models/User.js'
 export type * from './models/Product.js'
 export type * from './models/StockItem.js'

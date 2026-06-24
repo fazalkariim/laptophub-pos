@@ -28,6 +28,11 @@ export type Tenant = Prisma.TenantModel
  */
 export type Branch = Prisma.BranchModel
 /**
+ * Model Counter
+ * 
+ */
+export type Counter = Prisma.CounterModel
+/**
  * Model User
  * 
  */

@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Tenant: 'Tenant',
   Branch: 'Branch',
+  Counter: 'Counter',
   User: 'User',
   Product: 'Product',
   StockItem: 'StockItem',
@@ -106,6 +107,16 @@ export const BranchScalarFieldEnum = {
 export type BranchScalarFieldEnum = (typeof BranchScalarFieldEnum)[keyof typeof BranchScalarFieldEnum]
 
 
+export const CounterScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  name: 'name',
+  value: 'value'
+} as const
+
+export type CounterScalarFieldEnum = (typeof CounterScalarFieldEnum)[keyof typeof CounterScalarFieldEnum]
+
+
 export const UserScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -155,9 +166,14 @@ export const SaleScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
   branchId: 'branchId',
+  invoiceNumber: 'invoiceNumber',
   salesmanId: 'salesmanId',
   customerId: 'customerId',
+  subtotal: 'subtotal',
+  totalDiscount: 'totalDiscount',
   total: 'total',
+  amountPaid: 'amountPaid',
+  paymentStatus: 'paymentStatus',
   status: 'status',
   createdAt: 'createdAt'
 } as const

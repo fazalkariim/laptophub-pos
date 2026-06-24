@@ -610,14 +610,6 @@ export type StockItemUncheckedUpdateManyWithoutProductNestedInput = {
   deleteMany?: Prisma.StockItemScalarWhereInput | Prisma.StockItemScalarWhereInput[]
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type EnumStockStatusFieldUpdateOperationsInput = {
   set?: $Enums.StockStatus
 }

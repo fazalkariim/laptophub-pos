@@ -58,10 +58,10 @@ export class CreateSaleDto {
   @Type(() => SaleLineInput)
   lines: SaleLineInput[];
 
-  @ApiProperty({ type: [PaymentInput] })
+  @ApiProperty({ type: [PaymentInput], required: false, description: 'Payments — udhaar ke liye khaali ya kam ho sakta hai' })
+  @IsOptional()
   @IsArray()
-  @ArrayMinSize(1, { message: 'Kam se kam ek payment zaroori hai' })
   @ValidateNested({ each: true })
   @Type(() => PaymentInput)
-  payments: PaymentInput[];
+  payments?: PaymentInput[];
 }

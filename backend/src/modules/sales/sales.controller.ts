@@ -42,4 +42,10 @@ export class SalesController {
   returnSale(@Body() dto: ReturnSaleDto, @CurrentUser() user: any) {
     return this.salesService.returnSale(dto, user);
   }
+
+  @Get(':id/receipt')
+  @ApiOperation({ summary: 'Sale ka receipt data (printing frontend pe)' })
+  getReceipt(@Param('id') id: string) {
+    return this.salesService.getReceipt(id);
+  }
 }

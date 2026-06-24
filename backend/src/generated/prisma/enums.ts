@@ -69,3 +69,12 @@ export const MovementType = {
 } as const
 
 export type MovementType = (typeof MovementType)[keyof typeof MovementType]
+
+
+export const PaymentStatus = {
+  PAID: 'PAID',
+  PARTIAL: 'PARTIAL',
+  UNPAID: 'UNPAID'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
