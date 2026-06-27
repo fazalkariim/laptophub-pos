@@ -7,6 +7,8 @@ import { TenantPrismaService } from '../../prisma/tenant-prisma.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { DISCOUNT_LIMITS } from './discount-limits';
 import { ReturnSaleDto } from './dto/return-sale.dto';
+import { DEFAULT_WARRANTY_MONTHS } from './warranty-config';
+import { AddPaymentDto } from './dto/add-payment.dto';
 
 interface CurrentUser {
   userId: string;
@@ -187,14 +189,6 @@ export class SalesService {
           `Item ${item.serialNumber} available nahi (status: ${item.status})`,
         );
       }
-      if (!item.serialNumber) {
-        const wantQty = line.quantity ?? 1;
-        if (item.quantity < wantQty) {
-          throw new BadRequestException(
-            `Stock kaafi nahi (available: ${item.quantity})`,
-          );
-        }
-      }
     }
 
     // 2b. Discount limit check (role ke hisaab se)
@@ -250,6 +244,23 @@ export class SalesService {
         'Udhaar / partial payment sirf Manager ya Admin approve kar sakta hai. Poora payment lें.',
       );
     }
+    // Customer validation  ← NAYA
+    // Agar customerId diya hai, to wo asli customer hona chahiye
+    if (dto.customerId) {
+      const customer = await this.tenantPrisma.client.customer.findFirst({
+        where: { id: dto.customerId },
+      });
+      if (!customer) {
+        throw new NotFoundException('Customer nahi mila');
+      }
+    }
+
+    // Udhaar (PARTIAL/UNPAID) ke liye customer zaroori  ← NAYA
+    if (paymentStatus !== 'PAID' && !dto.customerId) {
+      throw new BadRequestException(
+        'Udhaar sale ke liye customer zaroori hai. Pehle customer select/banayein.',
+      );
+    }
 
     // 5. Invoice number generate karo + sab kuch transaction mein  ← NAYA (counter)
     const sale = await this.tenantPrisma.client.$transaction(async (tx) => {
@@ -291,11 +302,29 @@ export class SalesService {
             discount: line.discount ?? 0,
           } as any,
         });
-        if (item.serialNumber) {
+       if (item.serialNumber) {
           await tx.stockItem.update({
             where: { id: item.id },
             data: { status: 'SOLD' } as any,
           });
+
+          // Warranty auto-create — sirf serial wale item + customer ho to  ← NAYA
+          if (dto.customerId) {
+            const startDate = new Date();
+            const endDate = new Date();
+            endDate.setMonth(endDate.getMonth() + DEFAULT_WARRANTY_MONTHS);
+
+            await tx.warranty.create({
+              data: {
+                customerId: dto.customerId,
+                stockItemId: item.id,
+                serial: item.serialNumber,
+                startDate,
+                endDate,
+                status: 'ACTIVE',
+              } as any,
+            });
+          }
         } else {
           await tx.stockItem.update({
             where: { id: item.id },
@@ -333,6 +362,212 @@ export class SalesService {
     return this.findOne(sale.id);
   }
 
+  // Ek customer ki saari warranties
+  async customerWarranties(customerId: string) {
+    const customer = await this.tenantPrisma.client.customer.findFirst({
+      where: { id: customerId },
+      select: { id: true, name: true },
+    });
+    if (!customer) {
+      throw new NotFoundException('Customer nahi mila');
+    }
+
+    const warranties = await this.tenantPrisma.client.warranty.findMany({
+      where: { customerId },
+      include: {
+        stockItem: {
+          include: { product: { select: { brand: true, model: true } } },
+        },
+      },
+      orderBy: { endDate: 'asc' },
+    });
+
+    const now = new Date();
+    return {
+      customer,
+      warranties: warranties.map((w) => {
+        const daysLeft = Math.ceil(
+          (new Date(w.endDate).getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
+        );
+        return {
+          id: w.id,
+          serial: w.serial,
+          product: w.stockItem?.product
+            ? `${w.stockItem.product.brand} ${w.stockItem.product.model}`
+            : 'Item',
+          startDate: w.startDate,
+          endDate: w.endDate,
+          status: w.status,
+          daysLeft, // negative = expire ho chuki
+          isExpired: daysLeft < 0,
+        };
+      }),
+    };
+  }
+
+  // Expiring warranties — agle X dino mein khatam ho rahi (follow-up ke liye)
+  async expiringWarranties(branchId: string, withinDays: number = 30) {
+    const now = new Date();
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() + withinDays);
+
+    // Is branch ke stock items ki warranties jo cutoff se pehle khatam ho rahi
+    const warranties = await this.tenantPrisma.client.warranty.findMany({
+      where: {
+        status: 'ACTIVE',
+        endDate: { gte: now, lte: cutoff },
+        stockItem: { branchId },
+      },
+      include: {
+        customer: { select: { name: true, contact: true } },
+        stockItem: {
+          include: { product: { select: { brand: true, model: true } } },
+        },
+      },
+      orderBy: { endDate: 'asc' },
+    });
+
+    return warranties.map((w) => ({
+      id: w.id,
+      serial: w.serial,
+      product: w.stockItem?.product
+        ? `${w.stockItem.product.brand} ${w.stockItem.product.model}`
+        : 'Item',
+      customer: w.customer ? { name: w.customer.name, contact: w.customer.contact } : null,
+      endDate: w.endDate,
+    }));
+  }
+
+  // Customer ki purchase history + receivables (kitna baqi)
+  async customerHistory(customerId: string) {
+    // Customer maujood hai?
+    const customer = await this.tenantPrisma.client.customer.findFirst({
+      where: { id: customerId },
+      select: { id: true, name: true, contact: true },
+    });
+    if (!customer) {
+      throw new NotFoundException('Customer nahi mila');
+    }
+
+    // Is customer ki saari sales (lines + payments ke saath)
+    const sales = await this.tenantPrisma.client.sale.findMany({
+      where: { customerId },
+      include: {
+        lines: {
+          include: {
+            stockItem: {
+              include: { product: { select: { brand: true, model: true } } },
+            },
+          },
+        },
+        payments: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    // Receivables nikaalo — har sale ka balance jodo
+    let totalPurchased = 0;
+    let totalPaid = 0;
+    let totalDue = 0;
+
+    const history = sales.map((sale) => {
+      const total = Number(sale.total);
+      const paid = Number(sale.amountPaid);
+      const due = total - paid;
+
+      totalPurchased += total;
+      totalPaid += paid;
+      totalDue += due;
+
+      return {
+        saleId: sale.id,
+        invoiceNumber: sale.invoiceNumber,
+        date: sale.createdAt,
+        items: sale.lines.map((l) =>
+          l.stockItem?.product
+            ? `${l.stockItem.product.brand} ${l.stockItem.product.model}`
+            : 'Item',
+        ),
+        total,
+        paid,
+        due,
+        paymentStatus: sale.paymentStatus,
+        saleStatus: sale.status,
+      };
+    });
+
+    return {
+      customer,
+      summary: {
+        totalPurchased,   // kitne ka total maal liya
+        totalPaid,        // kitna pay kiya
+        totalDue,         // kitna baqi hai (receivables) ← sabse important
+        salesCount: sales.length,
+      },
+      history,
+    };
+  }
+
+  // Udhaar collect karna — existing sale pe naya payment add karo
+  async addPayment(dto: AddPaymentDto, user: CurrentUser) {
+    // 1. Sale laao
+    const sale = await this.tenantPrisma.client.sale.findFirst({
+      where: { id: dto.saleId },
+    });
+    if (!sale) {
+      throw new NotFoundException('Sale nahi mili');
+    }
+
+    // 2. Branch scope: Manager/Salesman sirf apni branch ki sale
+    if (user.role !== 'SUPER_ADMIN' && sale.branchId !== user.branchId) {
+      throw new BadRequestException('Aap sirf apni branch ki sale pe payment le sakte hain');
+    }
+
+    // 3. Sale pehle se poori paid to nahi?
+    const currentPaid = Number(sale.amountPaid);
+    const total = Number(sale.total);
+    const currentDue = total - currentPaid;
+
+    if (currentDue <= 0) {
+      throw new BadRequestException('Is sale ka poora payment ho chuka hai, koi balance baqi nahi');
+    }
+
+    // 4. Naya payment balance se zyada to nahi?
+    if (dto.amount > currentDue + 0.01) {
+      throw new BadRequestException(
+        `Payment (${dto.amount}) baqi balance (${currentDue}) se zyada nahi ho sakta`,
+      );
+    }
+
+    // 5. Naya amountPaid aur status nikaalo
+    const newAmountPaid = currentPaid + dto.amount;
+    const newDue = total - newAmountPaid;
+    const newPaymentStatus = newDue <= 0.01 ? 'PAID' : 'PARTIAL';
+
+    // 6. TRANSACTION: payment record + sale update
+    await this.tenantPrisma.client.$transaction(async (tx) => {
+      // (a) Payment row banao
+      await tx.payment.create({
+        data: {
+          saleId: sale.id,
+          method: dto.method,
+          amount: dto.amount,
+        } as any,
+      });
+
+      // (b) Sale ka amountPaid aur status update
+      await tx.sale.update({
+        where: { id: sale.id },
+        data: {
+          amountPaid: newAmountPaid,
+          paymentStatus: newPaymentStatus,
+        } as any,
+      });
+    });
+
+    return this.findOne(sale.id);
+  }
+
   // Ek sale dekho (lines + payments ke saath)
   async findOne(id: string) {
     const sale = await this.tenantPrisma.client.sale.findFirst({
@@ -357,3 +592,4 @@ export class SalesService {
     });
   }
 }
+

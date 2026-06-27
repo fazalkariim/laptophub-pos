@@ -8,6 +8,8 @@ import { BranchScopeGuard } from '../../common/guards/branch-scope.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { ReturnSaleDto } from './dto/return-sale.dto';
+import { AddPaymentDto } from './dto/add-payment.dto';
+import { Query } from '@nestjs/common';
 
 @ApiTags('sales')
 @ApiBearerAuth()
@@ -28,8 +30,14 @@ export class SalesController {
   findByBranch(@Param('branchId') branchId: string) {
     return this.salesService.findByBranch(branchId);
   }
-  
 
+  @Post('payments')
+  @Roles('SUPER_ADMIN', 'BRANCH_MANAGER', 'SALESMAN')  // koi bhi collect kar sakta hai
+  @ApiOperation({ summary: 'Udhaar collect karein (existing sale pe payment)' })
+  addPayment(@Body() dto: AddPaymentDto, @CurrentUser() user: any) {
+    return this.salesService.addPayment(dto, user);
+  }
+  
   @Get(':id')
   @ApiOperation({ summary: 'Ek sale dekhein' })
   findOne(@Param('id') id: string) {
@@ -41,6 +49,30 @@ export class SalesController {
   @ApiOperation({ summary: 'Sale return karein (manager approval zaroori)' })
   returnSale(@Body() dto: ReturnSaleDto, @CurrentUser() user: any) {
     return this.salesService.returnSale(dto, user);
+  }
+
+  @Get('customer/:customerId/warranties')
+  @ApiOperation({ summary: 'Customer ki warranties (days left ke saath)' })
+  customerWarranties(@Param('customerId') customerId: string) {
+    return this.salesService.customerWarranties(customerId);
+  }
+
+  @Get('warranties/expiring/:branchId')
+  @ApiOperation({ summary: 'Expiring warranties (follow-up ke liye)' })
+  expiringWarranties(
+    @Param('branchId') branchId: string,
+    @Query('withinDays') withinDays?: string,
+  ) {
+    return this.salesService.expiringWarranties(
+      branchId,
+      withinDays ? parseInt(withinDays, 10) : 30,
+    );
+  }
+
+  @Get('customer/:customerId/history')
+  @ApiOperation({ summary: 'Customer ki purchase history + baqi paise' })
+  customerHistory(@Param('customerId') customerId: string) {
+    return this.salesService.customerHistory(customerId);
   }
 
   @Get(':id/receipt')

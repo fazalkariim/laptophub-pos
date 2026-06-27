@@ -1,0 +1,1 @@
+export const DEFAULT_WARRANTY_MONTHS = 12; // 1 saal

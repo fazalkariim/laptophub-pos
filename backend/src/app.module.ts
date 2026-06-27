@@ -9,6 +9,7 @@ import { UsersModule } from './modules/users/users.module';
 import { CatalogModule } from './modules/catalog/catalog.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
 import { SalesModule } from './modules/sales/sales.module';
+import { CustomersModule } from './modules/customers/customers.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { SalesModule } from './modules/sales/sales.module';
     CatalogModule,
     InventoryModule,
     SalesModule,
+    CustomersModule,
   ],
   controllers: [],
   providers: [],
