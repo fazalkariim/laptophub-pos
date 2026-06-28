@@ -393,6 +393,8 @@ export const ModelName = {
   Sale: 'Sale',
   SaleLine: 'SaleLine',
   Payment: 'Payment',
+  Transfer: 'Transfer',
+  TransferLine: 'TransferLine',
   Customer: 'Customer',
   Warranty: 'Warranty',
   Supplier: 'Supplier',
@@ -415,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "branch" | "counter" | "user" | "product" | "stockItem" | "sale" | "saleLine" | "payment" | "customer" | "warranty" | "supplier" | "purchaseOrder" | "pOLine" | "expense" | "stockMovement"
+    modelProps: "tenant" | "branch" | "counter" | "user" | "product" | "stockItem" | "sale" | "saleLine" | "payment" | "transfer" | "transferLine" | "customer" | "warranty" | "supplier" | "purchaseOrder" | "pOLine" | "expense" | "stockMovement"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1082,6 +1084,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.PaymentCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.PaymentCountAggregateOutputType> | number
+        }
+      }
+    }
+    Transfer: {
+      payload: Prisma.$TransferPayload<ExtArgs>
+      fields: Prisma.TransferFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TransferFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TransferFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferPayload>
+        }
+        findFirst: {
+          args: Prisma.TransferFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TransferFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferPayload>
+        }
+        findMany: {
+          args: Prisma.TransferFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferPayload>[]
+        }
+        create: {
+          args: Prisma.TransferCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferPayload>
+        }
+        createMany: {
+          args: Prisma.TransferCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TransferCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferPayload>[]
+        }
+        delete: {
+          args: Prisma.TransferDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferPayload>
+        }
+        update: {
+          args: Prisma.TransferUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferPayload>
+        }
+        deleteMany: {
+          args: Prisma.TransferDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TransferUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TransferUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferPayload>[]
+        }
+        upsert: {
+          args: Prisma.TransferUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferPayload>
+        }
+        aggregate: {
+          args: Prisma.TransferAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTransfer>
+        }
+        groupBy: {
+          args: Prisma.TransferGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransferGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TransferCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransferCountAggregateOutputType> | number
+        }
+      }
+    }
+    TransferLine: {
+      payload: Prisma.$TransferLinePayload<ExtArgs>
+      fields: Prisma.TransferLineFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TransferLineFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferLinePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TransferLineFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferLinePayload>
+        }
+        findFirst: {
+          args: Prisma.TransferLineFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferLinePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TransferLineFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferLinePayload>
+        }
+        findMany: {
+          args: Prisma.TransferLineFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferLinePayload>[]
+        }
+        create: {
+          args: Prisma.TransferLineCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferLinePayload>
+        }
+        createMany: {
+          args: Prisma.TransferLineCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TransferLineCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferLinePayload>[]
+        }
+        delete: {
+          args: Prisma.TransferLineDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferLinePayload>
+        }
+        update: {
+          args: Prisma.TransferLineUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferLinePayload>
+        }
+        deleteMany: {
+          args: Prisma.TransferLineDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TransferLineUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TransferLineUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferLinePayload>[]
+        }
+        upsert: {
+          args: Prisma.TransferLineUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferLinePayload>
+        }
+        aggregate: {
+          args: Prisma.TransferLineAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTransferLine>
+        }
+        groupBy: {
+          args: Prisma.TransferLineGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransferLineGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TransferLineCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransferLineCountAggregateOutputType> | number
         }
       }
     }
@@ -1760,6 +1910,32 @@ export const PaymentScalarFieldEnum = {
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
 
 
+export const TransferScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  transferNumber: 'transferNumber',
+  sourceBranchId: 'sourceBranchId',
+  destBranchId: 'destBranchId',
+  status: 'status',
+  sentById: 'sentById',
+  receivedById: 'receivedById',
+  note: 'note',
+  createdAt: 'createdAt',
+  completedAt: 'completedAt'
+} as const
+
+export type TransferScalarFieldEnum = (typeof TransferScalarFieldEnum)[keyof typeof TransferScalarFieldEnum]
+
+
+export const TransferLineScalarFieldEnum = {
+  id: 'id',
+  transferId: 'transferId',
+  stockItemId: 'stockItemId'
+} as const
+
+export type TransferLineScalarFieldEnum = (typeof TransferLineScalarFieldEnum)[keyof typeof TransferLineScalarFieldEnum]
+
+
 export const CustomerScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -2016,6 +2192,20 @@ export type ListEnumSaleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 
 
 /**
+ * Reference to a field of type 'TransferStatus'
+ */
+export type EnumTransferStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransferStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'TransferStatus[]'
+ */
+export type ListEnumTransferStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransferStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'WarrantyStatus'
  */
 export type EnumWarrantyStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WarrantyStatus'>
@@ -2203,6 +2393,8 @@ export type GlobalOmitConfig = {
   sale?: Prisma.SaleOmit
   saleLine?: Prisma.SaleLineOmit
   payment?: Prisma.PaymentOmit
+  transfer?: Prisma.TransferOmit
+  transferLine?: Prisma.TransferLineOmit
   customer?: Prisma.CustomerOmit
   warranty?: Prisma.WarrantyOmit
   supplier?: Prisma.SupplierOmit

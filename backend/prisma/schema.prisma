@@ -62,6 +62,13 @@ enum PaymentStatus {
   UNPAID
 }
 
+enum TransferStatus {
+  IN_TRANSIT
+  RECEIVED
+  REJECTED
+  CANCELLED
+}
+
 // ──────────────────────────────────────────────
 // TENANT FOUNDATION
 // ──────────────────────────────────────────────
@@ -84,6 +91,7 @@ model Tenant {
   purchaseOrders PurchaseOrder[]
   expenses       Expense[]
   stockMovements StockMovement[]
+  transfers      Transfer[]
 
   @@map("tenants")
 }
@@ -253,6 +261,41 @@ model Payment {
   @@index([saleId])
   @@map("payments")
 }
+
+model Transfer {
+  id              String         @id @default(uuid())
+  tenantId        String
+  transferNumber  String         // readable (jaise TRF-2026-0001)
+  sourceBranchId  String
+  destBranchId    String
+  status          TransferStatus @default(IN_TRANSIT)
+  sentById        String
+  receivedById    String?        // jisne receive/reject kiya
+  note            String?
+  createdAt       DateTime       @default(now())
+  completedAt     DateTime?      // received/rejected/cancelled ka waqt
+
+  tenant Tenant         @relation(fields: [tenantId], references: [id])
+  lines  TransferLine[]
+
+  @@unique([tenantId, transferNumber])
+  @@index([tenantId])
+  @@index([sourceBranchId])
+  @@index([destBranchId])
+  @@map("transfers")
+}
+
+model TransferLine {
+  id          String @id @default(uuid())
+  transferId  String
+  stockItemId String
+
+  transfer Transfer @relation(fields: [transferId], references: [id])
+
+  @@index([transferId])
+  @@map("transfer_lines")
+} 
+
 
 // ──────────────────────────────────────────────
 // CRM & WARRANTY

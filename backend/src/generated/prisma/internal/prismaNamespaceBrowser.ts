@@ -60,6 +60,8 @@ export const ModelName = {
   Sale: 'Sale',
   SaleLine: 'SaleLine',
   Payment: 'Payment',
+  Transfer: 'Transfer',
+  TransferLine: 'TransferLine',
   Customer: 'Customer',
   Warranty: 'Warranty',
   Supplier: 'Supplier',
@@ -201,6 +203,32 @@ export const PaymentScalarFieldEnum = {
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const TransferScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  transferNumber: 'transferNumber',
+  sourceBranchId: 'sourceBranchId',
+  destBranchId: 'destBranchId',
+  status: 'status',
+  sentById: 'sentById',
+  receivedById: 'receivedById',
+  note: 'note',
+  createdAt: 'createdAt',
+  completedAt: 'completedAt'
+} as const
+
+export type TransferScalarFieldEnum = (typeof TransferScalarFieldEnum)[keyof typeof TransferScalarFieldEnum]
+
+
+export const TransferLineScalarFieldEnum = {
+  id: 'id',
+  transferId: 'transferId',
+  stockItemId: 'stockItemId'
+} as const
+
+export type TransferLineScalarFieldEnum = (typeof TransferLineScalarFieldEnum)[keyof typeof TransferLineScalarFieldEnum]
 
 
 export const CustomerScalarFieldEnum = {

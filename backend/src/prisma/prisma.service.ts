@@ -2,8 +2,9 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '../generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 
+
 // Wo models jinke paas tenantId column NAHI hai — scoping inpe nahi lagani
-const TENANT_EXEMPT_MODELS = ['Tenant', 'SaleLine', 'Payment', 'POLine'];
+const TENANT_EXEMPT_MODELS = ['Tenant', 'SaleLine', 'Payment', 'POLine', 'TransferLine'];
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {

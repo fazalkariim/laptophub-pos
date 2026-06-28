@@ -85,6 +85,16 @@ export type SaleLine = Prisma.SaleLineModel
  */
 export type Payment = Prisma.PaymentModel
 /**
+ * Model Transfer
+ * 
+ */
+export type Transfer = Prisma.TransferModel
+/**
+ * Model TransferLine
+ * 
+ */
+export type TransferLine = Prisma.TransferLineModel
+/**
  * Model Customer
  * 
  */
