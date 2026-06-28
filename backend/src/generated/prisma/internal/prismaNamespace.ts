@@ -1978,9 +1978,15 @@ export type SupplierScalarFieldEnum = (typeof SupplierScalarFieldEnum)[keyof typ
 export const PurchaseOrderScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
+  poNumber: 'poNumber',
   supplierId: 'supplierId',
   destinationBranchId: 'destinationBranchId',
   status: 'status',
+  totalCost: 'totalCost',
+  amountPaid: 'amountPaid',
+  paymentStatus: 'paymentStatus',
+  createdById: 'createdById',
+  note: 'note',
   createdAt: 'createdAt'
 } as const
 
@@ -1992,6 +1998,7 @@ export const POLineScalarFieldEnum = {
   poId: 'poId',
   productId: 'productId',
   quantity: 'quantity',
+  receivedQty: 'receivedQty',
   costPrice: 'costPrice'
 } as const
 

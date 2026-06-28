@@ -28,11 +28,13 @@ export type AggregatePOLine = {
 
 export type POLineAvgAggregateOutputType = {
   quantity: number | null
+  receivedQty: number | null
   costPrice: runtime.Decimal | null
 }
 
 export type POLineSumAggregateOutputType = {
   quantity: number | null
+  receivedQty: number | null
   costPrice: runtime.Decimal | null
 }
 
@@ -41,6 +43,7 @@ export type POLineMinAggregateOutputType = {
   poId: string | null
   productId: string | null
   quantity: number | null
+  receivedQty: number | null
   costPrice: runtime.Decimal | null
 }
 
@@ -49,6 +52,7 @@ export type POLineMaxAggregateOutputType = {
   poId: string | null
   productId: string | null
   quantity: number | null
+  receivedQty: number | null
   costPrice: runtime.Decimal | null
 }
 
@@ -57,6 +61,7 @@ export type POLineCountAggregateOutputType = {
   poId: number
   productId: number
   quantity: number
+  receivedQty: number
   costPrice: number
   _all: number
 }
@@ -64,11 +69,13 @@ export type POLineCountAggregateOutputType = {
 
 export type POLineAvgAggregateInputType = {
   quantity?: true
+  receivedQty?: true
   costPrice?: true
 }
 
 export type POLineSumAggregateInputType = {
   quantity?: true
+  receivedQty?: true
   costPrice?: true
 }
 
@@ -77,6 +84,7 @@ export type POLineMinAggregateInputType = {
   poId?: true
   productId?: true
   quantity?: true
+  receivedQty?: true
   costPrice?: true
 }
 
@@ -85,6 +93,7 @@ export type POLineMaxAggregateInputType = {
   poId?: true
   productId?: true
   quantity?: true
+  receivedQty?: true
   costPrice?: true
 }
 
@@ -93,6 +102,7 @@ export type POLineCountAggregateInputType = {
   poId?: true
   productId?: true
   quantity?: true
+  receivedQty?: true
   costPrice?: true
   _all?: true
 }
@@ -188,6 +198,7 @@ export type POLineGroupByOutputType = {
   poId: string
   productId: string
   quantity: number
+  receivedQty: number
   costPrice: runtime.Decimal
   _count: POLineCountAggregateOutputType | null
   _avg: POLineAvgAggregateOutputType | null
@@ -219,6 +230,7 @@ export type POLineWhereInput = {
   poId?: Prisma.StringFilter<"POLine"> | string
   productId?: Prisma.StringFilter<"POLine"> | string
   quantity?: Prisma.IntFilter<"POLine"> | number
+  receivedQty?: Prisma.IntFilter<"POLine"> | number
   costPrice?: Prisma.DecimalFilter<"POLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   po?: Prisma.XOR<Prisma.PurchaseOrderScalarRelationFilter, Prisma.PurchaseOrderWhereInput>
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
@@ -229,6 +241,7 @@ export type POLineOrderByWithRelationInput = {
   poId?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  receivedQty?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
   po?: Prisma.PurchaseOrderOrderByWithRelationInput
   product?: Prisma.ProductOrderByWithRelationInput
@@ -242,6 +255,7 @@ export type POLineWhereUniqueInput = Prisma.AtLeast<{
   poId?: Prisma.StringFilter<"POLine"> | string
   productId?: Prisma.StringFilter<"POLine"> | string
   quantity?: Prisma.IntFilter<"POLine"> | number
+  receivedQty?: Prisma.IntFilter<"POLine"> | number
   costPrice?: Prisma.DecimalFilter<"POLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   po?: Prisma.XOR<Prisma.PurchaseOrderScalarRelationFilter, Prisma.PurchaseOrderWhereInput>
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
@@ -252,6 +266,7 @@ export type POLineOrderByWithAggregationInput = {
   poId?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  receivedQty?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
   _count?: Prisma.POLineCountOrderByAggregateInput
   _avg?: Prisma.POLineAvgOrderByAggregateInput
@@ -268,12 +283,14 @@ export type POLineScalarWhereWithAggregatesInput = {
   poId?: Prisma.StringWithAggregatesFilter<"POLine"> | string
   productId?: Prisma.StringWithAggregatesFilter<"POLine"> | string
   quantity?: Prisma.IntWithAggregatesFilter<"POLine"> | number
+  receivedQty?: Prisma.IntWithAggregatesFilter<"POLine"> | number
   costPrice?: Prisma.DecimalWithAggregatesFilter<"POLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
 export type POLineCreateInput = {
   id?: string
   quantity: number
+  receivedQty?: number
   costPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   po: Prisma.PurchaseOrderCreateNestedOneWithoutLinesInput
   product: Prisma.ProductCreateNestedOneWithoutPoLinesInput
@@ -284,12 +301,14 @@ export type POLineUncheckedCreateInput = {
   poId: string
   productId: string
   quantity: number
+  receivedQty?: number
   costPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
 export type POLineUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  receivedQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   po?: Prisma.PurchaseOrderUpdateOneRequiredWithoutLinesNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutPoLinesNestedInput
@@ -300,6 +319,7 @@ export type POLineUncheckedUpdateInput = {
   poId?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  receivedQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
@@ -308,12 +328,14 @@ export type POLineCreateManyInput = {
   poId: string
   productId: string
   quantity: number
+  receivedQty?: number
   costPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
 export type POLineUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  receivedQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
@@ -322,6 +344,7 @@ export type POLineUncheckedUpdateManyInput = {
   poId?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  receivedQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
@@ -340,11 +363,13 @@ export type POLineCountOrderByAggregateInput = {
   poId?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  receivedQty?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
 }
 
 export type POLineAvgOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
+  receivedQty?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
 }
 
@@ -353,6 +378,7 @@ export type POLineMaxOrderByAggregateInput = {
   poId?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  receivedQty?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
 }
 
@@ -361,11 +387,13 @@ export type POLineMinOrderByAggregateInput = {
   poId?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  receivedQty?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
 }
 
 export type POLineSumOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
+  receivedQty?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
 }
 
@@ -456,6 +484,7 @@ export type POLineUncheckedUpdateManyWithoutPoNestedInput = {
 export type POLineCreateWithoutProductInput = {
   id?: string
   quantity: number
+  receivedQty?: number
   costPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   po: Prisma.PurchaseOrderCreateNestedOneWithoutLinesInput
 }
@@ -464,6 +493,7 @@ export type POLineUncheckedCreateWithoutProductInput = {
   id?: string
   poId: string
   quantity: number
+  receivedQty?: number
   costPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
@@ -501,12 +531,14 @@ export type POLineScalarWhereInput = {
   poId?: Prisma.StringFilter<"POLine"> | string
   productId?: Prisma.StringFilter<"POLine"> | string
   quantity?: Prisma.IntFilter<"POLine"> | number
+  receivedQty?: Prisma.IntFilter<"POLine"> | number
   costPrice?: Prisma.DecimalFilter<"POLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
 export type POLineCreateWithoutPoInput = {
   id?: string
   quantity: number
+  receivedQty?: number
   costPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   product: Prisma.ProductCreateNestedOneWithoutPoLinesInput
 }
@@ -515,6 +547,7 @@ export type POLineUncheckedCreateWithoutPoInput = {
   id?: string
   productId: string
   quantity: number
+  receivedQty?: number
   costPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
@@ -548,12 +581,14 @@ export type POLineCreateManyProductInput = {
   id?: string
   poId: string
   quantity: number
+  receivedQty?: number
   costPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
 export type POLineUpdateWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  receivedQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   po?: Prisma.PurchaseOrderUpdateOneRequiredWithoutLinesNestedInput
 }
@@ -562,6 +597,7 @@ export type POLineUncheckedUpdateWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   poId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  receivedQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
@@ -569,6 +605,7 @@ export type POLineUncheckedUpdateManyWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   poId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  receivedQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
@@ -576,12 +613,14 @@ export type POLineCreateManyPoInput = {
   id?: string
   productId: string
   quantity: number
+  receivedQty?: number
   costPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
 export type POLineUpdateWithoutPoInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  receivedQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product?: Prisma.ProductUpdateOneRequiredWithoutPoLinesNestedInput
 }
@@ -590,6 +629,7 @@ export type POLineUncheckedUpdateWithoutPoInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  receivedQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
@@ -597,6 +637,7 @@ export type POLineUncheckedUpdateManyWithoutPoInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  receivedQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
@@ -607,6 +648,7 @@ export type POLineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   poId?: boolean
   productId?: boolean
   quantity?: boolean
+  receivedQty?: boolean
   costPrice?: boolean
   po?: boolean | Prisma.PurchaseOrderDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
@@ -617,6 +659,7 @@ export type POLineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   poId?: boolean
   productId?: boolean
   quantity?: boolean
+  receivedQty?: boolean
   costPrice?: boolean
   po?: boolean | Prisma.PurchaseOrderDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
@@ -627,6 +670,7 @@ export type POLineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   poId?: boolean
   productId?: boolean
   quantity?: boolean
+  receivedQty?: boolean
   costPrice?: boolean
   po?: boolean | Prisma.PurchaseOrderDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
@@ -637,10 +681,11 @@ export type POLineSelectScalar = {
   poId?: boolean
   productId?: boolean
   quantity?: boolean
+  receivedQty?: boolean
   costPrice?: boolean
 }
 
-export type POLineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "poId" | "productId" | "quantity" | "costPrice", ExtArgs["result"]["pOLine"]>
+export type POLineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "poId" | "productId" | "quantity" | "receivedQty" | "costPrice", ExtArgs["result"]["pOLine"]>
 export type POLineInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   po?: boolean | Prisma.PurchaseOrderDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
@@ -665,6 +710,7 @@ export type $POLinePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     poId: string
     productId: string
     quantity: number
+    receivedQty: number
     costPrice: runtime.Decimal
   }, ExtArgs["result"]["pOLine"]>
   composites: {}
@@ -1095,6 +1141,7 @@ export interface POLineFieldRefs {
   readonly poId: Prisma.FieldRef<"POLine", 'String'>
   readonly productId: Prisma.FieldRef<"POLine", 'String'>
   readonly quantity: Prisma.FieldRef<"POLine", 'Int'>
+  readonly receivedQty: Prisma.FieldRef<"POLine", 'Int'>
   readonly costPrice: Prisma.FieldRef<"POLine", 'Decimal'>
 }
     

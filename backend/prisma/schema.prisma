@@ -360,25 +360,33 @@ model Supplier {
 model PurchaseOrder {
   id                  String              @id @default(uuid())
   tenantId            String
+  poNumber            String              // readable (PO-2026-0001)
   supplierId          String
   destinationBranchId String
   status              PurchaseOrderStatus @default(DRAFT)
+  totalCost           Decimal             @default(0) @db.Decimal(12, 2)
+  amountPaid          Decimal             @default(0) @db.Decimal(12, 2)
+  paymentStatus       PaymentStatus       @default(UNPAID)
+  createdById         String
+  note                String?
   createdAt           DateTime            @default(now())
 
   tenant   Tenant   @relation(fields: [tenantId], references: [id])
   supplier Supplier @relation(fields: [supplierId], references: [id])
   lines    POLine[]
 
+  @@unique([tenantId, poNumber])
   @@index([tenantId])
   @@map("purchase_orders")
 }
 
 model POLine {
-  id        String  @id @default(uuid())
-  poId      String
-  productId String
-  quantity  Int
-  costPrice Decimal @db.Decimal(12, 2)
+  id            String  @id @default(uuid())
+  poId          String
+  productId     String
+  quantity      Int     // kitne order kiye
+  receivedQty   Int     @default(0)  // kitne abhi tak receive hue
+  costPrice     Decimal @db.Decimal(12, 2)
 
   po      PurchaseOrder @relation(fields: [poId], references: [id])
   product Product       @relation(fields: [productId], references: [id])
