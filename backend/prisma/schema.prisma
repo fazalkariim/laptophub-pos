@@ -136,6 +136,7 @@ model User {
   role         Role
   email        String
   passwordHash String
+  refreshTokenHash String?  // logged-in refresh token ka hash 
   name         String?
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())

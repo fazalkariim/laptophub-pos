@@ -302,11 +302,19 @@ export class SalesService {
             discount: line.discount ?? 0,
           } as any,
         });
-       if (item.serialNumber) {
-          await tx.stockItem.update({
-            where: { id: item.id },
-            data: { status: 'SOLD' } as any,
+        if (item.serialNumber) {
+          // ATOMIC oversell check — SOLD karo SIRF agar abhi bhi IN_STOCK hai
+          const updateResult = await tx.stockItem.updateMany({
+            where: { id: item.id, status: 'IN_STOCK' }, // shart yahan
+            data: { status: 'SOLD' },
           });
+
+          // Agar count 0 — matlab kisi aur ne pehle bech liya (race condition)
+          if (updateResult.count === 0) {
+            throw new BadRequestException(
+              `Item ${item.serialNumber} abhi-abhi kisi aur ne bech diya. Dobara koshish karein.`,
+            );
+          }
 
           // Warranty auto-create — sirf serial wale item + customer ho to  ← NAYA
           if (dto.customerId) {

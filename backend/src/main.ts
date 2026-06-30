@@ -2,9 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Security headers
+  app.use(helmet());
 
   // Global validation: har DTO ka input automatically validate hoga
   app.useGlobalPipes(
@@ -30,4 +34,5 @@ async function bootstrap() {
   console.log(`App chal rahi hai: http://localhost:${port}`);
   console.log(`API docs: http://localhost:${port}/docs`);
 }
+// Security headers
 bootstrap();
