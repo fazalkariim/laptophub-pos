@@ -1,6 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { TenantPrismaService } from '../../prisma/tenant-prisma.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
+import {
+  getPaginationParams,
+  buildPaginatedResult,
+} from '../../common/utils/paginate';
 
 interface CurrentUser {
   userId: string;
@@ -14,22 +18,34 @@ export class CustomersService {
   constructor(private readonly tenantPrisma: TenantPrismaService) {}
 
   // List — saare customers (scoped)
-  findAll() {
-    return this.tenantPrisma.client.customer.findMany({
-      orderBy: { createdAt: 'desc' },
-    });
+  async findAll(page = 1, limit = 20) {
+    const { skip, take, page: p, limit: l } = getPaginationParams(page, limit);
+    const where = { deletedAt: null };
+
+    const [customers, total] = await Promise.all([
+      this.tenantPrisma.client.customer.findMany({
+        where: where as any,
+        skip,
+        take,
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.tenantPrisma.client.customer.count({ where: where as any }),
+    ]);
+
+    return buildPaginatedResult(customers, total, p, l);
   }
 
   // Quick lookup — naam ya contact se dhoondo (POS pe sale ke waqt)
   async search(query: string) {
     return this.tenantPrisma.client.customer.findMany({
       where: {
+        deletedAt: null,
         OR: [
           { name: { contains: query, mode: 'insensitive' } },
           { contact: { contains: query, mode: 'insensitive' } },
         ],
-      },
-      take: 10, // sirf top 10 results
+      } as any,
+      take: 10,
       orderBy: { name: 'asc' },
     });
   }
@@ -57,7 +73,8 @@ export class CustomersService {
     }
 
     // Customer banao (chahe duplicate ho — sirf flag karenge)
-    const branchId = user.branchId ?? user.role === 'SUPER_ADMIN' ? user.branchId : null;
+    const branchId =
+      (user.branchId ?? user.role === 'SUPER_ADMIN') ? user.branchId : null;
 
     const customer = await this.tenantPrisma.client.customer.create({
       data: {
@@ -77,7 +94,8 @@ export class CustomersService {
       warning:
         possibleDuplicates.length > 0
           ? {
-              message: 'Is contact par milte-julte customer pehle se maujood hain',
+              message:
+                'Is contact par milte-julte customer pehle se maujood hain',
               existing: possibleDuplicates,
             }
           : null,

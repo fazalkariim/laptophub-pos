@@ -1,23 +1,43 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { TenantPrismaService } from '../../prisma/tenant-prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import {
+  getPaginationParams,
+  buildPaginatedResult,
+} from '../../common/utils/paginate';
 
 @Injectable()
 export class CatalogService {
   constructor(private readonly tenantPrisma: TenantPrismaService) {}
 
   // READ — saare products (scoping khud lagegi)
-  findAll() {
-    return this.tenantPrisma.client.product.findMany({
-      orderBy: { createdAt: 'desc' },
-    });
+  async findAll(page = 1, limit = 20) {
+    const { skip, take, page: p, limit: l } = getPaginationParams(page, limit);
+
+    const where = { deletedAt: null }; // sirf active (deleted nahi)
+
+    const [products, total] = await Promise.all([
+      this.tenantPrisma.client.product.findMany({
+        where: where as any,
+        skip,
+        take,
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.tenantPrisma.client.product.count({ where: where as any }),
+    ]);
+
+    return buildPaginatedResult(products, total, p, l);
   }
 
   // READ — ek product apni id se
   async findOne(id: string) {
     const product = await this.tenantPrisma.client.product.findFirst({
-      where: { id },
+      where: { id, deletedAt: null } as any, // deleted ko "nahi mila" treat karo
     });
     if (!product) {
       throw new NotFoundException('Product nahi mila');
@@ -70,10 +90,13 @@ export class CatalogService {
 
   // DELETE — product hatao
   async remove(id: string) {
-    await this.findOne(id); // maujood hai confirm karo
-    await this.tenantPrisma.client.product.delete({
+    await this.findOne(id); // maujood hai confirm
+
+    // Soft delete — actually hatane ke bajaye mark karo
+    await this.tenantPrisma.client.product.update({
       where: { id },
+      data: { deletedAt: new Date() } as any,
     });
-    return { message: 'Product hata diya gaya' };
+    return { message: 'Product hata diya gaya (soft delete)' };
   }
 }

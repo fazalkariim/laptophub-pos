@@ -5,6 +5,7 @@ import { CreateCustomerDto } from './dto/create-customer.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { PaginationDto } from '../../common/dto/pagination.dto';
 
 @ApiTags('customers')
 @ApiBearerAuth()
@@ -13,10 +14,10 @@ import { CurrentUser } from '../../common/decorators/current-user.decorator';
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
 
-  @Get()
-  @ApiOperation({ summary: 'Saare customers' })
-  findAll() {
-    return this.customersService.findAll();
+ @Get()
+  @ApiOperation({ summary: 'Saare customers (paginated)' })
+  findAll(@Query() pagination: PaginationDto) {
+    return this.customersService.findAll(pagination.page, pagination.limit);
   }
 
   @Get('search')

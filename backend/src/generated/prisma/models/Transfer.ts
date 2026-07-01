@@ -513,10 +513,6 @@ export type EnumTransferStatusFieldUpdateOperationsInput = {
   set?: $Enums.TransferStatus
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type TransferCreateNestedOneWithoutLinesInput = {
   create?: Prisma.XOR<Prisma.TransferCreateWithoutLinesInput, Prisma.TransferUncheckedCreateWithoutLinesInput>
   connectOrCreate?: Prisma.TransferCreateOrConnectWithoutLinesInput

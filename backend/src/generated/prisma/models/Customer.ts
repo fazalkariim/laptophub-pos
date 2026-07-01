@@ -32,6 +32,7 @@ export type CustomerMinAggregateOutputType = {
   contact: string | null
   type: string | null
   createdAt: Date | null
+  deletedAt: Date | null
 }
 
 export type CustomerMaxAggregateOutputType = {
@@ -42,6 +43,7 @@ export type CustomerMaxAggregateOutputType = {
   contact: string | null
   type: string | null
   createdAt: Date | null
+  deletedAt: Date | null
 }
 
 export type CustomerCountAggregateOutputType = {
@@ -53,6 +55,7 @@ export type CustomerCountAggregateOutputType = {
   type: number
   tags: number
   createdAt: number
+  deletedAt: number
   _all: number
 }
 
@@ -65,6 +68,7 @@ export type CustomerMinAggregateInputType = {
   contact?: true
   type?: true
   createdAt?: true
+  deletedAt?: true
 }
 
 export type CustomerMaxAggregateInputType = {
@@ -75,6 +79,7 @@ export type CustomerMaxAggregateInputType = {
   contact?: true
   type?: true
   createdAt?: true
+  deletedAt?: true
 }
 
 export type CustomerCountAggregateInputType = {
@@ -86,6 +91,7 @@ export type CustomerCountAggregateInputType = {
   type?: true
   tags?: true
   createdAt?: true
+  deletedAt?: true
   _all?: true
 }
 
@@ -170,6 +176,7 @@ export type CustomerGroupByOutputType = {
   type: string | null
   tags: string[]
   createdAt: Date
+  deletedAt: Date | null
   _count: CustomerCountAggregateOutputType | null
   _min: CustomerMinAggregateOutputType | null
   _max: CustomerMaxAggregateOutputType | null
@@ -202,6 +209,7 @@ export type CustomerWhereInput = {
   type?: Prisma.StringNullableFilter<"Customer"> | string | null
   tags?: Prisma.StringNullableListFilter<"Customer">
   createdAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Customer"> | Date | string | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
   sales?: Prisma.SaleListRelationFilter
@@ -217,6 +225,7 @@ export type CustomerOrderByWithRelationInput = {
   type?: Prisma.SortOrderInput | Prisma.SortOrder
   tags?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   branch?: Prisma.BranchOrderByWithRelationInput
   sales?: Prisma.SaleOrderByRelationAggregateInput
@@ -235,6 +244,7 @@ export type CustomerWhereUniqueInput = Prisma.AtLeast<{
   type?: Prisma.StringNullableFilter<"Customer"> | string | null
   tags?: Prisma.StringNullableListFilter<"Customer">
   createdAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Customer"> | Date | string | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
   sales?: Prisma.SaleListRelationFilter
@@ -250,6 +260,7 @@ export type CustomerOrderByWithAggregationInput = {
   type?: Prisma.SortOrderInput | Prisma.SortOrder
   tags?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.CustomerCountOrderByAggregateInput
   _max?: Prisma.CustomerMaxOrderByAggregateInput
   _min?: Prisma.CustomerMinOrderByAggregateInput
@@ -267,6 +278,7 @@ export type CustomerScalarWhereWithAggregatesInput = {
   type?: Prisma.StringNullableWithAggregatesFilter<"Customer"> | string | null
   tags?: Prisma.StringNullableListFilter<"Customer">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Customer"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Customer"> | Date | string | null
 }
 
 export type CustomerCreateInput = {
@@ -276,6 +288,7 @@ export type CustomerCreateInput = {
   type?: string | null
   tags?: Prisma.CustomerCreatetagsInput | string[]
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
   branch: Prisma.BranchCreateNestedOneWithoutCustomersInput
   sales?: Prisma.SaleCreateNestedManyWithoutCustomerInput
@@ -291,6 +304,7 @@ export type CustomerUncheckedCreateInput = {
   type?: string | null
   tags?: Prisma.CustomerCreatetagsInput | string[]
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCustomerInput
   warranties?: Prisma.WarrantyUncheckedCreateNestedManyWithoutCustomerInput
 }
@@ -302,6 +316,7 @@ export type CustomerUpdateInput = {
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.CustomerUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutCustomersNestedInput
   sales?: Prisma.SaleUpdateManyWithoutCustomerNestedInput
@@ -317,6 +332,7 @@ export type CustomerUncheckedUpdateInput = {
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.CustomerUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sales?: Prisma.SaleUncheckedUpdateManyWithoutCustomerNestedInput
   warranties?: Prisma.WarrantyUncheckedUpdateManyWithoutCustomerNestedInput
 }
@@ -330,6 +346,7 @@ export type CustomerCreateManyInput = {
   type?: string | null
   tags?: Prisma.CustomerCreatetagsInput | string[]
   createdAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type CustomerUpdateManyMutationInput = {
@@ -339,6 +356,7 @@ export type CustomerUpdateManyMutationInput = {
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.CustomerUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type CustomerUncheckedUpdateManyInput = {
@@ -350,6 +368,7 @@ export type CustomerUncheckedUpdateManyInput = {
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.CustomerUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type CustomerListRelationFilter = {
@@ -384,6 +403,7 @@ export type CustomerCountOrderByAggregateInput = {
   type?: Prisma.SortOrder
   tags?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type CustomerMaxOrderByAggregateInput = {
@@ -394,6 +414,7 @@ export type CustomerMaxOrderByAggregateInput = {
   contact?: Prisma.SortOrder
   type?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type CustomerMinOrderByAggregateInput = {
@@ -404,6 +425,7 @@ export type CustomerMinOrderByAggregateInput = {
   contact?: Prisma.SortOrder
   type?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type CustomerScalarRelationFilter = {
@@ -541,6 +563,7 @@ export type CustomerCreateWithoutTenantInput = {
   type?: string | null
   tags?: Prisma.CustomerCreatetagsInput | string[]
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   branch: Prisma.BranchCreateNestedOneWithoutCustomersInput
   sales?: Prisma.SaleCreateNestedManyWithoutCustomerInput
   warranties?: Prisma.WarrantyCreateNestedManyWithoutCustomerInput
@@ -554,6 +577,7 @@ export type CustomerUncheckedCreateWithoutTenantInput = {
   type?: string | null
   tags?: Prisma.CustomerCreatetagsInput | string[]
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCustomerInput
   warranties?: Prisma.WarrantyUncheckedCreateNestedManyWithoutCustomerInput
 }
@@ -596,6 +620,7 @@ export type CustomerScalarWhereInput = {
   type?: Prisma.StringNullableFilter<"Customer"> | string | null
   tags?: Prisma.StringNullableListFilter<"Customer">
   createdAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Customer"> | Date | string | null
 }
 
 export type CustomerCreateWithoutBranchInput = {
@@ -605,6 +630,7 @@ export type CustomerCreateWithoutBranchInput = {
   type?: string | null
   tags?: Prisma.CustomerCreatetagsInput | string[]
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
   sales?: Prisma.SaleCreateNestedManyWithoutCustomerInput
   warranties?: Prisma.WarrantyCreateNestedManyWithoutCustomerInput
@@ -618,6 +644,7 @@ export type CustomerUncheckedCreateWithoutBranchInput = {
   type?: string | null
   tags?: Prisma.CustomerCreatetagsInput | string[]
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCustomerInput
   warranties?: Prisma.WarrantyUncheckedCreateNestedManyWithoutCustomerInput
 }
@@ -655,6 +682,7 @@ export type CustomerCreateWithoutSalesInput = {
   type?: string | null
   tags?: Prisma.CustomerCreatetagsInput | string[]
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
   branch: Prisma.BranchCreateNestedOneWithoutCustomersInput
   warranties?: Prisma.WarrantyCreateNestedManyWithoutCustomerInput
@@ -669,6 +697,7 @@ export type CustomerUncheckedCreateWithoutSalesInput = {
   type?: string | null
   tags?: Prisma.CustomerCreatetagsInput | string[]
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   warranties?: Prisma.WarrantyUncheckedCreateNestedManyWithoutCustomerInput
 }
 
@@ -695,6 +724,7 @@ export type CustomerUpdateWithoutSalesInput = {
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.CustomerUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutCustomersNestedInput
   warranties?: Prisma.WarrantyUpdateManyWithoutCustomerNestedInput
@@ -709,6 +739,7 @@ export type CustomerUncheckedUpdateWithoutSalesInput = {
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.CustomerUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warranties?: Prisma.WarrantyUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
@@ -719,6 +750,7 @@ export type CustomerCreateWithoutWarrantiesInput = {
   type?: string | null
   tags?: Prisma.CustomerCreatetagsInput | string[]
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
   branch: Prisma.BranchCreateNestedOneWithoutCustomersInput
   sales?: Prisma.SaleCreateNestedManyWithoutCustomerInput
@@ -733,6 +765,7 @@ export type CustomerUncheckedCreateWithoutWarrantiesInput = {
   type?: string | null
   tags?: Prisma.CustomerCreatetagsInput | string[]
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCustomerInput
 }
 
@@ -759,6 +792,7 @@ export type CustomerUpdateWithoutWarrantiesInput = {
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.CustomerUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutCustomersNestedInput
   sales?: Prisma.SaleUpdateManyWithoutCustomerNestedInput
@@ -773,6 +807,7 @@ export type CustomerUncheckedUpdateWithoutWarrantiesInput = {
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.CustomerUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sales?: Prisma.SaleUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
@@ -784,6 +819,7 @@ export type CustomerCreateManyTenantInput = {
   type?: string | null
   tags?: Prisma.CustomerCreatetagsInput | string[]
   createdAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type CustomerUpdateWithoutTenantInput = {
@@ -793,6 +829,7 @@ export type CustomerUpdateWithoutTenantInput = {
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.CustomerUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branch?: Prisma.BranchUpdateOneRequiredWithoutCustomersNestedInput
   sales?: Prisma.SaleUpdateManyWithoutCustomerNestedInput
   warranties?: Prisma.WarrantyUpdateManyWithoutCustomerNestedInput
@@ -806,6 +843,7 @@ export type CustomerUncheckedUpdateWithoutTenantInput = {
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.CustomerUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sales?: Prisma.SaleUncheckedUpdateManyWithoutCustomerNestedInput
   warranties?: Prisma.WarrantyUncheckedUpdateManyWithoutCustomerNestedInput
 }
@@ -818,6 +856,7 @@ export type CustomerUncheckedUpdateManyWithoutTenantInput = {
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.CustomerUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type CustomerCreateManyBranchInput = {
@@ -828,6 +867,7 @@ export type CustomerCreateManyBranchInput = {
   type?: string | null
   tags?: Prisma.CustomerCreatetagsInput | string[]
   createdAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type CustomerUpdateWithoutBranchInput = {
@@ -837,6 +877,7 @@ export type CustomerUpdateWithoutBranchInput = {
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.CustomerUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
   sales?: Prisma.SaleUpdateManyWithoutCustomerNestedInput
   warranties?: Prisma.WarrantyUpdateManyWithoutCustomerNestedInput
@@ -850,6 +891,7 @@ export type CustomerUncheckedUpdateWithoutBranchInput = {
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.CustomerUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sales?: Prisma.SaleUncheckedUpdateManyWithoutCustomerNestedInput
   warranties?: Prisma.WarrantyUncheckedUpdateManyWithoutCustomerNestedInput
 }
@@ -862,6 +904,7 @@ export type CustomerUncheckedUpdateManyWithoutBranchInput = {
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.CustomerUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -913,6 +956,7 @@ export type CustomerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   type?: boolean
   tags?: boolean
   createdAt?: boolean
+  deletedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   sales?: boolean | Prisma.Customer$salesArgs<ExtArgs>
@@ -929,6 +973,7 @@ export type CustomerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   type?: boolean
   tags?: boolean
   createdAt?: boolean
+  deletedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["customer"]>
@@ -942,6 +987,7 @@ export type CustomerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   type?: boolean
   tags?: boolean
   createdAt?: boolean
+  deletedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["customer"]>
@@ -955,9 +1001,10 @@ export type CustomerSelectScalar = {
   type?: boolean
   tags?: boolean
   createdAt?: boolean
+  deletedAt?: boolean
 }
 
-export type CustomerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "branchId" | "name" | "contact" | "type" | "tags" | "createdAt", ExtArgs["result"]["customer"]>
+export type CustomerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "branchId" | "name" | "contact" | "type" | "tags" | "createdAt" | "deletedAt", ExtArgs["result"]["customer"]>
 export type CustomerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
@@ -991,6 +1038,7 @@ export type $CustomerPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     type: string | null
     tags: string[]
     createdAt: Date
+    deletedAt: Date | null
   }, ExtArgs["result"]["customer"]>
   composites: {}
 }
@@ -1426,6 +1474,7 @@ export interface CustomerFieldRefs {
   readonly type: Prisma.FieldRef<"Customer", 'String'>
   readonly tags: Prisma.FieldRef<"Customer", 'String[]'>
   readonly createdAt: Prisma.FieldRef<"Customer", 'DateTime'>
+  readonly deletedAt: Prisma.FieldRef<"Customer", 'DateTime'>
 }
     
 

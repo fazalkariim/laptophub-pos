@@ -6,6 +6,8 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { Query } from '@nestjs/common';
+import { PaginationDto } from '../../common/dto/pagination.dto';
 
 @ApiTags('catalog')
 @ApiBearerAuth()
@@ -14,10 +16,10 @@ import { Roles } from '../../common/decorators/roles.decorator';
 export class CatalogController {
   constructor(private readonly catalogService: CatalogService) {}
 
-  @Get()
-  @ApiOperation({ summary: 'Saare products dekhein' })
-  findAll() {
-    return this.catalogService.findAll();
+ @Get()
+  @ApiOperation({ summary: 'Saare products (paginated)' })
+  findAll(@Query() pagination: PaginationDto) {
+    return this.catalogService.findAll(pagination.page, pagination.limit);
   }
 
   @Get(':id')

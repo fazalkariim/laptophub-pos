@@ -1849,7 +1849,8 @@ export const ProductScalarFieldEnum = {
   category: 'category',
   sku: 'sku',
   barcode: 'barcode',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
@@ -1945,7 +1946,8 @@ export const CustomerScalarFieldEnum = {
   contact: 'contact',
   type: 'type',
   tags: 'tags',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type CustomerScalarFieldEnum = (typeof CustomerScalarFieldEnum)[keyof typeof CustomerScalarFieldEnum]
@@ -1970,7 +1972,8 @@ export const SupplierScalarFieldEnum = {
   tenantId: 'tenantId',
   name: 'name',
   contact: 'contact',
-  terms: 'terms'
+  terms: 'terms',
+  deletedAt: 'deletedAt'
 } as const
 
 export type SupplierScalarFieldEnum = (typeof SupplierScalarFieldEnum)[keyof typeof SupplierScalarFieldEnum]

@@ -8,16 +8,16 @@ export class SuppliersService {
   constructor(private readonly tenantPrisma: TenantPrismaService) {}
 
   // List — saare suppliers (scoped)
-  findAll() {
+ findAll() {
     return this.tenantPrisma.client.supplier.findMany({
+      where: { deletedAt: null } as any,
       orderBy: { name: 'asc' },
     });
   }
 
-  // Ek supplier
   async findOne(id: string) {
     const supplier = await this.tenantPrisma.client.supplier.findFirst({
-      where: { id },
+      where: { id, deletedAt: null } as any,
     });
     if (!supplier) {
       throw new NotFoundException('Supplier nahi mila');
@@ -66,9 +66,10 @@ export class SuppliersService {
   // Delete
   async remove(id: string) {
     await this.findOne(id);
-    await this.tenantPrisma.client.supplier.delete({
+    await this.tenantPrisma.client.supplier.update({
       where: { id },
+      data: { deletedAt: new Date() } as any,
     });
-    return { message: 'Supplier hata diya gaya' };
+    return { message: 'Supplier hata diya gaya (soft delete)' };
   }
 }

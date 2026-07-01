@@ -129,7 +129,7 @@ describe('Tenant Isolation (e2e) — most important safety net', () => {
       .set('Authorization', `Bearer ${A.token}`)
       .expect(200);
 
-    const skus = res.body.map((p: any) => p.sku);
+    const skus = res.body.data.map((p: any) => p.sku);
     expect(skus).toContain('SKU-A-SECRET');       // apna dikhe
     expect(skus).not.toContain('SKU-B-SECRET');   // B ka NAHI dikhe
   });
@@ -140,7 +140,7 @@ describe('Tenant Isolation (e2e) — most important safety net', () => {
       .set('Authorization', `Bearer ${B.token}`)
       .expect(200);
 
-    const skus = res.body.map((p: any) => p.sku);
+    const skus = res.body.data.map((p: any) => p.sku);
     expect(skus).toContain('SKU-B-SECRET');
     expect(skus).not.toContain('SKU-A-SECRET');
   });

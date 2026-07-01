@@ -167,6 +167,8 @@ model Product {
   barcode   String?
   createdAt DateTime @default(now())
 
+  deletedAt DateTime?  // soft delete — null = active, date = deleted
+
   tenant     Tenant      @relation(fields: [tenantId], references: [id])
   stockItems StockItem[]
   poLines    POLine[]
@@ -312,6 +314,8 @@ model Customer {
   tags      String[]
   createdAt DateTime @default(now())
 
+  deletedAt DateTime? // Soft delete
+
   tenant     Tenant      @relation(fields: [tenantId], references: [id])
   branch     Branch      @relation(fields: [branchId], references: [id])
   sales      Sale[]
@@ -350,6 +354,8 @@ model Supplier {
   name     String
   contact  String?
   terms    String?
+
+  deletedAt DateTime? // Soft delete
 
   tenant         Tenant          @relation(fields: [tenantId], references: [id])
   purchaseOrders PurchaseOrder[]
