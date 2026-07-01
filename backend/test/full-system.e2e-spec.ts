@@ -104,9 +104,15 @@ describe('FULL SYSTEM SMOKE TEST — A to Z', () => {
       await db.stockMovement.deleteMany({ where: { stockItemId: { in: created.stockIds } } });
       await db.stockItem.deleteMany({ where: { id: { in: created.stockIds } } });
       if (created.customerId) await db.customer.deleteMany({ where: { id: created.customerId } });
+      
       if (created.supplierId) await db.supplier.deleteMany({ where: { id: created.supplierId } });
-      // Product delete se pehle: us product se jude SAARE stock items + movements hatao
-      await db.stockMovement.deleteMany({ where: { stockItem: { productId: { in: created.productIds } } } });
+      // Us product ke saare stock items pehle dhoondо, phir un ke movements + items hatao
+      const productStock = await db.stockItem.findMany({
+        where: { productId: { in: created.productIds } },
+        select: { id: true },
+      });
+      const productStockIds = productStock.map((s) => s.id);
+      await db.stockMovement.deleteMany({ where: { stockItemId: { in: productStockIds } } });
       await db.stockItem.deleteMany({ where: { productId: { in: created.productIds } } });
       // Product aakhir mein (sab stock hatne ke baad)
       await db.product.deleteMany({ where: { id: { in: created.productIds } } });
