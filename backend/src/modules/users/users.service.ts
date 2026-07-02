@@ -2,10 +2,16 @@ import { Injectable, ConflictException, BadRequestException } from '@nestjs/comm
 import * as bcrypt from 'bcrypt';
 import { TenantPrismaService } from '../../prisma/tenant-prisma.service';
 import { CreateUserDto, UserRole } from './dto/create-user.dto';
+import { PlanLimitService } from '../../common/services/plan-limit.service';
+import { TenantContextService } from '../../context/tenant-context.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly tenantPrisma: TenantPrismaService) {}
+  constructor(
+    private readonly tenantPrisma: TenantPrismaService,
+    private readonly tenantContext: TenantContextService,
+    private readonly planLimit: PlanLimitService,
+  ) {}
 
   // Saare users — passwordHash kabhi nahi bhejenge
   findAll() {
@@ -25,8 +31,13 @@ export class UsersService {
   }
 
   // Naya user banao
+ // Naya user banao
   async create(dto: CreateUserDto) {
-    // 1. Email pehle se to nahi? (same tenant ke andar)
+    // Plan limit check — tenantId context se
+    const tenantId = this.tenantContext.getTenantId();
+    await this.planLimit.checkUserLimit(tenantId!);
+
+    // 1. Email pehle se to nahi?
     const existing = await this.tenantPrisma.client.user.findFirst({
       where: { email: dto.email },
     });
@@ -34,8 +45,7 @@ export class UsersService {
       throw new ConflictException('Ye email pehle se istemaal mein hai');
     }
 
-    // 2. Role rules: SUPER_ADMIN ka branch null hona chahiye,
-    //    baaki roles ka branch zaroori hai
+    // 2. Role rules
     if (dto.role === UserRole.SUPER_ADMIN && dto.branchId) {
       throw new BadRequestException('Super Admin ka koi branch nahi hota');
     }
@@ -43,11 +53,11 @@ export class UsersService {
       throw new BadRequestException('Is role ke liye branch zaroori hai');
     }
 
-    // 3. Password hash karo — plain text kabhi store nahi
+    // 3. Password hash
     const passwordHash = await bcrypt.hash(dto.password, 10);
 
     // 4. User banao (tenantId extension se khud lagega)
-    const user = await this.tenantPrisma.client.user.create({
+    const newUser = await this.tenantPrisma.client.user.create({
       data: {
         email: dto.email,
         passwordHash,
@@ -57,8 +67,8 @@ export class UsersService {
       } as any,
     });
 
-    // 5. Response se passwordHash hata kar bhejo
-    const { passwordHash: _, ...safeUser } = user;
+    // 5. passwordHash hata kar bhejo
+    const { passwordHash: _, ...safeUser } = newUser;
     return safeUser;
   }
 }

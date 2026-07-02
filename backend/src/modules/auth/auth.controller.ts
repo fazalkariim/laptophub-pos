@@ -11,6 +11,7 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RefreshGuard } from '../../common/guards/refresh.guard';
+import { SignupDto } from './dto/signup.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -65,5 +66,12 @@ export class AuthController {
   @ApiOperation({ summary: 'Logout (refresh token revoke)' })
   logout(@CurrentUser() user: any) {
     return this.authService.logout(user.userId);
+  }
+
+  @Post('signup')
+  @Throttle({ default: { limit: 3, ttl: 60000 } })  // signup: max 3 per minute (abuse rok)
+  @ApiOperation({ summary: 'Naya business register karein (public signup)' })
+  signup(@Body() dto: SignupDto) {
+    return this.authService.signup(dto);
   }
 }

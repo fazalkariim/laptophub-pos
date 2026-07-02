@@ -6,6 +6,8 @@ import { LoginDto } from './dto/login.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { jwtConstants } from './constants';
+import { SignupDto } from './dto/signup.dto';
+import { ConflictException } from '@nestjs/common';
 
 @Injectable()
 export class AuthService {
@@ -132,6 +134,83 @@ export class AuthService {
     });
 
     return { message: `${user.email} ka password reset kar diya gaya` };
+  }
+
+  // Public signup — naya business register kare (tenant + admin + branch auto)
+  async signup(dto: SignupDto) {
+    // Pehle check: ye email kisi bhi tenant mein pehle se to nahi?
+    // (Signup ke liye email globally unique rakhna behtar hai, taake login clear rahe)
+    const existingUser = await this.prisma.user.findFirst({
+      where: { email: dto.email },
+    });
+    if (existingUser) {
+      throw new ConflictException('Ye email pehle se registered hai. Login karein.');
+    }
+
+    const passwordHash = await bcrypt.hash(dto.password, 10);
+
+    // TRANSACTION: tenant + branch + admin user — sab ya to banें ya koi nahi
+    const result = await this.prisma.$transaction(async (tx) => {
+      // 1. Tenant banao
+      const tenant = await tx.tenant.create({
+        data: {
+          name: dto.businessName,
+          plan: 'free',      // naya tenant free plan pe (aage plans add karenge)
+          status: 'active',
+        },
+      });
+
+      // 2. Default branch banao
+      const branch = await tx.branch.create({
+        data: {
+          tenantId: tenant.id,
+          name: 'Main Branch',  // default — baad mein rename kar sakta hai
+        },
+      });
+
+      // 3. Admin user banao (Super Admin — branchId null, poore tenant ka malik)
+      const user = await tx.user.create({
+        data: {
+          tenantId: tenant.id,
+          branchId: null,        // Super Admin kisi ek branch ka nahi
+          role: 'SUPER_ADMIN',
+          email: dto.email,
+          passwordHash,
+          name: dto.ownerName,
+          isActive: true,
+        },
+      });
+
+      return { tenant, branch, user };
+    });
+
+    // Signup ke baad seedha login token de do (taake foran shuru kar sake)
+    const payload = {
+      sub: result.user.id,
+      tenantId: result.tenant.id,
+      branchId: result.user.branchId,
+      role: result.user.role,
+      email: result.user.email,
+    };
+    const tokens = await this.generateTokens(payload);
+    await this.saveRefreshToken(result.user.id, tokens.refreshToken);
+
+    return {
+      message: 'Business register ho gaya! Aap login ho chuke hain.',
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      business: {
+        tenantId: result.tenant.id,
+        name: result.tenant.name,
+        plan: result.tenant.plan,
+      },
+      user: {
+        id: result.user.id,
+        email: result.user.email,
+        name: result.user.name,
+        role: result.user.role,
+      },
+    };
   }
 
  // Access + refresh dono tokens banao

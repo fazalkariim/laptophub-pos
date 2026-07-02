@@ -17,6 +17,7 @@ import { PurchasingModule } from './modules/purchasing/purchasing.module';
 import { FinanceModule } from './modules/finance/finance.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { HealthModule } from './modules/health/health.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { HealthModule } from './modules/health/health.module';
     FinanceModule,
     ReportsModule,
     HealthModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [
