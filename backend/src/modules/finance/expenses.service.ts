@@ -16,7 +16,9 @@ export class ExpensesService {
   // Create expense
   async create(dto: CreateExpenseDto, user: CurrentUser) {
     // Branch scope: Manager sirf apni branch ka kharch
-    if (user.role !== 'SUPER_ADMIN' && dto.branchId !== user.branchId) {
+    // Head office roles (Super Admin, Accountant) — kisi bhi branch ka expense
+    const headOffice = user.role === 'SUPER_ADMIN' || user.role === 'ACCOUNTANT';
+    if (!headOffice && dto.branchId !== user.branchId) {
       throw new BadRequestException('Aap sirf apni branch ka kharch add kar sakte hain');
     }
 
@@ -72,7 +74,8 @@ export class ExpensesService {
     if (!expense) {
       throw new NotFoundException('Expense nahi mila');
     }
-    if (user.role !== 'SUPER_ADMIN' && expense.branchId !== user.branchId) {
+    const headOffice = user.role === 'SUPER_ADMIN' || user.role === 'ACCOUNTANT';
+    if (!headOffice && expense.branchId !== user.branchId) {
       throw new BadRequestException('Aap sirf apni branch ka expense hata sakte hain');
     }
 

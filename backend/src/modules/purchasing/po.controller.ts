@@ -38,14 +38,14 @@ export class PoController {
   }
 
   @Post('pay-supplier')
-  @Roles('SUPER_ADMIN')
+  @Roles('SUPER_ADMIN', 'ACCOUNTANT')
   @ApiOperation({ summary: 'Supplier ko payment (sirf Super Admin)' })
   paySupplier(@Body() dto: PaySupplierDto, @CurrentUser() user: any) {
     return this.poService.paySupplier(dto, user);
   }
 
   @Get('supplier/:supplierId/payables')
-  @Roles('SUPER_ADMIN')
+  @Roles('SUPER_ADMIN', 'ACCOUNTANT')
   @ApiOperation({ summary: 'Supplier payables — kitna dena hai (sirf Super Admin)' })
   supplierPayables(@Param('supplierId') supplierId: string) {
     return this.poService.supplierPayables(supplierId);

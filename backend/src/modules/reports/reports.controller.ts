@@ -36,7 +36,7 @@ export class ReportsController {
   }
 
   @Get('stock-valuation')
-  @Roles('SUPER_ADMIN', 'BRANCH_MANAGER')  // cost data — salesman nahi
+  @Roles('SUPER_ADMIN', 'BRANCH_MANAGER', 'ACCOUNTANT')  // cost data — salesman nahi
   @ApiOperation({ summary: 'Stock valuation — kitna paisa stock mein (cost pe)' })
   stockValuation(
     @CurrentUser() user: any,

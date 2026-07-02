@@ -32,7 +32,7 @@ export class SalesController {
   }
 
   @Post('payments')
-  @Roles('SUPER_ADMIN', 'BRANCH_MANAGER', 'SALESMAN')  // koi bhi collect kar sakta hai
+  @Roles('SUPER_ADMIN', 'BRANCH_MANAGER', 'SALESMAN', 'ACCOUNTANT')  // koi bhi collect kar sakta hai
   @ApiOperation({ summary: 'Udhaar collect karein (existing sale pe payment)' })
   addPayment(@Body() dto: AddPaymentDto, @CurrentUser() user: any) {
     return this.salesService.addPayment(dto, user);
@@ -63,13 +63,14 @@ export class SalesController {
     @Param('branchId') branchId: string,
     @Query('withinDays') withinDays?: string,
   ) {
-    return this.salesService.expiringWarranties(
+    return this.salesService.expiringWarranties( 
       branchId,
       withinDays ? parseInt(withinDays, 10) : 30,
     );
   }
 
   @Get('customer/:customerId/history')
+  @Roles('SUPER_ADMIN', 'BRANCH_MANAGER', 'ACCOUNTANT', 'SALESMAN')
   @ApiOperation({ summary: 'Customer ki purchase history + baqi paise' })
   customerHistory(@Param('customerId') customerId: string) {
     return this.salesService.customerHistory(customerId);

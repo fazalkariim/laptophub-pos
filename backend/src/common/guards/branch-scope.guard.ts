@@ -12,7 +12,7 @@ export class BranchScopeGuard implements CanActivate {
     }
 
     // Super Admin (branchId null) — har branch allowed
-    if (user.role === 'SUPER_ADMIN') {
+    if (user.role === 'SUPER_ADMIN'|| user.role === 'ACCOUNTANT') {
       return true;
     }
 

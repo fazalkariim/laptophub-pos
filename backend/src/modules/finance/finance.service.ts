@@ -195,11 +195,22 @@ export class FinanceService {
 
       // Expenses (date range)
       const expenseWhere: any = { branchId: branch.id };
+
       if (from || to) {
-        expenseWhere.date = {};
-        if (from) expenseWhere.date.gte = new Date(from);
-        if (to) expenseWhere.date.lte = new Date(to + 'T23:59:59');
+        const dateRange: any = {};
+        if (from) {
+          const d = new Date(from);
+          if (!isNaN(d.getTime())) dateRange.gte = d;
+        }
+        if (to) {
+          const d = new Date(to + 'T23:59:59');
+          if (!isNaN(d.getTime())) dateRange.lte = d;
+        }
+        if (Object.keys(dateRange).length > 0) {
+          expenseWhere.date = dateRange;
+        }
       }
+
       const expenses = await this.tenantPrisma.client.expense.findMany({
         where: expenseWhere,
       });

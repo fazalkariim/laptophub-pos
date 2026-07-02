@@ -48,7 +48,7 @@ export class ReportsService {
       saleWhere.salesmanId = user.userId;
     } else if (user.role === 'BRANCH_MANAGER') {
       saleWhere.branchId = user.branchId;
-    } else if (user.role === 'SUPER_ADMIN') {
+    } else if (user.role === 'SUPER_ADMIN'|| user.role === 'ACCOUNTANT') {
       if (branchId) saleWhere.branchId = branchId;
     }
 
@@ -113,7 +113,7 @@ export class ReportsService {
     } else if (user.role === 'BRANCH_MANAGER') {
       // Manager sirf apni branch
       where.branchId = user.branchId;
-    } else if (user.role === 'SUPER_ADMIN') {
+    } else if (user.role === 'SUPER_ADMIN'|| user.role === 'ACCOUNTANT') {
       // Super Admin sab — agar branchId diya to us branch ka
       if (branchId) where.branchId = branchId;
     }

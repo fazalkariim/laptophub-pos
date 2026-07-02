@@ -45,11 +45,13 @@ export class UsersService {
       throw new ConflictException('Ye email pehle se istemaal mein hai');
     }
 
-    // 2. Role rules
-    if (dto.role === UserRole.SUPER_ADMIN && dto.branchId) {
-      throw new BadRequestException('Super Admin ka koi branch nahi hota');
+   // Head-office roles (Super Admin, Accountant) — branch nahi hota
+    const headOfficeRoles = [UserRole.SUPER_ADMIN, UserRole.ACCOUNTANT];
+
+    if (headOfficeRoles.includes(dto.role) && dto.branchId) {
+      throw new BadRequestException('Is role (head office) ka koi branch nahi hota');
     }
-    if (dto.role !== UserRole.SUPER_ADMIN && !dto.branchId) {
+    if (!headOfficeRoles.includes(dto.role) && !dto.branchId) {
       throw new BadRequestException('Is role ke liye branch zaroori hai');
     }
 
