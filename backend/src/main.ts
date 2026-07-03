@@ -4,8 +4,14 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+    app.enableCors({
+    origin: 'http://localhost:3001',   // frontend ka origin
+    credentials: true,                  // agar cookies/refresh header bhej rahe ho
+  });
 
   // Security headers
   app.use(helmet());
