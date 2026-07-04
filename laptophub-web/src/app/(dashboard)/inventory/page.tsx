@@ -8,6 +8,9 @@ import { DataTable, Column } from '@/components/shared/DataTable';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { StatusBadge } from '@/components/inventory/StatusBadge';
 import type { StockItem } from '@/types';
+import { IntakeDialog } from '@/components/inventory/IntakeDialog';
+import { AdjustDialog } from '@/components/inventory/AdjustDialog';
+import { Button } from '@/components/ui/button';
 
 export default function InventoryPage() {
   const user = useAuth((s) => s.user);
@@ -23,6 +26,7 @@ export default function InventoryPage() {
 
   const branchId = isSuperAdmin ? selectedBranch : user?.branchId ?? null;
   const { data, isLoading, isError } = useStock(branchId);
+  const [adjustItem, setAdjustItem] = useState<StockItem | null>(null);
 
   const columns: Column<StockItem>[] = [
     { header: 'SKU', cell: (s) => s.product.sku },
@@ -40,8 +44,23 @@ export default function InventoryPage() {
                 ? `Rs ${Number(s.costPrice).toLocaleString()}`
                 : '—',
           },
+          
         ]
       : []),
+      {
+      header: '',
+      cell: (s: StockItem) => (
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setAdjustItem(s)}
+          >
+            Adjust
+          </Button>
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -49,21 +68,25 @@ export default function InventoryPage() {
       <PageHeader
         title="Inventory"
         description="Branch ka stock dekhein."
-        action={
-          isSuperAdmin ? (
-            <select
-              value={selectedBranch ?? ''}
-              onChange={(e) => setSelectedBranch(e.target.value || null)}
-              className="rounded-md border px-3 py-2 text-sm"
-            >
-              <option value="">Branch chunein…</option>
-              {branches?.map((b) => (
-                <option key={b.id} value={b.id}>
-                  {b.name}
-                </option>
-              ))}
-            </select>
-          ) : null
+
+      action={
+          <div className="flex items-center gap-2">
+            {isSuperAdmin && (
+              <select
+                value={selectedBranch ?? ''}
+                onChange={(e) => setSelectedBranch(e.target.value || null)}
+                className="rounded-md border px-3 py-2 text-sm"
+              >
+                <option value="">Branch chunein…</option>
+                {branches?.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.name}
+                  </option>
+                ))}
+              </select>
+            )}
+            {branchId && <IntakeDialog branchId={branchId} />}
+          </div>
         }
       />
 
@@ -81,6 +104,12 @@ export default function InventoryPage() {
           emptyMessage="Is branch mein koi stock nahi hai."
         />
       )}
+
+      <AdjustDialog
+        item={adjustItem}
+        branchId={branchId}
+        onOpenChange={(v) => !v && setAdjustItem(null)}
+      />
     </div>
   );
 }

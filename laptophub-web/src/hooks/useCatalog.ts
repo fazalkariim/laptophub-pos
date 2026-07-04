@@ -58,3 +58,16 @@ export function useDeleteProduct() {
     },
   });
 }
+
+// Dropdown ke liye — bada limit taake saare products ek call mein aa jaayein
+export function useAllProducts() {
+  return useQuery({
+    queryKey: ['catalog', 'all'],
+    queryFn: async () => {
+      const res = await apiClient.get<PaginatedResponse<Product>>(
+        '/catalog?page=1&limit=100'
+      );
+      return res.data.data;
+    },
+  });
+}

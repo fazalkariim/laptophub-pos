@@ -75,6 +75,12 @@ export const NAV_ITEMS: NavItem[] = [
     icon: Package,
     allow: ["SUPER_ADMIN"],
   },
+  {
+    label: 'Bulk Intake',
+    href: '/inventory/bulk-intake',
+    icon: Package,
+    allow: ['SUPER_ADMIN', 'BRANCH_MANAGER'],
+  },
 ];
 
 export function navForRole(role: Role): NavItem[] {
