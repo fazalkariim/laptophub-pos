@@ -9,7 +9,9 @@ import { ScanInput } from '@/components/pos/ScanInput';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { formatMoney } from '@/lib/format';
-import type { StockItem } from '@/types';
+import type { StockItem , Customer } from '@/types';
+import { CustomerLookup } from '@/components/pos/CustomerLookup';
+import { PaymentPanel, PaymentLine } from '@/components/pos/PaymentPanel';
 
 interface CartLine {
   item: StockItem;
@@ -31,6 +33,9 @@ export default function PosPage() {
   const [cart, setCart] = useState<CartLine[]>([]);
   const createSale = useCreateSale(branchId);
 
+  const [customer, setCustomer] = useState<Customer | null>(null);
+  const [payments, setPayments] = useState<PaymentLine[]>([]);
+
   function addItem(item: StockItem) {
     setCart((prev) => [...prev, { item, price: 0, discount: 0 }]);
   }
@@ -44,9 +49,14 @@ export default function PosPage() {
   }
 
   const subtotal = useMemo(
-    () => cart.reduce((sum, l) => sum + (l.price - l.discount), 0),
+    () => cart.reduce((sum, l) => sum + (l.price - l.discount) * l.item.quantity, 0),
     [cart]
   );
+
+  const canDoPartial =
+    user?.role === 'SUPER_ADMIN' || user?.role === 'BRANCH_MANAGER';
+  const paidTotal = payments.reduce((sum, p) => sum + p.amount, 0);
+  const isPartial = paidTotal < subtotal - 0.01;
 
   function completeSale() {
     if (!branchId) {
@@ -61,22 +71,41 @@ export default function PosPage() {
       toast.error('Har item ka price daalein');
       return;
     }
+    if (payments.length === 0) {
+      toast.error('Kam se kam ek payment daalein');
+      return;
+    }
+    if (isPartial && !canDoPartial) {
+      toast.error('Udhaar sirf Manager ya Admin kar sakte hain. Poora payment lें.');
+      return;
+    }
+    if (isPartial && canDoPartial && !customer) {
+      toast.error('Udhaar sale ke liye customer zaroori hai.');
+      return;
+    }
+    if (paidTotal > subtotal + 0.01) {
+      toast.error('Payment total se zyada hai.');
+      return;
+    }
 
     createSale.mutate(
       {
         branchId,
+        customerId: customer?.id,
         lines: cart.map((l) => ({
           stockItemId: l.item.id,
           price: l.price,
           discount: l.discount,
           quantity: l.item.quantity,
         })),
-        payments: [{ method: 'cash', amount: subtotal }],
+        payments,
       },
       {
         onSuccess: (sale) => {
           toast.success(`Sale complete — ${sale.invoiceNumber}`);
           setCart([]);
+          setCustomer(null);
+          setPayments([]);
         },
         onError: (err: any) =>
           toast.error(err?.response?.data?.message ?? 'Sale fail hui'),
@@ -195,8 +224,18 @@ export default function PosPage() {
       </div>
 
       {/* Right: summary + pay */}
-      <div className="w-80 shrink-0 border-l p-4">
+      <div className="w-80 shrink-0 overflow-y-auto border-l p-4">
         <h2 className="mb-4 text-lg font-semibold">Summary</h2>
+
+        <div className="mb-4">
+          <p className="mb-1 text-sm font-medium">Customer (optional)</p>
+          <CustomerLookup
+            attached={customer}
+            onAttach={setCustomer}
+            onClear={() => setCustomer(null)}
+          />
+        </div>
+
         <div className="mb-2 flex justify-between text-sm">
           <span className="text-muted-foreground">Items</span>
           <span>{cart.length}</span>
@@ -205,12 +244,22 @@ export default function PosPage() {
           <span>Total</span>
           <span>{formatMoney(subtotal)}</span>
         </div>
+
+        <p className="mb-1 text-sm font-medium">Payment</p>
+        <PaymentPanel
+          total={subtotal}
+          payments={payments}
+          onChange={setPayments}
+          canDoPartial={canDoPartial}
+          hasCustomer={!!customer}
+        />
+
         <Button
-          className="w-full"
+          className="mt-4 w-full"
           disabled={createSale.isPending || cart.length === 0}
           onClick={completeSale}
         >
-          {createSale.isPending ? 'Processing…' : 'Complete Sale (Cash)'}
+          {createSale.isPending ? 'Processing…' : 'Complete Sale'}
         </Button>
       </div>
     </div>

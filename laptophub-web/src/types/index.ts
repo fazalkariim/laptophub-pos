@@ -50,6 +50,23 @@ export interface PaginatedResponse<T> {
   };
 }
 
+export interface Customer {
+  id: string;
+  branchId: string;
+  name: string;
+  contact: string | null;
+  type: string | null;
+  tags: string[];
+  createdAt: string;
+}
+
+export interface CreateCustomerInput {
+  name: string;
+  contact?: string;
+  type?: string;
+  tags?: string[];
+}
+
 export type StockStatus = 'IN_STOCK' | 'SOLD' | string;
 
 export interface StockItem {
