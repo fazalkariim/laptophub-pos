@@ -12,6 +12,7 @@ import { formatMoney } from '@/lib/format';
 import type { StockItem , Customer } from '@/types';
 import { CustomerLookup } from '@/components/pos/CustomerLookup';
 import { PaymentPanel, PaymentLine } from '@/components/pos/PaymentPanel';
+import { ReceiptDialog } from '@/components/pos/ReceiptDialog';
 
 interface CartLine {
   item: StockItem;
@@ -35,6 +36,7 @@ export default function PosPage() {
 
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [payments, setPayments] = useState<PaymentLine[]>([]);
+  const [receiptSaleId, setReceiptSaleId] = useState<string | null>(null);
 
   function addItem(item: StockItem) {
     setCart((prev) => [...prev, { item, price: 0, discount: 0 }]);
@@ -106,6 +108,7 @@ export default function PosPage() {
           setCart([]);
           setCustomer(null);
           setPayments([]);
+          setReceiptSaleId(sale.id);
         },
         onError: (err: any) =>
           toast.error(err?.response?.data?.message ?? 'Sale fail hui'),
@@ -262,6 +265,10 @@ export default function PosPage() {
           {createSale.isPending ? 'Processing…' : 'Complete Sale'}
         </Button>
       </div>
+      <ReceiptDialog
+        saleId={receiptSaleId}
+        onOpenChange={(v) => !v && setReceiptSaleId(null)}
+      />
     </div>
   );
 }

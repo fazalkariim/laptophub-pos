@@ -67,6 +67,35 @@ export interface CreateCustomerInput {
   tags?: string[];
 }
 
+export interface ReceiptItem {
+  description: string;
+  serialNumber: string | null;
+  price: number;
+  discount: number;
+  lineTotal: number;
+}
+
+export interface ReceiptPayment {
+  method: string;
+  amount: number;
+}
+
+export interface Receipt {
+  invoiceNumber: string;
+  date: string;
+  branch: { name: string; address: string | null };
+  salesman: string;
+  customer: { name: string; contact: string | null } | null;
+  items: ReceiptItem[];
+  payments: ReceiptPayment[];
+  totalDiscount: number;
+  total: number;
+  amountPaid: number;
+  balanceDue: number;
+  paymentStatus: string;
+  status: string;
+}
+
 export type StockStatus = 'IN_STOCK' | 'SOLD' | string;
 
 export interface StockItem {
