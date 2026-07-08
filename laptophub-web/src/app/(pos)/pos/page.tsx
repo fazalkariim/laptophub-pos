@@ -13,6 +13,10 @@ import type { StockItem , Customer } from '@/types';
 import { CustomerLookup } from '@/components/pos/CustomerLookup';
 import { PaymentPanel, PaymentLine } from '@/components/pos/PaymentPanel';
 import { ReceiptDialog } from '@/components/pos/ReceiptDialog';
+import { useHeldSales } from '@/hooks/useHeldSales';
+import { HeldSalesDropdown } from '@/components/pos/HeldSalesDropdown';
+import { useSaleQueue } from '@/hooks/useSaleQueue';
+import { QueuedSalesBadge } from '@/components/pos/QueuedSalesBadge';
 
 interface CartLine {
   item: StockItem;
@@ -31,9 +35,15 @@ export default function PosPage() {
   );
   const branchId = canPickBranch ? selectedBranch : user?.branchId ?? null;
 
+
   const [cart, setCart] = useState<CartLine[]>([]);
   const createSale = useCreateSale(branchId);
-
+  const { heldSales, holdSale, resumeSale, discardSale } = useHeldSales();
+  const { queue, enqueue, syncAll, syncOne, removeFromQueue } = useSaleQueue(
+    (sale) => {
+      toast.success(`Queued sale sync ho gayi — ${sale.invoiceNumber}`);
+    }
+  );
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [payments, setPayments] = useState<PaymentLine[]>([]);
   const [receiptSaleId, setReceiptSaleId] = useState<string | null>(null);
@@ -49,7 +59,30 @@ export default function PosPage() {
       prev.map((l) => (l.item.id === id ? { ...l, [field]: value } : l))
     );
   }
+  function onHold() {
+    if (!branchId) return;
+    if (cart.length === 0) {
+      toast.error('Cart khaali hai — hold karne ko kuch nahi');
+      return;
+    }
+    holdSale(branchId, cart, customer, payments);
+    toast.success('Sale hold ho gayi');
+    setCart([]);
+    setCustomer(null);
+    setPayments([]);
+  }
 
+  function onResume(held: (typeof heldSales)[number]) {
+    if (cart.length > 0) {
+      toast.error('Pehle current cart complete ya hold karein');
+      return;
+    }
+    setCart(held.cart);
+    setCustomer(held.customer);
+    setPayments(held.payments);
+    resumeSale(held.id);
+    toast.success('Sale resume ho gayi');
+  }
   const subtotal = useMemo(
     () => cart.reduce((sum, l) => sum + (l.price - l.discount) * l.item.quantity, 0),
     [cart]
@@ -102,7 +135,7 @@ export default function PosPage() {
         })),
         payments,
       },
-      {
+    {
         onSuccess: (sale) => {
           toast.success(`Sale complete — ${sale.invoiceNumber}`);
           setCart([]);
@@ -110,8 +143,30 @@ export default function PosPage() {
           setPayments([]);
           setReceiptSaleId(sale.id);
         },
-        onError: (err: any) =>
-          toast.error(err?.response?.data?.message ?? 'Sale fail hui'),
+        onError: (err: any) => {
+          if (!err?.response) {
+            // Network fail — queue mein daal do, data mat khoye
+            enqueue({
+              branchId,
+              customerId: customer?.id,
+              lines: cart.map((l) => ({
+                stockItemId: l.item.id,
+                price: l.price,
+                discount: l.discount,
+                quantity: l.item.quantity,
+              })),
+              payments,
+            });
+            toast.error(
+              'Connection issue — sale save ho gayi, connection wapas aane pe automatically bhej di jaayegi.'
+            );
+            setCart([]);
+            setCustomer(null);
+            setPayments([]);
+          } else {
+            toast.error(err.response?.data?.message ?? 'Sale fail hui');
+          }
+        },
       }
     );
   }
@@ -120,20 +175,38 @@ export default function PosPage() {
     <div className="flex h-full">
       {/* Left: scan + cart */}
       <div className="flex flex-1 flex-col overflow-hidden p-4">
-        {canPickBranch && (
-          <select
-            value={selectedBranch ?? ''}
-            onChange={(e) => setSelectedBranch(e.target.value || null)}
-            className="mb-3 max-w-xs rounded-md border px-3 py-2 text-sm"
-          >
-            <option value="">Branch chunein…</option>
-            {branches?.map((b) => (
-              <option key={b.id} value={b.id}>
-                {b.name}
-              </option>
-            ))}
-          </select>
-        )}
+        <div className="mb-3 flex items-center justify-between">
+          {canPickBranch && (
+            <select
+              value={selectedBranch ?? ''}
+              onChange={(e) => setSelectedBranch(e.target.value || null)}
+              className="max-w-xs rounded-md border px-3 py-2 text-sm"
+            >
+              <option value="">Branch chunein…</option>
+              {branches?.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.name}
+                </option>
+              ))}
+            </select>
+          )}
+          <div className="ml-auto flex gap-2">
+            <QueuedSalesBadge
+              queue={queue}
+              onRetry={syncOne}
+              onRetryAll={syncAll}
+              onDiscard={removeFromQueue}
+            />
+            <Button variant="outline" onClick={onHold} disabled={cart.length === 0}>
+              Hold Sale
+            </Button>
+            <HeldSalesDropdown
+              heldSales={heldSales}
+              onResume={onResume}
+              onDiscard={discardSale}
+            />
+          </div>
+        </div>
 
         {!branchId ? (
           <div className="rounded-lg border p-8 text-center text-sm text-muted-foreground">

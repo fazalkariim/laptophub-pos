@@ -114,3 +114,50 @@ export interface StockItem {
     category: string | null;
   };
 }
+
+export interface CustomerHistorySale {
+  saleId: string;
+  invoiceNumber: string;
+  date: string;
+  items: string[];
+  total: number;
+  paid: number;
+  due: number;
+  paymentStatus: string;
+  saleStatus: string;
+}
+
+export interface CustomerHistory {
+  customer: { id: string; name: string; contact: string | null };
+  summary: {
+    totalPurchased: number;
+    totalPaid: number;
+    totalDue: number;
+    salesCount: number;
+  };
+  history: CustomerHistorySale[];
+}
+
+export interface CustomerWarranty {
+  id: string;
+  serial: string | null;
+  product: string;
+  startDate: string;
+  endDate: string;
+  status: string;
+  daysLeft: number;
+  isExpired: boolean;
+}
+
+export interface CustomerWarranties {
+  customer: { id: string; name: string };
+  warranties: CustomerWarranty[];
+}
+
+export interface ExpiringWarranty {
+  id: string;
+  serial: string | null;
+  product: string;
+  customer: { name: string; contact: string | null };
+  endDate: string;
+}

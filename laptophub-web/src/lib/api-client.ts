@@ -55,18 +55,31 @@ apiClient.interceptors.response.use(
       });
     }
 
-    isRefreshing = true;
+   isRefreshing = true;
     try {
       const refreshToken = tokenStore.getRefresh();
-      const { data } = await axios.post(`${BASE_URL}/auth/refresh`, {}, {
-        headers: { Authorization: `Bearer ${refreshToken}` },
-      });
+      const { data } = await axios.post(
+        `${BASE_URL}/auth/refresh`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${refreshToken}` },
+          timeout: 8000, // network hang se bachne ke liye
+        }
+      );
       tokenStore.set(data.accessToken, data.refreshToken);
       queue.forEach((cb) => cb(data.accessToken));
       queue = [];
       original.headers.Authorization = `Bearer ${data.accessToken}`;
       return apiClient(original);
-    } catch (e) {
+    } catch (e: any) {
+      queue = [];
+      // Agar refresh khud se koi jawab na de (network/timeout fail),
+      // to login se mat nikaalo — cart/sale data bachao, error upar bhej do
+      // taake retry-queue usse network-fail samjhe.
+      if (!e?.response) {
+        return Promise.reject(e);
+      }
+      // Refresh token sach mein invalid/expired hai (backend ne 401 diya) — ab logout theek hai
       tokenStore.clear();
       if (typeof window !== 'undefined') window.location.href = '/login';
       return Promise.reject(e);

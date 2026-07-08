@@ -81,6 +81,12 @@ export const NAV_ITEMS: NavItem[] = [
     icon: Package,
     allow: ['SUPER_ADMIN', 'BRANCH_MANAGER'],
   },
+  {
+    label: 'Expiring Warranties',
+    href: '/customers/expiring-warranties',
+    icon: Users,
+    allow: ['SUPER_ADMIN', 'BRANCH_MANAGER'],
+  },
 ];
 
 export function navForRole(role: Role): NavItem[] {

@@ -37,11 +37,12 @@ export function useCreateSale(branchId: string | null) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: CreateSaleInput) => {
-      const res = await apiClient.post<SaleResult>('/sales', input);
+      const res = await apiClient.post<SaleResult>('/sales', input, {
+        timeout: 8000, // 8 second — is se zyada wait mat karo
+      });
       return res.data;
     },
     onSuccess: () => {
-      // sale ke baad stock badla — us branch ki list refresh
       qc.invalidateQueries({ queryKey: ['stock', branchId] });
     },
   });
