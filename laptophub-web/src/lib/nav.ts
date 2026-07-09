@@ -39,12 +39,7 @@ export const NAV_ITEMS: NavItem[] = [
     icon: Users,
     allow: ["SUPER_ADMIN", "BRANCH_MANAGER", "SALESMAN"],
   },
-  {
-    label: "Purchasing",
-    href: "/purchasing",
-    icon: Truck,
-    allow: ["SUPER_ADMIN"],
-  },
+ 
   {
     label: "Finance",
     href: "/finance",
@@ -87,8 +82,29 @@ export const NAV_ITEMS: NavItem[] = [
     icon: Users,
     allow: ['SUPER_ADMIN', 'BRANCH_MANAGER'],
   },
+  {
+    label: 'Transfers',
+    href: '/transfers',
+    icon: Truck,
+    allow: ['SUPER_ADMIN', 'BRANCH_MANAGER'],
+  },
+  {
+    label: 'Consolidated Stock',
+    href: '/transfers/consolidated-stock',
+    icon: Truck,
+    allow: ['SUPER_ADMIN'],
+  },
+  {
+    label: 'Purchasing',
+    href: '/purchasing/suppliers',
+    icon: Truck,
+    allow: ['SUPER_ADMIN'],
+  },
+
 ];
 
 export function navForRole(role: Role): NavItem[] {
   return NAV_ITEMS.filter((item) => item.allow.includes(role));
 }
+
+

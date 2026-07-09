@@ -161,3 +161,56 @@ export interface ExpiringWarranty {
   customer: { name: string; contact: string | null };
   endDate: string;
 }
+
+export interface TransferLine {
+  id: string;
+  transferId: string;
+  stockItemId: string;
+}
+
+export interface Transfer {
+  id: string;
+  transferNumber: string;
+  sourceBranchId: string;
+  destBranchId: string;
+  status: 'IN_TRANSIT' | 'RECEIVED' | 'REJECTED' | 'CANCELLED';
+  sentById: string;
+  receivedById: string | null;
+  note: string | null;
+  createdAt: string;
+  completedAt: string | null;
+  lines: TransferLine[];
+}
+
+export interface CreateTransferInput {
+  sourceBranchId: string;
+  destBranchId: string;
+  stockItemIds: string[];
+  note?: string;
+}
+
+export interface TransferActionInput {
+  transferId: string;
+  reason: string;
+}
+
+export interface ConsolidatedStockRow {
+  branchId: string;
+  status: string;
+  itemCount: number;
+  totalQuantity: number;
+}
+
+export interface Supplier {
+  id: string;
+  name: string;
+  contact: string | null;
+  terms: string | null;
+  deletedAt: string | null;
+}
+
+export interface CreateSupplierInput {
+  name: string;
+  contact?: string;
+  terms?: string;
+}
