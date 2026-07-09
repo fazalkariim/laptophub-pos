@@ -100,6 +100,12 @@ export const NAV_ITEMS: NavItem[] = [
     icon: Truck,
     allow: ['SUPER_ADMIN'],
   },
+  {
+    label: 'Purchase Orders',
+    href: '/purchasing/orders',
+    icon: Truck,
+    allow: ['SUPER_ADMIN'],
+  },
 
 ];
 
