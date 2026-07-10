@@ -1,0 +1,22 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:3001",
+      "localStorage": [
+        {
+          "name": "accessToken",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzODNkOGIzNC00ZWM3LTQ1Y2ItODZiZC1hOWQ3NDVhZjFlMDQiLCJ0ZW5hbnRJZCI6ImxhcHRvcGh1Yi10ZW5hbnQtMDAxIiwiYnJhbmNoSWQiOm51bGwsInJvbGUiOiJTVVBFUl9BRE1JTiIsImVtYWlsIjoiYWRtaW5AbGFwdG9waHViLmNvbSIsImlhdCI6MTc4MzY5NDkzMywiZXhwIjoxNzgzNjk1ODMzfQ.nOorsDYdfer0tiCNcpn5Rp9ZaPOW9EqGtl5vVaBV7EI"
+        },
+        {
+          "name": "refreshToken",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzODNkOGIzNC00ZWM3LTQ1Y2ItODZiZC1hOWQ3NDVhZjFlMDQiLCJpYXQiOjE3ODM2OTQ5MzMsImV4cCI6MTc4NDI5OTczM30.-tvna-0qQkT-u_JenIpidLuGsHILD9JwbM_fQoTvWdc"
+        },
+        {
+          "name": "laptophub-auth",
+          "value": "{\"state\":{\"user\":{\"id\":\"383d8b34-4ec7-45cb-86bd-a9d745af1e04\",\"email\":\"admin@laptophub.com\",\"name\":\"Super Admin\",\"role\":\"SUPER_ADMIN\",\"branchId\":null}},\"version\":0}"
+        }
+      ]
+    }
+  ]
+}

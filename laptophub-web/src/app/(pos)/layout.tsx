@@ -35,9 +35,10 @@ export default function PosLayout({
         <span className="text-lg font-semibold">LaptopHub POS</span>
         <div className="flex items-center gap-4">
           <span className="text-sm text-muted-foreground">{user.name}</span>
-          <Button
+        <Button
             variant="ghost"
             size="icon"
+            aria-label="Logout"
             onClick={() => {
               logout();
               router.replace('/login');

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { formatMoney } from '@/lib/format';
@@ -34,12 +34,14 @@ export function PaymentPanel({
   const remaining = Math.max(0, total - paidTotal);
   const isPartial = paidTotal < total - 0.01;
   const isOverpaid = paidTotal > total + 0.01;
+  const amountInputRef = useRef<HTMLInputElement>(null);
 
-  function addPayment() {
+function addPayment() {
     const val = Number(amount);
     if (!val || val <= 0) return;
     onChange([...payments, { method, amount: val }]);
     setAmount('');
+    amountInputRef.current?.focus(); // ye line add karo
   }
 
   function removePayment(index: number) {
@@ -88,7 +90,8 @@ export function PaymentPanel({
             </option>
           ))}
         </select>
-        <Input
+          <Input
+          ref={amountInputRef}
           type="number"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}

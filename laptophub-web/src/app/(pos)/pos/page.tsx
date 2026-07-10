@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo , useEffect} from 'react';
 import { toast } from 'sonner';
 import { useAuth } from '@/lib/auth';
 import { useBranches } from '@/hooks/useBranches';
@@ -94,7 +94,6 @@ export default function PosPage() {
   const isPartial = paidTotal < subtotal - 0.01;
 
   function completeSale() {
-    console.log('>>> BUTTON CLICKED — completeSale chal raha hai');
     if (!branchId) {
       toast.error('Branch chunein');
       return;
@@ -171,6 +170,17 @@ export default function PosPage() {
       }
     );
   }
+
+  useEffect(() => {
+    function handleShortcut(e: KeyboardEvent) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        completeSale();
+      }
+    }
+    window.addEventListener('keydown', handleShortcut);
+    return () => window.removeEventListener('keydown', handleShortcut);
+  }, [completeSale]);
 
   return (
     <div className="flex h-full">
@@ -281,12 +291,13 @@ export default function PosPage() {
                           />
                         </td>
                         <td className="py-2">
-                          {formatMoney(l.price - l.discount)}
+                          {formatMoney((l.price - l.discount) * l.item.quantity)}
                         </td>
-                        <td className="py-2">
+                       <td className="py-2">
                           <button
                             onClick={() => removeLine(l.item.id)}
                             className="text-xs text-red-500 hover:underline"
+                            aria-label={`${l.item.product.model} cart se hataayein`}
                           >
                             Remove
                           </button>
@@ -332,11 +343,12 @@ export default function PosPage() {
           hasCustomer={!!customer}
         />
 
-        <Button
+      <Button
           className="mt-4 w-full"
           disabled={createSale.isPending || cart.length === 0}
           onClick={completeSale}
           data-testid="complete-sale-button"
+          title="Shortcut: Ctrl+Enter"
         >
           {createSale.isPending ? 'Processing…' : 'Complete Sale'}
         </Button>
