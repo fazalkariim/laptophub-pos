@@ -95,7 +95,7 @@ export function PaymentPanel({
           placeholder="Amount"
           className="flex-1"
         />
-        <Button type="button" variant="outline" onClick={addPayment}>
+        <Button type="button" variant="outline" onClick={addPayment} data-testid="add-payment-button">
           Add
         </Button>
       </div>

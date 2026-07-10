@@ -15,15 +15,34 @@ export default function PurchaseOrderDetailPage() {
   const router = useRouter();
   const id = params.id as string;
 
-  const { data: po, isLoading } = usePurchaseOrder(id);
+  const { data: po, isLoading, isError } = usePurchaseOrder(id);
   const [showReceive, setShowReceive] = useState(false);
   const [showPay, setShowPay] = useState(false);
 
   if (isLoading) {
     return <p className="text-sm text-muted-foreground">Load ho raha…</p>;
   }
+  if (isError) {
+    return (
+      <div>
+        <Button variant="ghost" size="sm" onClick={() => router.push('/purchasing/orders')}>
+          ← Purchase Orders
+        </Button>
+        <p className="mt-4 text-sm text-red-500">
+          PO load nahi ho paya. Connection check karein ya permission verify karein.
+        </p>
+      </div>
+    );
+  }
   if (!po) {
-    return <p className="text-sm text-red-500">PO nahi mila.</p>;
+    return (
+      <div>
+        <Button variant="ghost" size="sm" onClick={() => router.push('/purchasing/orders')}>
+          ← Purchase Orders
+        </Button>
+        <p className="mt-4 text-sm text-muted-foreground">PO nahi mila.</p>
+      </div>
+    );
   }
 
   const canReceive =

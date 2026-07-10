@@ -40,10 +40,26 @@ export default function FinancePage() {
     'overview'
   );
 
-  const { data: profit } = useBranchProfit(branchId, from, to);
-  const { data: summary } = useSalesSummary(branchId, from, to);
-  const { data: expensesData } = useExpenses(branchId, from, to);
-  const { data: dashboard } = useFinanceDashboard(from, to);
+  const {
+    data: profit,
+    isLoading: profitLoading,
+    isError: profitError,
+  } = useBranchProfit(branchId, from, to);
+  const {
+    data: summary,
+    isLoading: summaryLoading,
+    isError: summaryError,
+  } = useSalesSummary(branchId, from, to);
+  const {
+    data: expensesData,
+    isLoading: expensesLoading,
+    isError: expensesError,
+  } = useExpenses(branchId, from, to);
+  const {
+    data: dashboard,
+    isLoading: dashboardLoading,
+    isError: dashboardError,
+  } = useFinanceDashboard(from, to);
   const deleteExpense = useDeleteExpense();
 
   return (
@@ -107,6 +123,14 @@ export default function FinancePage() {
             <div className="rounded-lg border p-8 text-center text-sm text-muted-foreground">
               Dekhne ke liye branch chunein.
             </div>
+          ) : profitLoading || summaryLoading ? (
+            <div className="rounded-lg border p-8 text-center text-sm text-muted-foreground">
+              Load ho raha…
+            </div>
+          ) : profitError || summaryError ? (
+            <div className="rounded-lg border p-8 text-center text-sm text-red-500">
+              Data load nahi ho paya. Dobara try karein ya permission check karein.
+            </div>
           ) : (
             <div className="space-y-6">
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -133,13 +157,19 @@ export default function FinancePage() {
                     />
                   </div>
                   <h4 className="mb-2 mt-4 text-sm font-medium">Payment Breakdown</h4>
-                  <div className="flex gap-4">
-                    {Object.entries(summary.paymentBreakdown).map(([method, amt]) => (
-                      <div key={method} className="rounded-md bg-muted px-3 py-2 text-sm capitalize">
-                        {method}: {formatMoney(amt)}
-                      </div>
-                    ))}
-                  </div>
+                  {Object.keys(summary.paymentBreakdown).length === 0 ? (
+                    <p className="text-xs text-muted-foreground">
+                      Is period mein koi payment nahi hui.
+                    </p>
+                  ) : (
+                    <div className="flex gap-4">
+                      {Object.entries(summary.paymentBreakdown).map(([method, amt]) => (
+                        <div key={method} className="rounded-md bg-muted px-3 py-2 text-sm capitalize">
+                          {method}: {formatMoney(amt)}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -152,6 +182,14 @@ export default function FinancePage() {
           {!branchId ? (
             <div className="rounded-lg border p-8 text-center text-sm text-muted-foreground">
               Dekhne ke liye branch chunein.
+            </div>
+          ) : expensesLoading ? (
+            <div className="rounded-lg border p-8 text-center text-sm text-muted-foreground">
+              Load ho raha…
+            </div>
+          ) : expensesError ? (
+            <div className="rounded-lg border p-8 text-center text-sm text-red-500">
+              Expenses load nahi ho paye. Dobara try karein.
             </div>
           ) : (
             <div>
@@ -206,47 +244,63 @@ export default function FinancePage() {
         </>
       )}
 
-      {tab === 'consolidated' && isSuperAdmin && dashboard && (
-        <div className="space-y-6">
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            <StatCard label="Total Revenue" value={formatMoney(dashboard.overall.revenue)} />
-            <StatCard label="Net Profit" value={formatMoney(dashboard.overall.netProfit)} />
-            <StatCard
-              label="Net Cash Position"
-              value={formatMoney(dashboard.overall.netCashPosition)}
-            />
-            <StatCard
-              label="Payable"
-              value={formatMoney(dashboard.overall.payable)}
-              warn={dashboard.overall.payable > 0}
-            />
-          </div>
+      {tab === 'consolidated' && isSuperAdmin && (
+        <>
+          {dashboardLoading ? (
+            <div className="rounded-lg border p-8 text-center text-sm text-muted-foreground">
+              Load ho raha…
+            </div>
+          ) : dashboardError ? (
+            <div className="rounded-lg border p-8 text-center text-sm text-red-500">
+              Dashboard load nahi ho paya. Dobara try karein.
+            </div>
+          ) : !dashboard ? (
+            <div className="rounded-lg border p-8 text-center text-sm text-muted-foreground">
+              Koi data nahi mila.
+            </div>
+          ) : (
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                <StatCard label="Total Revenue" value={formatMoney(dashboard.overall.revenue)} />
+                <StatCard label="Net Profit" value={formatMoney(dashboard.overall.netProfit)} />
+                <StatCard
+                  label="Net Cash Position"
+                  value={formatMoney(dashboard.overall.netCashPosition)}
+                />
+                <StatCard
+                  label="Payable"
+                  value={formatMoney(dashboard.overall.payable)}
+                  warn={dashboard.overall.payable > 0}
+                />
+              </div>
 
-          <div className="overflow-hidden rounded-lg border">
-            <table className="w-full text-sm">
-              <thead className="bg-muted/50">
-                <tr>
-                  <th className="px-4 py-3 text-left font-medium text-muted-foreground">Branch</th>
-                  <th className="px-4 py-3 text-left font-medium text-muted-foreground">Revenue</th>
-                  <th className="px-4 py-3 text-left font-medium text-muted-foreground">Net Profit</th>
-                  <th className="px-4 py-3 text-left font-medium text-muted-foreground">Receivable</th>
-                  <th className="px-4 py-3 text-left font-medium text-muted-foreground">Sales</th>
-                </tr>
-              </thead>
-              <tbody>
-                {dashboard.perBranch.map((b) => (
-                  <tr key={b.branchId} className="border-t">
-                    <td className="px-4 py-3 font-medium">{b.branchName}</td>
-                    <td className="px-4 py-3">{formatMoney(b.revenue)}</td>
-                    <td className="px-4 py-3">{formatMoney(b.netProfit)}</td>
-                    <td className="px-4 py-3">{formatMoney(b.receivable)}</td>
-                    <td className="px-4 py-3">{b.salesCount}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+              <div className="overflow-hidden rounded-lg border">
+                <table className="w-full text-sm">
+                  <thead className="bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-medium text-muted-foreground">Branch</th>
+                      <th className="px-4 py-3 text-left font-medium text-muted-foreground">Revenue</th>
+                      <th className="px-4 py-3 text-left font-medium text-muted-foreground">Net Profit</th>
+                      <th className="px-4 py-3 text-left font-medium text-muted-foreground">Receivable</th>
+                      <th className="px-4 py-3 text-left font-medium text-muted-foreground">Sales</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {dashboard.perBranch.map((b) => (
+                      <tr key={b.branchId} className="border-t">
+                        <td className="px-4 py-3 font-medium">{b.branchName}</td>
+                        <td className="px-4 py-3">{formatMoney(b.revenue)}</td>
+                        <td className="px-4 py-3">{formatMoney(b.netProfit)}</td>
+                        <td className="px-4 py-3">{formatMoney(b.receivable)}</td>
+                        <td className="px-4 py-3">{b.salesCount}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

@@ -263,6 +263,7 @@ export default function PosPage() {
                               )
                             }
                             className="w-28"
+                            data-testid={`cart-price-${l.item.id}`}
                           />
                         </td>
                         <td className="py-2">
@@ -319,7 +320,7 @@ export default function PosPage() {
         </div>
         <div className="mb-4 flex justify-between text-lg font-semibold">
           <span>Total</span>
-          <span>{formatMoney(subtotal)}</span>
+          <span data-testid="pos-summary-total">{formatMoney(subtotal)}</span>
         </div>
 
         <p className="mb-1 text-sm font-medium">Payment</p>
@@ -335,6 +336,7 @@ export default function PosPage() {
           className="mt-4 w-full"
           disabled={createSale.isPending || cart.length === 0}
           onClick={completeSale}
+          data-testid="complete-sale-button"
         >
           {createSale.isPending ? 'Processing…' : 'Complete Sale'}
         </Button>

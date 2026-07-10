@@ -19,16 +19,46 @@ export default function CustomerDetailPage() {
 
   const [tab, setTab] = useState<'history' | 'warranties'>('history');
 
-  const { data: customer, isLoading: customerLoading } = useCustomerDetail(id);
-  const { data: history, isLoading: historyLoading } = useCustomerHistory(id);
-  const { data: warranties, isLoading: warrantiesLoading } =
-    useCustomerWarranties(id);
+  const {
+    data: customer,
+    isLoading: customerLoading,
+    isError: customerError,
+  } = useCustomerDetail(id);
+  const {
+    data: history,
+    isLoading: historyLoading,
+    isError: historyError,
+  } = useCustomerHistory(id);
+  const {
+    data: warranties,
+    isLoading: warrantiesLoading,
+    isError: warrantiesError,
+  } = useCustomerWarranties(id);
 
   if (customerLoading) {
     return <p className="text-sm text-muted-foreground">Load ho raha…</p>;
   }
+  if (customerError) {
+    return (
+      <div>
+        <Button variant="ghost" size="sm" onClick={() => router.push('/customers')}>
+          ← Customers
+        </Button>
+        <p className="mt-4 text-sm text-red-500">
+          Customer load nahi ho paya. Connection check karein ya permission verify karein.
+        </p>
+      </div>
+    );
+  }
   if (!customer) {
-    return <p className="text-sm text-red-500">Customer nahi mila.</p>;
+    return (
+      <div>
+        <Button variant="ghost" size="sm" onClick={() => router.push('/customers')}>
+          ← Customers
+        </Button>
+        <p className="mt-4 text-sm text-muted-foreground">Customer nahi mila.</p>
+      </div>
+    );
   }
 
   return (
@@ -43,35 +73,41 @@ export default function CustomerDetailPage() {
       />
 
       {/* Summary cards */}
-      {history && (
-        <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <div className="rounded-lg border p-4">
-            <p className="text-xs text-muted-foreground">Total Purchased</p>
-            <p className="text-lg font-semibold">
-              {formatMoney(history.summary.totalPurchased)}
-            </p>
-          </div>
-          <div className="rounded-lg border p-4">
-            <p className="text-xs text-muted-foreground">Total Paid</p>
-            <p className="text-lg font-semibold">
-              {formatMoney(history.summary.totalPaid)}
-            </p>
-          </div>
-          <div className="rounded-lg border p-4">
-            <p className="text-xs text-muted-foreground">Total Due</p>
-            <p
-              className={`text-lg font-semibold ${
-                history.summary.totalDue > 0 ? 'text-amber-600' : ''
-              }`}
-            >
-              {formatMoney(history.summary.totalDue)}
-            </p>
-          </div>
-          <div className="rounded-lg border p-4">
-            <p className="text-xs text-muted-foreground">Sales Count</p>
-            <p className="text-lg font-semibold">{history.summary.salesCount}</p>
-          </div>
+      {historyError ? (
+        <div className="mb-6 rounded-lg border p-4 text-sm text-red-500">
+          Summary load nahi ho paya.
         </div>
+      ) : (
+        history && (
+          <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <div className="rounded-lg border p-4">
+              <p className="text-xs text-muted-foreground">Total Purchased</p>
+              <p className="text-lg font-semibold">
+                {formatMoney(history.summary.totalPurchased)}
+              </p>
+            </div>
+            <div className="rounded-lg border p-4">
+              <p className="text-xs text-muted-foreground">Total Paid</p>
+              <p className="text-lg font-semibold">
+                {formatMoney(history.summary.totalPaid)}
+              </p>
+            </div>
+            <div className="rounded-lg border p-4">
+              <p className="text-xs text-muted-foreground">Total Due</p>
+              <p
+                className={`text-lg font-semibold ${
+                  history.summary.totalDue > 0 ? 'text-amber-600' : ''
+                }`}
+              >
+                {formatMoney(history.summary.totalDue)}
+              </p>
+            </div>
+            <div className="rounded-lg border p-4">
+              <p className="text-xs text-muted-foreground">Sales Count</p>
+              <p className="text-lg font-semibold">{history.summary.salesCount}</p>
+            </div>
+          </div>
+        )
       )}
 
       {/* Tabs */}
@@ -101,6 +137,10 @@ export default function CustomerDetailPage() {
       {tab === 'history' ? (
         historyLoading ? (
           <p className="text-sm text-muted-foreground">Load ho raha…</p>
+        ) : historyError ? (
+          <div className="rounded-lg border p-8 text-center text-sm text-red-500">
+            Purchase history load nahi ho payi. Dobara try karein.
+          </div>
         ) : !history || history.history.length === 0 ? (
           <div className="rounded-lg border p-8 text-center text-sm text-muted-foreground">
             Koi purchase history nahi hai.
@@ -161,6 +201,10 @@ export default function CustomerDetailPage() {
         )
       ) : warrantiesLoading ? (
         <p className="text-sm text-muted-foreground">Load ho raha…</p>
+      ) : warrantiesError ? (
+        <div className="rounded-lg border p-8 text-center text-sm text-red-500">
+          Warranties load nahi ho payin. Dobara try karein.
+        </div>
       ) : !warranties || warranties.warranties.length === 0 ? (
         <div className="rounded-lg border p-8 text-center text-sm text-muted-foreground">
           Koi warranty nahi hai.
