@@ -94,6 +94,7 @@ export default function PosPage() {
   const isPartial = paidTotal < subtotal - 0.01;
 
   function completeSale() {
+    console.log('>>> BUTTON CLICKED — completeSale chal raha hai');
     if (!branchId) {
       toast.error('Branch chunein');
       return;

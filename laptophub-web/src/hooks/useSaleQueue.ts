@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { apiClient } from '@/lib/api-client';
-import type { CreateSaleInput, SaleResult } from '@/hooks/useSale';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { apiClient } from "@/lib/api-client";
+import type { CreateSaleInput, SaleResult } from "@/hooks/useSale";
 
 export interface QueuedSale {
   id: string;
@@ -12,10 +12,10 @@ export interface QueuedSale {
   lastError?: string;
 }
 
-const STORAGE_KEY = 'laptophub-sale-queue';
+const STORAGE_KEY = "laptophub-sale-queue";
 
 function loadQueue(): QueuedSale[] {
-  if (typeof window === 'undefined') return [];
+  if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     return raw ? JSON.parse(raw) : [];
@@ -66,10 +66,34 @@ export function useSaleQueue(onSaleSynced?: (sale: SaleResult) => void) {
   // Ek queued sale ko retry karo
   const syncOne = useCallback(
     async (item: QueuedSale) => {
-      try {
-        const res = await apiClient.post<SaleResult>('/sales', item.payload);
+try {
+        const data = await new Promise<SaleResult>((resolve, reject) => {
+          let settled = false;
+          const timer = setTimeout(() => {
+            if (settled) return;
+            settled = true;
+            const timeoutError: any = new Error('Request timed out');
+            timeoutError.response = undefined;
+            reject(timeoutError);
+          }, 8000);
+
+          apiClient
+            .post<SaleResult>('/sales', item.payload)
+            .then((res) => {
+              if (settled) return;
+              settled = true;
+              clearTimeout(timer);
+              resolve(res.data);
+            })
+            .catch((err) => {
+              if (settled) return;
+              settled = true;
+              clearTimeout(timer);
+              reject(err);
+            });
+        });
         removeFromQueue(item.id);
-        onSaleSynced?.(res.data);
+        onSaleSynced?.(data);
         return true;
       } catch (err: any) {
         // Agar backend ne jawab diya (validation/business error) — queue se hata do,
@@ -81,10 +105,9 @@ export function useSaleQueue(onSaleSynced?: (sale: SaleResult) => void) {
                 ? {
                     ...q,
                     attempts: q.attempts + 1,
-                    lastError:
-                      err.response?.data?.message ?? 'Sale reject hui',
+                    lastError: err.response?.data?.message ?? "Sale reject hui",
                   }
-                : q
+                : q,
             );
             saveQueue(updated);
             return updated;
@@ -94,8 +117,8 @@ export function useSaleQueue(onSaleSynced?: (sale: SaleResult) => void) {
           setQueue((prev) => {
             const updated = prev.map((q) =>
               q.id === item.id
-                ? { ...q, attempts: q.attempts + 1, lastError: 'Network error' }
-                : q
+                ? { ...q, attempts: q.attempts + 1, lastError: "Network error" }
+                : q,
             );
             saveQueue(updated);
             return updated;
@@ -104,7 +127,7 @@ export function useSaleQueue(onSaleSynced?: (sale: SaleResult) => void) {
         return false;
       }
     },
-    [onSaleSynced, removeFromQueue]
+    [onSaleSynced, removeFromQueue],
   );
 
   // Poori queue sync karo (jab connection wapas aaye)
@@ -123,8 +146,8 @@ export function useSaleQueue(onSaleSynced?: (sale: SaleResult) => void) {
     function handleOnline() {
       syncAll();
     }
-    window.addEventListener('online', handleOnline);
-    return () => window.removeEventListener('online', handleOnline);
+    window.addEventListener("online", handleOnline);
+    return () => window.removeEventListener("online", handleOnline);
   }, [syncAll]);
 
   // Warn karo agar tab band ho / refresh ho aur pending sales hon
@@ -132,11 +155,11 @@ export function useSaleQueue(onSaleSynced?: (sale: SaleResult) => void) {
     function handleBeforeUnload(e: BeforeUnloadEvent) {
       if (loadQueue().length > 0) {
         e.preventDefault();
-        e.returnValue = '';
+        e.returnValue = "";
       }
     }
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, []);
 
   return { queue, enqueue, syncAll, syncOne, removeFromQueue };
