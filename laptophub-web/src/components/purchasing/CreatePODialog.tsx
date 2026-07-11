@@ -95,7 +95,7 @@ export function CreatePODialog() {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)}>New Purchase Order</Button>
+      <Button variant="tertiary" onClick={() => setOpen(true)}>New Purchase Order</Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-2xl">

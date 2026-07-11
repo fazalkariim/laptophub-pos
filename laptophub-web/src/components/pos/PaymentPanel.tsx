@@ -98,7 +98,7 @@ function addPayment() {
           placeholder="Amount"
           className="flex-1"
         />
-        <Button type="button" variant="outline" onClick={addPayment} data-testid="add-payment-button">
+        <Button type="button" variant="tertiary" onClick={addPayment} data-testid="add-payment-button">
           Add
         </Button>
       </div>

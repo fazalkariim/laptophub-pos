@@ -57,7 +57,7 @@ export function CreateCustomerDialog() {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)}>Add Customer</Button>
+      <Button variant="tertiary" onClick={() => setOpen(true)}>Add Customer</Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>

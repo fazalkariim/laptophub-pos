@@ -73,7 +73,7 @@ export function IntakeDialog({ branchId }: IntakeDialogProps) {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)}>Add Stock</Button>
+      <Button variant="tertiary" onClick={() => setOpen(true)}>Add Stock</Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>

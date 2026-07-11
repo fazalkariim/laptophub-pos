@@ -51,7 +51,7 @@ export default function CustomersPage() {
       header: '',
       cell: (c) => (
         <Button
-          variant="outline"
+          variant="inverted"
           size="sm"
           onClick={() => router.push(`/customers/${c.id}`)}
         >

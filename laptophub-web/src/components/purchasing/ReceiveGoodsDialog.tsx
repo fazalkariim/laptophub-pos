@@ -126,7 +126,7 @@ export function ReceiveGoodsDialog({ po, onClose }: ReceiveGoodsDialogProps) {
                       <Button
                         type="button"
                         size="sm"
-                        variant="outline"
+                        variant="tertiary"
                         onClick={() => addSerial(line.id)}
                       >
                         Add

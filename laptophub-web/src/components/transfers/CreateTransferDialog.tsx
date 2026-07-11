@@ -87,7 +87,7 @@ export function CreateTransferDialog() {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)}>New Transfer</Button>
+      <Button variant="tertiary" onClick={() => setOpen(true)}>New Transfer</Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-lg">

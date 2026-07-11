@@ -134,6 +134,7 @@ export function CustomerLookup({
           <div className="flex gap-2">
             <Button
               size="sm"
+              variant="tertiary"
               onClick={handleCreate}
               disabled={createCustomer.isPending}
             >

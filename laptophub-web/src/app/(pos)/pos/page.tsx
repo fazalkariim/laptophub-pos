@@ -208,7 +208,7 @@ export default function PosPage() {
               onRetryAll={syncAll}
               onDiscard={removeFromQueue}
             />
-            <Button variant="outline" onClick={onHold} disabled={cart.length === 0}>
+            <Button variant="inverted" onClick={onHold} disabled={cart.length === 0}>
               Hold Sale
             </Button>
             <HeldSalesDropdown

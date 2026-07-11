@@ -49,6 +49,7 @@ export function HeldSalesDropdown({
                   <div className="flex gap-2">
                     <Button
                       size="sm"
+                      variant="tertiary"
                       onClick={() => {
                         onResume(h);
                         setOpen(false);

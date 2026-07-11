@@ -24,7 +24,7 @@ export default function SuppliersPage() {
       header: '',
       cell: (s) => (
         <div className="flex justify-end gap-2">
-          <Button variant="outline" size="sm" onClick={() => setEditSupplier(s)}>
+          <Button variant="inverted" size="sm" onClick={() => setEditSupplier(s)}>
             Edit
           </Button>
           <Button
@@ -44,7 +44,7 @@ export default function SuppliersPage() {
       <PageHeader
         title="Suppliers"
         description="Apne suppliers manage karein."
-        action={<Button onClick={() => setCreateOpen(true)}>Add Supplier</Button>}
+        action={<Button variant="tertiary" onClick={() => setCreateOpen(true)}>Add Supplier</Button>}
       />
 
       <DataTable

@@ -28,7 +28,7 @@ export default function CatalogPage() {
       header: '',
       cell: (p) => (
         <div className="flex justify-end gap-2">
-          <Button variant="outline" size="sm" onClick={() => setEditProduct(p)}>
+          <Button variant="inverted" size="sm" onClick={() => setEditProduct(p)}>
             Edit
           </Button>
           <RoleGate allow={['SUPER_ADMIN']}>
@@ -52,7 +52,7 @@ export default function CatalogPage() {
       <PageHeader
         title="Catalog"
         description="Products manage karein."
-        action={<Button onClick={() => setCreateOpen(true)}>Add Product</Button>}
+        action={<Button variant="tertiary" onClick={() => setCreateOpen(true)}>Add Product</Button>}
       />
 
       <DataTable

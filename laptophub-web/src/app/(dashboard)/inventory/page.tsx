@@ -52,7 +52,7 @@ export default function InventoryPage() {
       cell: (s: StockItem) => (
         <div className="flex justify-end">
           <Button
-            variant="outline"
+            variant="inverted"
             size="sm"
             onClick={() => setAdjustItem(s)}
           >

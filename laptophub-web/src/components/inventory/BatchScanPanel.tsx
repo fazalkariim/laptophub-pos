@@ -109,7 +109,7 @@ export function BatchScanPanel({ branchId }: BatchScanPanelProps) {
             placeholder="Serial scan ya type karein…"
             autoFocus
           />
-          <Button type="button" variant="outline" onClick={addSerial}>
+          <Button type="button" variant="tertiary" onClick={addSerial}>
             Add
           </Button>
         </div>

@@ -56,12 +56,12 @@ export default function PurchaseOrdersPage() {
       cell: (po) => (
         <div className="flex justify-end gap-2">
           {po.status === 'DRAFT' && (
-            <Button size="sm" onClick={() => onSend(po.id)} disabled={sendPO.isPending}>
+            <Button size="sm" variant="tertiary" onClick={() => onSend(po.id)} disabled={sendPO.isPending}>
               Send
             </Button>
           )}
           <Button
-            variant="outline"
+            variant="inverted"
             size="sm"
             onClick={() => router.push(`/purchasing/orders/${po.id}`)}
           >

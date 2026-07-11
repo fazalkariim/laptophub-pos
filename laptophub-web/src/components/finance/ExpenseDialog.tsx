@@ -61,7 +61,7 @@ export function ExpenseDialog({ branchId }: ExpenseDialogProps) {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)}>Add Expense</Button>
+      <Button variant="tertiary" onClick={() => setOpen(true)}>Add Expense</Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>

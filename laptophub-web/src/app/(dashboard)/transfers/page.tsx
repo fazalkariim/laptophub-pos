@@ -55,6 +55,7 @@ export default function TransfersPage() {
               <>
                 <Button
                   size="sm"
+                  variant="tertiary"
                   onClick={() =>
                     setActionTarget({ id: t.id, action: 'receive' })
                   }

@@ -67,7 +67,7 @@ export default function PurchaseOrderDetailPage() {
               </Button>
             )}
             {due > 0 && (
-              <Button variant="outline" onClick={() => setShowPay(true)}>
+              <Button variant="inverted" onClick={() => setShowPay(true)}>
                 Pay Supplier
               </Button>
             )}

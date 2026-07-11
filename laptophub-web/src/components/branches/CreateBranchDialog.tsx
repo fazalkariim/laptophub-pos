@@ -54,7 +54,7 @@ export function CreateBranchDialog() {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)}>Add Branch</Button>
+      <Button variant="tertiary" onClick={() => setOpen(true)}>Add Branch</Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
