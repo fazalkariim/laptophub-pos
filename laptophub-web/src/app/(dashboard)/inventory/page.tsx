@@ -11,6 +11,8 @@ import type { StockItem } from '@/types';
 import { IntakeDialog } from '@/components/inventory/IntakeDialog';
 import { AdjustDialog } from '@/components/inventory/AdjustDialog';
 import { Button } from '@/components/ui/button';
+import { usePagination } from '@/hooks/usePagination';
+import { PaginationControls } from '@/components/shared/PaginationControls';
 
 export default function InventoryPage() {
   const user = useAuth((s) => s.user);
@@ -26,6 +28,7 @@ export default function InventoryPage() {
 
   const branchId = isSuperAdmin ? selectedBranch : user?.branchId ?? null;
   const { data, isLoading, isError } = useStock(branchId);
+  const { pageItems, page, setPage, totalPages, total } = usePagination(data, 20);
   const [adjustItem, setAdjustItem] = useState<StockItem | null>(null);
 
   const columns: Column<StockItem>[] = [
@@ -95,15 +98,27 @@ export default function InventoryPage() {
           Stock dekhne ke liye branch chunein.
         </div>
       ) : (
+        <>
         <DataTable
           columns={columns}
-          data={data}
+          data={pageItems}
           isLoading={isLoading}
           isError={isError}
           rowKey={(s) => s.id}
           emptyMessage="Is branch mein koi stock nahi hai."
         />
+
+           {total > 0 && (
+          <PaginationControls
+         page={page}
+         totalPages={totalPages}
+         total={total}
+         onPageChange={setPage}
+        />
+        )}
+        </>
       )}
+   
 
       <AdjustDialog
         item={adjustItem}

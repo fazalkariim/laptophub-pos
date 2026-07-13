@@ -4,7 +4,9 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { useSuppliers } from '@/hooks/useSuppliers';
 import { usePurchaseOrders, useSendPO } from '@/hooks/usePurchaseOrders';
+import { usePagination } from '@/hooks/usePagination';
 import { DataTable, Column } from '@/components/shared/DataTable';
+import { PaginationControls } from '@/components/shared/PaginationControls';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { POStatusBadge } from '@/components/purchasing/POStatusBadge';
 import { CreatePODialog } from '@/components/purchasing/CreatePODialog';
@@ -17,6 +19,11 @@ export default function PurchaseOrdersPage() {
   const { data: suppliers } = useSuppliers();
   const { data: orders, isLoading, isError } = usePurchaseOrders();
   const sendPO = useSendPO();
+
+  const { pageItems, page, setPage, totalPages, total } = usePagination(
+    orders,
+    20,
+  );
 
   function supplierName(id: string) {
     return suppliers?.find((s) => s.id === id)?.name ?? id;
@@ -50,16 +57,25 @@ export default function PurchaseOrdersPage() {
         </span>
       ),
     },
-    { header: 'Status', cell: (po) => <POStatusBadge status={po.status} /> },
+    {
+      header: 'Status',
+      cell: (po) => <POStatusBadge status={po.status} />,
+    },
     {
       header: '',
       cell: (po) => (
         <div className="flex justify-end gap-2">
           {po.status === 'DRAFT' && (
-            <Button size="sm" variant="tertiary" onClick={() => onSend(po.id)} disabled={sendPO.isPending}>
+            <Button
+              size="sm"
+              variant="tertiary"
+              onClick={() => onSend(po.id)}
+              disabled={sendPO.isPending}
+            >
               Send
             </Button>
           )}
+
           <Button
             variant="inverted"
             size="sm"
@@ -82,12 +98,21 @@ export default function PurchaseOrdersPage() {
 
       <DataTable
         columns={columns}
-        data={orders}
+        data={pageItems}
         isLoading={isLoading}
         isError={isError}
         rowKey={(po) => po.id}
         emptyMessage="Abhi koi purchase order nahi hai."
       />
+
+      {total > 0 && (
+        <PaginationControls
+          page={page}
+          totalPages={totalPages}
+          total={total}
+          onPageChange={setPage}
+        />
+      )}
     </div>
   );
 }

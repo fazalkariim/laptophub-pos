@@ -15,6 +15,7 @@ import { DateRangePicker } from '@/components/finance/DateRangePicker';
 import { ExpenseDialog } from '@/components/finance/ExpenseDialog';
 import { Button } from '@/components/ui/button';
 import { formatMoney } from '@/lib/format';
+import { Eye, EyeOff } from 'lucide-react';
 
 function firstOfMonth() {
   const d = new Date();
@@ -39,6 +40,7 @@ export default function FinancePage() {
   const [tab, setTab] = useState<'overview' | 'expenses' | 'consolidated'>(
     'overview'
   );
+  const [showAmounts, setShowAmounts] = useState(false);
 
   const {
     data: profit,
@@ -134,14 +136,27 @@ export default function FinancePage() {
           ) : (
             <div className="space-y-6">
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                <StatCard label="Revenue" value={formatMoney(profit?.revenue ?? 0)} />
-                <StatCard label="COGS" value={formatMoney(profit?.cogs ?? 0)} />
+                <StatCard
+                  label="Revenue"
+                  value={formatMoney(profit?.revenue ?? 0)}
+                  masked={!showAmounts}
+                  onToggleMask={() => setShowAmounts((v) => !v)}
+                />
+                <StatCard
+                  label="COGS"
+                  value={formatMoney(profit?.cogs ?? 0)}
+                  masked={!showAmounts}
+                />
                 <StatCard
                   label="Gross Margin"
                   value={formatMoney(profit?.grossMargin ?? 0)}
                   sub={profit ? `${profit.marginPercent}%` : undefined}
+                  masked={!showAmounts}
                 />
-                <StatCard label="Items Sold" value={String(profit?.itemsSold ?? 0)} />
+                <StatCard
+                  label="Items Sold"
+                  value={String(profit?.itemsSold ?? 0)}
+                />
               </div>
 
               {summary && (
@@ -259,18 +274,29 @@ export default function FinancePage() {
               Koi data nahi mila.
             </div>
           ) : (
-            <div className="space-y-6">
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                <StatCard label="Total Revenue" value={formatMoney(dashboard.overall.revenue)} />
-                <StatCard label="Net Profit" value={formatMoney(dashboard.overall.netProfit)} />
+             <div className="space-y-6">
+             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                <StatCard
+                  label="Total Revenue"
+                  value={formatMoney(dashboard.overall.revenue)}
+                  masked={!showAmounts}
+                  onToggleMask={() => setShowAmounts((v) => !v)}
+                />
+                <StatCard
+                  label="Net Profit"
+                  value={formatMoney(dashboard.overall.netProfit)}
+                  masked={!showAmounts}
+                />
                 <StatCard
                   label="Net Cash Position"
                   value={formatMoney(dashboard.overall.netCashPosition)}
+                  masked={!showAmounts}
                 />
                 <StatCard
                   label="Payable"
                   value={formatMoney(dashboard.overall.payable)}
                   warn={dashboard.overall.payable > 0}
+                  masked={!showAmounts}
                 />
               </div>
 
@@ -311,19 +337,44 @@ function StatCard({
   value,
   sub,
   warn,
+  masked,
+  onToggleMask,
 }: {
   label: string;
   value: string;
   sub?: string;
   warn?: boolean;
+  masked?: boolean;
+  onToggleMask?: () => void;
 }) {
   return (
     <div className="rounded-lg border p-4">
-      <p className="text-xs text-muted-foreground">{label}</p>
+      <div className="flex items-center justify-between">
+        <p className="text-xs text-muted-foreground">{label}</p>
+        {onToggleMask && (
+          <button
+            onClick={onToggleMask}
+            className="flex items-center gap-1 text-muted-foreground hover:text-foreground"
+            aria-label={masked ? 'Amounts dikhaayein' : 'Amounts chhupaayein'}
+          >
+            {masked ? (
+              <>
+                <Eye className="h-3.5 w-3.5" />
+                <span className="text-[10px]">Show</span>
+              </>
+            ) : (
+              <>
+                <EyeOff className="h-3.5 w-3.5" />
+                <span className="text-[10px]">Hide</span>
+              </>
+            )}
+          </button>
+        )}
+      </div>
       <p className={`text-lg font-semibold ${warn ? 'text-amber-600' : ''}`}>
-        {value}
+        {masked ? '••••••••' : value}
       </p>
-      {sub && <p className="text-xs text-muted-foreground">{sub}</p>}
+      {sub && !masked && <p className="text-xs text-muted-foreground">{sub}</p>}
     </div>
   );
 }

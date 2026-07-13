@@ -2,7 +2,9 @@
 
 import { useState } from 'react';
 import { useSuppliers } from '@/hooks/useSuppliers';
+import { usePagination } from '@/hooks/usePagination';
 import { DataTable, Column } from '@/components/shared/DataTable';
+import { PaginationControls } from '@/components/shared/PaginationControls';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { SupplierDialog } from '@/components/suppliers/SupplierDialog';
 import { DeleteSupplierDialog } from '@/components/suppliers/DeleteSupplierDialog';
@@ -11,6 +13,11 @@ import type { Supplier } from '@/types';
 
 export default function SuppliersPage() {
   const { data, isLoading, isError } = useSuppliers();
+
+  const { pageItems, page, setPage, totalPages, total } = usePagination(
+    data,
+    20,
+  );
 
   const [createOpen, setCreateOpen] = useState(false);
   const [editSupplier, setEditSupplier] = useState<Supplier | undefined>();
@@ -24,9 +31,14 @@ export default function SuppliersPage() {
       header: '',
       cell: (s) => (
         <div className="flex justify-end gap-2">
-          <Button variant="inverted" size="sm" onClick={() => setEditSupplier(s)}>
+          <Button
+            variant="inverted"
+            size="sm"
+            onClick={() => setEditSupplier(s)}
+          >
             Edit
           </Button>
+
           <Button
             variant="destructive"
             size="sm"
@@ -44,24 +56,39 @@ export default function SuppliersPage() {
       <PageHeader
         title="Suppliers"
         description="Apne suppliers manage karein."
-        action={<Button variant="tertiary" onClick={() => setCreateOpen(true)}>Add Supplier</Button>}
+        action={
+          <Button variant="tertiary" onClick={() => setCreateOpen(true)}>
+            Add Supplier
+          </Button>
+        }
       />
 
       <DataTable
         columns={columns}
-        data={data}
+        data={pageItems}
         isLoading={isLoading}
         isError={isError}
         rowKey={(s) => s.id}
         emptyMessage="Abhi koi supplier nahi hai."
       />
 
+      {total > 0 && (
+        <PaginationControls
+          page={page}
+          totalPages={totalPages}
+          total={total}
+          onPageChange={setPage}
+        />
+      )}
+
       <SupplierDialog open={createOpen} onOpenChange={setCreateOpen} />
+
       <SupplierDialog
         supplier={editSupplier}
         open={!!editSupplier}
         onOpenChange={(v) => !v && setEditSupplier(undefined)}
       />
+
       <DeleteSupplierDialog
         supplier={deleteSupplier}
         onOpenChange={(v) => !v && setDeleteSupplier(null)}

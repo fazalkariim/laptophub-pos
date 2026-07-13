@@ -4,7 +4,9 @@ import { useState } from 'react';
 import { useAuth } from '@/lib/auth';
 import { useBranches } from '@/hooks/useBranches';
 import { useTransfers } from '@/hooks/useTransfers';
+import { usePagination } from '@/hooks/usePagination';
 import { DataTable, Column } from '@/components/shared/DataTable';
+import { PaginationControls } from '@/components/shared/PaginationControls';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { TransferStatusBadge } from '@/components/transfers/TransferStatusBadge';
 import { CreateTransferDialog } from '@/components/transfers/CreateTransferDialog';
@@ -18,6 +20,11 @@ export default function TransfersPage() {
   const user = useAuth((s) => s.user);
   const { data: branches } = useBranches();
   const { data: transfers, isLoading, isError } = useTransfers();
+
+  const { pageItems, page, setPage, totalPages, total } = usePagination(
+    transfers,
+    20,
+  );
 
   const [actionTarget, setActionTarget] = useState<{
     id: string;
@@ -35,7 +42,10 @@ export default function TransfersPage() {
     { header: 'From', cell: (t) => branchName(t.sourceBranchId) },
     { header: 'To', cell: (t) => branchName(t.destBranchId) },
     { header: 'Items', cell: (t) => t.lines.length },
-    { header: 'Status', cell: (t) => <TransferStatusBadge status={t.status} /> },
+    {
+      header: 'Status',
+      cell: (t) => <TransferStatusBadge status={t.status} />,
+    },
     {
       header: 'Date',
       cell: (t) => new Date(t.createdAt).toLocaleDateString(),
@@ -47,7 +57,9 @@ export default function TransfersPage() {
 
         const canReceiveReject =
           isSuperAdmin || user?.branchId === t.destBranchId;
-        const canCancel = isSuperAdmin || user?.branchId === t.sourceBranchId;
+
+        const canCancel =
+          isSuperAdmin || user?.branchId === t.sourceBranchId;
 
         return (
           <div className="flex justify-end gap-2">
@@ -62,6 +74,7 @@ export default function TransfersPage() {
                 >
                   Receive
                 </Button>
+
                 <Button
                   size="sm"
                   variant="outline"
@@ -73,6 +86,7 @@ export default function TransfersPage() {
                 </Button>
               </>
             )}
+
             {canCancel && (
               <Button
                 size="sm"
@@ -100,12 +114,21 @@ export default function TransfersPage() {
 
       <DataTable
         columns={columns}
-        data={transfers}
+        data={pageItems}
         isLoading={isLoading}
         isError={isError}
         rowKey={(t) => t.id}
         emptyMessage="Abhi koi transfer nahi hai."
       />
+
+      {total > 0 && (
+        <PaginationControls
+          page={page}
+          totalPages={totalPages}
+          total={total}
+          onPageChange={setPage}
+        />
+      )}
 
       <TransferActionDialog
         transferId={actionTarget?.id ?? null}
