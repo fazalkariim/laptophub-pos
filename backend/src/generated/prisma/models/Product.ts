@@ -494,10 +494,6 @@ export type ProductUncheckedUpdateManyWithoutTenantNestedInput = {
   deleteMany?: Prisma.ProductScalarWhereInput | Prisma.ProductScalarWhereInput[]
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type ProductCreateNestedOneWithoutStockItemsInput = {
   create?: Prisma.XOR<Prisma.ProductCreateWithoutStockItemsInput, Prisma.ProductUncheckedCreateWithoutStockItemsInput>
   connectOrCreate?: Prisma.ProductCreateOrConnectWithoutStockItemsInput

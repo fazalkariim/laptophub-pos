@@ -12,6 +12,8 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RefreshGuard } from '../../common/guards/refresh.guard';
 import { SignupDto } from './dto/signup.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetWithTokenDto } from './dto/reset-with-token.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -73,5 +75,21 @@ export class AuthController {
   @ApiOperation({ summary: 'Naya business register karein (public signup)' })
   signup(@Body() dto: SignupDto) {
     return this.authService.signup(dto);
+  }
+
+  @Post('forgot-password')
+  @Throttle({ default: { limit: 3, ttl: 900000 } })  // 3 per 15 min (spam rok)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Forgot password — reset link email karein' })
+  forgotPassword(@Body() dto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(dto);
+  }
+
+  @Post('reset-password-with-token')
+  @Throttle({ default: { limit: 5, ttl: 900000 } })  // token attempts bhi limit
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Token se password reset karein' })
+  resetPasswordWithToken(@Body() dto: ResetWithTokenDto) {
+    return this.authService.resetPasswordWithToken(dto);
   }
 }

@@ -60,6 +60,11 @@ export type Counter = Prisma.CounterModel
  */
 export type User = Prisma.UserModel
 /**
+ * Model PasswordResetToken
+ * 
+ */
+export type PasswordResetToken = Prisma.PasswordResetTokenModel
+/**
  * Model Product
  * 
  */

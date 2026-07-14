@@ -55,6 +55,7 @@ export const ModelName = {
   Branch: 'Branch',
   Counter: 'Counter',
   User: 'User',
+  PasswordResetToken: 'PasswordResetToken',
   Product: 'Product',
   StockItem: 'StockItem',
   Sale: 'Sale',
@@ -133,6 +134,19 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const PasswordResetTokenScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  userId: 'userId',
+  token: 'token',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalarFieldEnum)[keyof typeof PasswordResetTokenScalarFieldEnum]
 
 
 export const ProductScalarFieldEnum = {

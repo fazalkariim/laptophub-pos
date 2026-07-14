@@ -93,6 +93,7 @@ model Tenant {
   expenses       Expense[]
   stockMovements StockMovement[]
   transfers      Transfer[]
+  passwordResetTokens PasswordResetToken[]
 
   @@map("tenants")
 }
@@ -147,10 +148,29 @@ model User {
 
   sales          Sale[]
   stockMovements StockMovement[]
+  passwordResetTokens PasswordResetToken[]
 
   @@unique([tenantId, email]) // email har tenant ke andar unique
   @@index([tenantId])
   @@map("users")
+}
+
+
+model PasswordResetToken {
+  id        String    @id @default(uuid())
+  tenantId  String
+  userId    String
+  token     String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  tenant    Tenant    @relation(fields: [tenantId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+
+  @@index([token])
+  @@index([userId])
+  @@map("password_reset_tokens")
 }
 
 // ──────────────────────────────────────────────

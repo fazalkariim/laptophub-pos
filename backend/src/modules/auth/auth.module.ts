@@ -6,6 +6,7 @@ import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
 import { jwtConstants } from './constants';
 import { RefreshStrategy } from './refresh.strategy';
+import { EmailService } from './email.service';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { RefreshStrategy } from './refresh.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, RefreshStrategy],
+  providers: [AuthService, JwtStrategy, RefreshStrategy, EmailService],
   exports: [AuthService, JwtModule], // JwtModule add kiya taake middleware use kar sake
 })
 export class AuthModule {}

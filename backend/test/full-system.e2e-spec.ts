@@ -59,7 +59,7 @@ describe('FULL SYSTEM SMOKE TEST — A to Z', () => {
 
     // Logins
     const a = await request(http).post('/auth/login')
-      .send({ email: 'admin@laptophub.com', password: 'password123' });
+      .send({ email: 'rkstechware@gmail.com', password: 'password123' });
     adminToken = a.body.accessToken;
 
     const m = await request(http).post('/auth/login')
@@ -142,7 +142,7 @@ describe('FULL SYSTEM SMOKE TEST — A to Z', () => {
 
     it('Galat password reject (401 ya 400)', async () => {
       const res = await request(http).post('/auth/login')
-        .send({ email: 'admin@laptophub.com', password: 'wrongpass' });
+        .send({ email: 'rkstechware@gmail.com', password: 'wrongpass' });
       expect([400, 401]).toContain(res.status); // dono soorat mein reject
     });
 

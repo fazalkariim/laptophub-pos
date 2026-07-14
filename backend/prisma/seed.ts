@@ -48,18 +48,18 @@ async function main() {
 
   // Super Admin — branchId null (head office, sab branches dekh sakta hai)
   await prisma.user.upsert({
-    where: { tenantId_email: { tenantId: tenant.id, email: 'admin@laptophub.com' } },
+    where: { tenantId_email: { tenantId: tenant.id, email: 'rkstechware@gmail.com' } },
     update: {},
     create: {
       tenantId: tenant.id,
       branchId: null,
       role: 'SUPER_ADMIN',
-      email: 'admin@laptophub.com',
+      email: 'rkstechware@gmail.com',
       passwordHash,
       name: 'Super Admin',
     },
   });
-  console.log('✅ Super Admin banaya: admin@laptophub.com');
+  console.log('✅ Super Admin banaya: rkstechware@gmail.com');
 
   // Branch Manager — Main Branch ka
   await prisma.user.upsert({

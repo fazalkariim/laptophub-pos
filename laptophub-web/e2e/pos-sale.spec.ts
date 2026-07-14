@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test('POS: login → scan → sale → receipt', async ({ page, request }) => {
   // 0. Pehle login karke token lo (API se seedha), taake test-item bana sakein
   const loginRes = await request.post('http://localhost:3000/auth/login', {
-    data: { email: 'admin@laptophub.com', password: 'password123' },
+    data: { email: 'rkstechware@gmail.com', password: 'password123' },
   });
   const { accessToken } = await loginRes.json();
 
@@ -22,7 +22,7 @@ test('POS: login → scan → sale → receipt', async ({ page, request }) => {
 // 2. UI se login karo (ye file khud login-flow test karti hai,
   //    isliye storageState use nahi karti, apna login yahin karti hai)
   await page.goto('/login');
-  await page.getByPlaceholder('Email').fill('admin@laptophub.com');
+  await page.getByPlaceholder('Email').fill('rkstechware@gmail.com');
   await page.getByPlaceholder('Password').fill('password123');
   await page.getByRole('button', { name: 'Login' }).click();
   await expect(page).toHaveURL(/\/dashboard/);

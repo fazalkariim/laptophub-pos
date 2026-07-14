@@ -14,7 +14,7 @@
         },
         {
           "name": "laptophub-auth",
-          "value": "{\"state\":{\"user\":{\"id\":\"383d8b34-4ec7-45cb-86bd-a9d745af1e04\",\"email\":\"admin@laptophub.com\",\"name\":\"Super Admin\",\"role\":\"SUPER_ADMIN\",\"branchId\":null}},\"version\":0}"
+          "value": "{\"state\":{\"user\":{\"id\":\"383d8b34-4ec7-45cb-86bd-a9d745af1e04\",\"email\":\"rkstechware@gmail.com\",\"name\":\"Super Admin\",\"role\":\"SUPER_ADMIN\",\"branchId\":null}},\"version\":0}"
         }
       ]
     }

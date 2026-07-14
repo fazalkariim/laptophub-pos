@@ -8,12 +8,18 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { jwtConstants } from './constants';
 import { SignupDto } from './dto/signup.dto';
 import { ConflictException } from '@nestjs/common';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetWithTokenDto } from './dto/reset-with-token.dto';
+import { EmailService } from './email.service';
+import { BadRequestException } from '@nestjs/common';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
+    private readonly emailService: EmailService,
   ) {}
 
   async login(dto: LoginDto) {
@@ -211,6 +217,77 @@ export class AuthService {
         role: result.user.role,
       },
     };
+  }
+
+  // Forgot password — reset link email karo
+  async forgotPassword(dto: ForgotPasswordDto) {
+    // Login jaisा hi — email se user (globally, kyunke email globally unique hai)
+    const user = await this.prisma.user.findFirst({
+      where: { email: dto.email, isActive: true },
+    });
+
+    // User mila to hi token banao + email bhejo. Na mila to bhi SAME response.
+    if (user) {
+      const token = crypto.randomBytes(32).toString('hex');
+      const expiresAt = new Date(Date.now() + 30 * 60 * 1000); // 30 min
+
+      await this.prisma.passwordResetToken.create({
+        data: {
+          tenantId: user.tenantId,
+          userId: user.id,
+          token,
+          expiresAt,
+        },
+      });
+
+      const frontendUrl = process.env.FRONTEND_URL ?? 'http://localhost:3001';
+      const resetLink = `${frontendUrl}/reset-password?token=${token}`;
+      await this.emailService.sendPasswordReset(user.email, resetLink);
+    }
+
+    // Hamesha SAME response (chahe email mile ya na mile) — enumeration se bachao
+    return {
+      message: 'Agar ye email registered hai, reset link bhej diya gaya hai',
+    };
+  }
+
+  // Token se password reset
+  async resetPasswordWithToken(dto: ResetWithTokenDto) {
+    // 1. Token dhoondो
+    const resetToken = await this.prisma.passwordResetToken.findFirst({
+      where: { token: dto.token },
+    });
+
+    // 2. Validate: exist, expire nahi hua, use nahi hua
+    if (
+      !resetToken ||
+      resetToken.usedAt !== null ||
+      resetToken.expiresAt < new Date()
+    ) {
+      throw new BadRequestException('Link expire ho chuka hai ya invalid hai');
+    }
+
+    // 3. Naya password hash
+    const passwordHash = await bcrypt.hash(dto.newPassword, 10);
+
+    // 4-5. TRANSACTION: password update + token used + sessions revoke
+    await this.prisma.$transaction(async (tx) => {
+      // Password update
+      await tx.user.update({
+        where: { id: resetToken.userId },
+        data: {
+          passwordHash,
+          refreshTokenHash: null, // saare sessions revoke (security)
+        },
+      });
+      // Token single-use — mark used
+      await tx.passwordResetToken.update({
+        where: { id: resetToken.id },
+        data: { usedAt: new Date() },
+      });
+    });
+
+    return { message: 'Password reset ho gaya' };
   }
 
  // Access + refresh dono tokens banao
