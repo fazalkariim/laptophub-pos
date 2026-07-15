@@ -1,4 +1,4 @@
-import { Injectable, ConflictException, BadRequestException } from '@nestjs/common';
+import { Injectable, ConflictException, BadRequestException, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { TenantPrismaService } from '../../prisma/tenant-prisma.service';
 import { CreateUserDto, UserRole } from './dto/create-user.dto';
@@ -13,9 +13,10 @@ export class UsersService {
     private readonly planLimit: PlanLimitService,
   ) {}
 
-  // Saare users — passwordHash kabhi nahi bhejenge
+// Saare users — sirf active, passwordHash kabhi nahi bhejenge
   findAll() {
     return this.tenantPrisma.client.user.findMany({
+      where: { isActive: true } as any,
       select: {
         id: true,
         email: true,
@@ -24,13 +25,11 @@ export class UsersService {
         branchId: true,
         isActive: true,
         createdAt: true,
-        // passwordHash: jaan boojh kar NAHI — secret hai
       },
       orderBy: { createdAt: 'desc' },
     });
   }
 
-  // Naya user banao
  // Naya user banao
   async create(dto: CreateUserDto) {
     // Plan limit check — tenantId context se
@@ -72,5 +71,41 @@ export class UsersService {
     // 5. passwordHash hata kar bhejo
     const { passwordHash: _, ...safeUser } = newUser;
     return safeUser;
+  }
+  // Soft delete — user ko deactivate karo (hard delete KABHI nahi)
+  async remove(id: string, callingUser: any) {
+    // 1. Target user — tenant-scoped
+    const targetUser = await this.tenantPrisma.client.user.findFirst({
+      where: { id },
+    });
+    if (!targetUser) {
+      throw new NotFoundException('User nahi mila');
+    }
+
+    // 2. Self-delete rok
+    if (targetUser.id === callingUser.userId) {
+      throw new BadRequestException('Aap khud ko delete nahi kar sakte');
+    }
+
+    // 3. Aakhri active Super Admin rok
+    if (targetUser.role === 'SUPER_ADMIN') {
+      const activeSuperAdmins = await this.tenantPrisma.client.user.count({
+        where: { role: 'SUPER_ADMIN', isActive: true },
+      });
+      if (activeSuperAdmins <= 1) {
+        throw new BadRequestException('Tenant ka aakhri Super Admin delete nahi ho sakta');
+      }
+    }
+
+    // 4. Soft delete: isActive false + sessions revoke
+    await this.tenantPrisma.client.user.update({
+      where: { id: targetUser.id },
+      data: {
+        isActive: false,
+        refreshTokenHash: null,
+      } as any,
+    });
+
+    return { message: 'User delete kar diya gaya' };
   }
 }

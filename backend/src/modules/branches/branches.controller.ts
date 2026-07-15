@@ -5,6 +5,8 @@ import { CreateBranchDto } from './dto/create-branch.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { Patch, Delete, Param } from '@nestjs/common';
+import { UpdateBranchDto } from './dto/update-branch.dto';
 
 @ApiTags('branches')
 @ApiBearerAuth()
@@ -24,5 +26,19 @@ export class BranchesController {
   @ApiOperation({ summary: 'Nayi branch banayein (sirf Super Admin)' })
   create(@Body() dto: CreateBranchDto) {
     return this.branchesService.create(dto);
+  }
+
+  @Patch(':id')
+  @Roles('SUPER_ADMIN')
+  @ApiOperation({ summary: 'Branch update karein (sirf Super Admin)' })
+  update(@Param('id') id: string, @Body() dto: UpdateBranchDto) {
+    return this.branchesService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @Roles('SUPER_ADMIN')
+  @ApiOperation({ summary: 'Branch delete karein (soft delete, sirf Super Admin)' })
+  remove(@Param('id') id: string) {
+    return this.branchesService.remove(id);
   }
 }

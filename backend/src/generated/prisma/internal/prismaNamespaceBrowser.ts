@@ -104,6 +104,7 @@ export const BranchScalarFieldEnum = {
   tenantId: 'tenantId',
   name: 'name',
   address: 'address',
+  isActive: 'isActive',
   createdAt: 'createdAt'
 } as const
 

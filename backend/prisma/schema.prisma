@@ -103,6 +103,7 @@ model Branch {
   tenantId  String
   name      String
   address   String?
+  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
 
   tenant         Tenant          @relation(fields: [tenantId], references: [id])

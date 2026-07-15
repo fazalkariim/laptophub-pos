@@ -29,6 +29,7 @@ export type BranchMinAggregateOutputType = {
   tenantId: string | null
   name: string | null
   address: string | null
+  isActive: boolean | null
   createdAt: Date | null
 }
 
@@ -37,6 +38,7 @@ export type BranchMaxAggregateOutputType = {
   tenantId: string | null
   name: string | null
   address: string | null
+  isActive: boolean | null
   createdAt: Date | null
 }
 
@@ -45,6 +47,7 @@ export type BranchCountAggregateOutputType = {
   tenantId: number
   name: number
   address: number
+  isActive: number
   createdAt: number
   _all: number
 }
@@ -55,6 +58,7 @@ export type BranchMinAggregateInputType = {
   tenantId?: true
   name?: true
   address?: true
+  isActive?: true
   createdAt?: true
 }
 
@@ -63,6 +67,7 @@ export type BranchMaxAggregateInputType = {
   tenantId?: true
   name?: true
   address?: true
+  isActive?: true
   createdAt?: true
 }
 
@@ -71,6 +76,7 @@ export type BranchCountAggregateInputType = {
   tenantId?: true
   name?: true
   address?: true
+  isActive?: true
   createdAt?: true
   _all?: true
 }
@@ -152,6 +158,7 @@ export type BranchGroupByOutputType = {
   tenantId: string
   name: string
   address: string | null
+  isActive: boolean
   createdAt: Date
   _count: BranchCountAggregateOutputType | null
   _min: BranchMinAggregateOutputType | null
@@ -181,6 +188,7 @@ export type BranchWhereInput = {
   tenantId?: Prisma.StringFilter<"Branch"> | string
   name?: Prisma.StringFilter<"Branch"> | string
   address?: Prisma.StringNullableFilter<"Branch"> | string | null
+  isActive?: Prisma.BoolFilter<"Branch"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Branch"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   users?: Prisma.UserListRelationFilter
@@ -196,6 +204,7 @@ export type BranchOrderByWithRelationInput = {
   tenantId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   users?: Prisma.UserOrderByRelationAggregateInput
@@ -214,6 +223,7 @@ export type BranchWhereUniqueInput = Prisma.AtLeast<{
   tenantId?: Prisma.StringFilter<"Branch"> | string
   name?: Prisma.StringFilter<"Branch"> | string
   address?: Prisma.StringNullableFilter<"Branch"> | string | null
+  isActive?: Prisma.BoolFilter<"Branch"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Branch"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   users?: Prisma.UserListRelationFilter
@@ -229,6 +239,7 @@ export type BranchOrderByWithAggregationInput = {
   tenantId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.BranchCountOrderByAggregateInput
   _max?: Prisma.BranchMaxOrderByAggregateInput
@@ -243,6 +254,7 @@ export type BranchScalarWhereWithAggregatesInput = {
   tenantId?: Prisma.StringWithAggregatesFilter<"Branch"> | string
   name?: Prisma.StringWithAggregatesFilter<"Branch"> | string
   address?: Prisma.StringNullableWithAggregatesFilter<"Branch"> | string | null
+  isActive?: Prisma.BoolWithAggregatesFilter<"Branch"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Branch"> | Date | string
 }
 
@@ -250,6 +262,7 @@ export type BranchCreateInput = {
   id?: string
   name: string
   address?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutBranchesInput
   users?: Prisma.UserCreateNestedManyWithoutBranchInput
@@ -265,6 +278,7 @@ export type BranchUncheckedCreateInput = {
   tenantId: string
   name: string
   address?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
   stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
@@ -278,6 +292,7 @@ export type BranchUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutBranchesNestedInput
   users?: Prisma.UserUpdateManyWithoutBranchNestedInput
@@ -293,6 +308,7 @@ export type BranchUncheckedUpdateInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
   stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
@@ -307,6 +323,7 @@ export type BranchCreateManyInput = {
   tenantId: string
   name: string
   address?: string | null
+  isActive?: boolean
   createdAt?: Date | string
 }
 
@@ -314,6 +331,7 @@ export type BranchUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -322,6 +340,7 @@ export type BranchUncheckedUpdateManyInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -340,6 +359,7 @@ export type BranchCountOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -348,6 +368,7 @@ export type BranchMaxOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -356,6 +377,7 @@ export type BranchMinOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -413,6 +435,10 @@ export type BranchUncheckedUpdateManyWithoutTenantNestedInput = {
 
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type BranchCreateNestedOneWithoutUsersInput = {
@@ -505,6 +531,7 @@ export type BranchCreateWithoutTenantInput = {
   id?: string
   name: string
   address?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutBranchInput
   stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
@@ -518,6 +545,7 @@ export type BranchUncheckedCreateWithoutTenantInput = {
   id?: string
   name: string
   address?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
   stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
@@ -561,6 +589,7 @@ export type BranchScalarWhereInput = {
   tenantId?: Prisma.StringFilter<"Branch"> | string
   name?: Prisma.StringFilter<"Branch"> | string
   address?: Prisma.StringNullableFilter<"Branch"> | string | null
+  isActive?: Prisma.BoolFilter<"Branch"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Branch"> | Date | string
 }
 
@@ -568,6 +597,7 @@ export type BranchCreateWithoutUsersInput = {
   id?: string
   name: string
   address?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutBranchesInput
   stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
@@ -582,6 +612,7 @@ export type BranchUncheckedCreateWithoutUsersInput = {
   tenantId: string
   name: string
   address?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
@@ -610,6 +641,7 @@ export type BranchUpdateWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutBranchesNestedInput
   stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
@@ -624,6 +656,7 @@ export type BranchUncheckedUpdateWithoutUsersInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
@@ -636,6 +669,7 @@ export type BranchCreateWithoutStockItemsInput = {
   id?: string
   name: string
   address?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutBranchesInput
   users?: Prisma.UserCreateNestedManyWithoutBranchInput
@@ -650,6 +684,7 @@ export type BranchUncheckedCreateWithoutStockItemsInput = {
   tenantId: string
   name: string
   address?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
@@ -678,6 +713,7 @@ export type BranchUpdateWithoutStockItemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutBranchesNestedInput
   users?: Prisma.UserUpdateManyWithoutBranchNestedInput
@@ -692,6 +728,7 @@ export type BranchUncheckedUpdateWithoutStockItemsInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
@@ -704,6 +741,7 @@ export type BranchCreateWithoutSalesInput = {
   id?: string
   name: string
   address?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutBranchesInput
   users?: Prisma.UserCreateNestedManyWithoutBranchInput
@@ -718,6 +756,7 @@ export type BranchUncheckedCreateWithoutSalesInput = {
   tenantId: string
   name: string
   address?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
   stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
@@ -746,6 +785,7 @@ export type BranchUpdateWithoutSalesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutBranchesNestedInput
   users?: Prisma.UserUpdateManyWithoutBranchNestedInput
@@ -760,6 +800,7 @@ export type BranchUncheckedUpdateWithoutSalesInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
   stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
@@ -772,6 +813,7 @@ export type BranchCreateWithoutCustomersInput = {
   id?: string
   name: string
   address?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutBranchesInput
   users?: Prisma.UserCreateNestedManyWithoutBranchInput
@@ -786,6 +828,7 @@ export type BranchUncheckedCreateWithoutCustomersInput = {
   tenantId: string
   name: string
   address?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
   stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
@@ -814,6 +857,7 @@ export type BranchUpdateWithoutCustomersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutBranchesNestedInput
   users?: Prisma.UserUpdateManyWithoutBranchNestedInput
@@ -828,6 +872,7 @@ export type BranchUncheckedUpdateWithoutCustomersInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
   stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
@@ -840,6 +885,7 @@ export type BranchCreateWithoutExpensesInput = {
   id?: string
   name: string
   address?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutBranchesInput
   users?: Prisma.UserCreateNestedManyWithoutBranchInput
@@ -854,6 +900,7 @@ export type BranchUncheckedCreateWithoutExpensesInput = {
   tenantId: string
   name: string
   address?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
   stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
@@ -882,6 +929,7 @@ export type BranchUpdateWithoutExpensesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutBranchesNestedInput
   users?: Prisma.UserUpdateManyWithoutBranchNestedInput
@@ -896,6 +944,7 @@ export type BranchUncheckedUpdateWithoutExpensesInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
   stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
@@ -908,6 +957,7 @@ export type BranchCreateWithoutStockMovementsInput = {
   id?: string
   name: string
   address?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutBranchesInput
   users?: Prisma.UserCreateNestedManyWithoutBranchInput
@@ -922,6 +972,7 @@ export type BranchUncheckedCreateWithoutStockMovementsInput = {
   tenantId: string
   name: string
   address?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
   stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
@@ -950,6 +1001,7 @@ export type BranchUpdateWithoutStockMovementsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutBranchesNestedInput
   users?: Prisma.UserUpdateManyWithoutBranchNestedInput
@@ -964,6 +1016,7 @@ export type BranchUncheckedUpdateWithoutStockMovementsInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
   stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
@@ -976,6 +1029,7 @@ export type BranchCreateManyTenantInput = {
   id?: string
   name: string
   address?: string | null
+  isActive?: boolean
   createdAt?: Date | string
 }
 
@@ -983,6 +1037,7 @@ export type BranchUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutBranchNestedInput
   stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
@@ -996,6 +1051,7 @@ export type BranchUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
   stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
@@ -1009,6 +1065,7 @@ export type BranchUncheckedUpdateManyWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1093,6 +1150,7 @@ export type BranchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   tenantId?: boolean
   name?: boolean
   address?: boolean
+  isActive?: boolean
   createdAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   users?: boolean | Prisma.Branch$usersArgs<ExtArgs>
@@ -1109,6 +1167,7 @@ export type BranchSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   tenantId?: boolean
   name?: boolean
   address?: boolean
+  isActive?: boolean
   createdAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["branch"]>
@@ -1118,6 +1177,7 @@ export type BranchSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   tenantId?: boolean
   name?: boolean
   address?: boolean
+  isActive?: boolean
   createdAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["branch"]>
@@ -1127,10 +1187,11 @@ export type BranchSelectScalar = {
   tenantId?: boolean
   name?: boolean
   address?: boolean
+  isActive?: boolean
   createdAt?: boolean
 }
 
-export type BranchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "name" | "address" | "createdAt", ExtArgs["result"]["branch"]>
+export type BranchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "name" | "address" | "isActive" | "createdAt", ExtArgs["result"]["branch"]>
 export type BranchInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   users?: boolean | Prisma.Branch$usersArgs<ExtArgs>
@@ -1164,6 +1225,7 @@ export type $BranchPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     tenantId: string
     name: string
     address: string | null
+    isActive: boolean
     createdAt: Date
   }, ExtArgs["result"]["branch"]>
   composites: {}
@@ -1599,6 +1661,7 @@ export interface BranchFieldRefs {
   readonly tenantId: Prisma.FieldRef<"Branch", 'String'>
   readonly name: Prisma.FieldRef<"Branch", 'String'>
   readonly address: Prisma.FieldRef<"Branch", 'String'>
+  readonly isActive: Prisma.FieldRef<"Branch", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Branch", 'DateTime'>
 }
     

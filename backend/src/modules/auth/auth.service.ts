@@ -289,7 +289,7 @@ export class AuthService {
 
     return { message: 'Password reset ho gaya' };
   }
-
+ 
  // Access + refresh dono tokens banao
   private async generateTokens(payload: any) {
     const accessToken = await this.jwtService.signAsync(payload, {
