@@ -24,6 +24,18 @@ export default function CatalogPage() {
     { header: 'Model', cell: (p) => p.model },
     { header: 'Brand', cell: (p) => p.brand ?? '—' },
     { header: 'Category', cell: (p) => p.category ?? '—' },
+    { header: 'Barcode', cell: (p) => p.barcode ?? '—' },
+    {
+      header: 'Specs',
+      cell: (p) =>
+        p.specs ? (
+          <span className="line-clamp-1 max-w-[200px] text-muted-foreground" title={p.specs}>
+            {p.specs}
+          </span>
+        ) : (
+          '—'
+        ),
+    },
     {
       header: '',
       cell: (p) => (

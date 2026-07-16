@@ -30,6 +30,7 @@ export interface Product {
   brand: string | null;
   category: string | null;
   specs: string | null;
+  barcode: string | null;
 }
 
 export interface CreateProductInput {
@@ -38,6 +39,7 @@ export interface CreateProductInput {
   brand?: string;
   category?: string;
   specs?: string;
+  barcode?: string;
 }
 
 export interface PaginatedResponse<T> {

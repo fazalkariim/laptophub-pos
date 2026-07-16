@@ -24,6 +24,7 @@ const schema = z.object({
   brand: z.string().optional(),
   category: z.string().optional(),
   specs: z.string().optional(),
+  barcode: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -61,6 +62,7 @@ export function ProductDialog({
         brand: product?.brand ?? '',
         category: product?.category ?? '',
         specs: product?.specs ?? '',
+        barcode: product?.barcode ?? '',
       });
     }
   }, [open, product, reset]);
@@ -131,6 +133,11 @@ export function ProductDialog({
             <Input id="specs" {...register('specs')} />
           </div>
 
+          <div className="space-y-1">
+            <Label htmlFor="barcode">Barcode (optional)</Label>
+            <Input id="barcode" {...register('barcode')} />
+          </div>
+          
           <DialogFooter>
             <Button type="submit" disabled={isPending}>
               {isPending ? 'Save ho raha…' : isEdit ? 'Save Changes' : 'Create Product'}
