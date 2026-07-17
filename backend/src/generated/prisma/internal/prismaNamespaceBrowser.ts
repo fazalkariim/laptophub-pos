@@ -69,7 +69,8 @@ export const ModelName = {
   PurchaseOrder: 'PurchaseOrder',
   POLine: 'POLine',
   Expense: 'Expense',
-  StockMovement: 'StockMovement'
+  StockMovement: 'StockMovement',
+  ImportBatch: 'ImportBatch'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -175,7 +176,16 @@ export const StockItemScalarFieldEnum = {
   quantity: 'quantity',
   status: 'status',
   costPrice: 'costPrice',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  lastScan: 'lastScan',
+  vendorQuotedCost: 'vendorQuotedCost',
+  finalSalePrice: 'finalSalePrice',
+  buyer: 'buyer',
+  transactionDate: 'transactionDate',
+  saleAt: 'saleAt',
+  vendorId: 'vendorId',
+  vendorTrackingId: 'vendorTrackingId',
+  receivedOn: 'receivedOn'
 } as const
 
 export type StockItemScalarFieldEnum = (typeof StockItemScalarFieldEnum)[keyof typeof StockItemScalarFieldEnum]
@@ -346,6 +356,21 @@ export const StockMovementScalarFieldEnum = {
 export type StockMovementScalarFieldEnum = (typeof StockMovementScalarFieldEnum)[keyof typeof StockMovementScalarFieldEnum]
 
 
+export const ImportBatchScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  uploadedById: 'uploadedById',
+  fileName: 'fileName',
+  uploadedAt: 'uploadedAt',
+  totalRows: 'totalRows',
+  successCount: 'successCount',
+  failedCount: 'failedCount',
+  rows: 'rows'
+} as const
+
+export type ImportBatchScalarFieldEnum = (typeof ImportBatchScalarFieldEnum)[keyof typeof ImportBatchScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -360,6 +385,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

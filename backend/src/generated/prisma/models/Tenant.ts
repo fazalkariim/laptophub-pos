@@ -195,6 +195,7 @@ export type TenantWhereInput = {
   stockMovements?: Prisma.StockMovementListRelationFilter
   transfers?: Prisma.TransferListRelationFilter
   passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
+  importBatches?: Prisma.ImportBatchListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -216,6 +217,7 @@ export type TenantOrderByWithRelationInput = {
   stockMovements?: Prisma.StockMovementOrderByRelationAggregateInput
   transfers?: Prisma.TransferOrderByRelationAggregateInput
   passwordResetTokens?: Prisma.PasswordResetTokenOrderByRelationAggregateInput
+  importBatches?: Prisma.ImportBatchOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -240,6 +242,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   stockMovements?: Prisma.StockMovementListRelationFilter
   transfers?: Prisma.TransferListRelationFilter
   passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
+  importBatches?: Prisma.ImportBatchListRelationFilter
 }, "id">
 
 export type TenantOrderByWithAggregationInput = {
@@ -283,6 +286,7 @@ export type TenantCreateInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -304,6 +308,7 @@ export type TenantUncheckedCreateInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -325,6 +330,7 @@ export type TenantUpdateInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -346,6 +352,7 @@ export type TenantUncheckedUpdateInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -591,6 +598,20 @@ export type TenantUpdateOneRequiredWithoutStockMovementsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutStockMovementsInput, Prisma.TenantUpdateWithoutStockMovementsInput>, Prisma.TenantUncheckedUpdateWithoutStockMovementsInput>
 }
 
+export type TenantCreateNestedOneWithoutImportBatchesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutImportBatchesInput, Prisma.TenantUncheckedCreateWithoutImportBatchesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutImportBatchesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutImportBatchesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutImportBatchesInput, Prisma.TenantUncheckedCreateWithoutImportBatchesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutImportBatchesInput
+  upsert?: Prisma.TenantUpsertWithoutImportBatchesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutImportBatchesInput, Prisma.TenantUpdateWithoutImportBatchesInput>, Prisma.TenantUncheckedUpdateWithoutImportBatchesInput>
+}
+
 export type TenantCreateWithoutBranchesInput = {
   id?: string
   name: string
@@ -609,6 +630,7 @@ export type TenantCreateWithoutBranchesInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutBranchesInput = {
@@ -629,6 +651,7 @@ export type TenantUncheckedCreateWithoutBranchesInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutBranchesInput = {
@@ -665,6 +688,7 @@ export type TenantUpdateWithoutBranchesInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutBranchesInput = {
@@ -685,6 +709,7 @@ export type TenantUncheckedUpdateWithoutBranchesInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutUsersInput = {
@@ -705,6 +730,7 @@ export type TenantCreateWithoutUsersInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutUsersInput = {
@@ -725,6 +751,7 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutUsersInput = {
@@ -761,6 +788,7 @@ export type TenantUpdateWithoutUsersInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -781,6 +809,7 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPasswordResetTokensInput = {
@@ -801,6 +830,7 @@ export type TenantCreateWithoutPasswordResetTokensInput = {
   expenses?: Prisma.ExpenseCreateNestedManyWithoutTenantInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPasswordResetTokensInput = {
@@ -821,6 +851,7 @@ export type TenantUncheckedCreateWithoutPasswordResetTokensInput = {
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutTenantInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPasswordResetTokensInput = {
@@ -857,6 +888,7 @@ export type TenantUpdateWithoutPasswordResetTokensInput = {
   expenses?: Prisma.ExpenseUpdateManyWithoutTenantNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPasswordResetTokensInput = {
@@ -877,6 +909,7 @@ export type TenantUncheckedUpdateWithoutPasswordResetTokensInput = {
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutTenantNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutProductsInput = {
@@ -897,6 +930,7 @@ export type TenantCreateWithoutProductsInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutProductsInput = {
@@ -917,6 +951,7 @@ export type TenantUncheckedCreateWithoutProductsInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutProductsInput = {
@@ -953,6 +988,7 @@ export type TenantUpdateWithoutProductsInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutProductsInput = {
@@ -973,6 +1009,7 @@ export type TenantUncheckedUpdateWithoutProductsInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutStockItemsInput = {
@@ -993,6 +1030,7 @@ export type TenantCreateWithoutStockItemsInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutStockItemsInput = {
@@ -1013,6 +1051,7 @@ export type TenantUncheckedCreateWithoutStockItemsInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutStockItemsInput = {
@@ -1049,6 +1088,7 @@ export type TenantUpdateWithoutStockItemsInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutStockItemsInput = {
@@ -1069,6 +1109,7 @@ export type TenantUncheckedUpdateWithoutStockItemsInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutSalesInput = {
@@ -1089,6 +1130,7 @@ export type TenantCreateWithoutSalesInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSalesInput = {
@@ -1109,6 +1151,7 @@ export type TenantUncheckedCreateWithoutSalesInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSalesInput = {
@@ -1145,6 +1188,7 @@ export type TenantUpdateWithoutSalesInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSalesInput = {
@@ -1165,6 +1209,7 @@ export type TenantUncheckedUpdateWithoutSalesInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutTransfersInput = {
@@ -1185,6 +1230,7 @@ export type TenantCreateWithoutTransfersInput = {
   expenses?: Prisma.ExpenseCreateNestedManyWithoutTenantInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutTransfersInput = {
@@ -1205,6 +1251,7 @@ export type TenantUncheckedCreateWithoutTransfersInput = {
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutTenantInput
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutTransfersInput = {
@@ -1241,6 +1288,7 @@ export type TenantUpdateWithoutTransfersInput = {
   expenses?: Prisma.ExpenseUpdateManyWithoutTenantNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutTransfersInput = {
@@ -1261,6 +1309,7 @@ export type TenantUncheckedUpdateWithoutTransfersInput = {
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutTenantNestedInput
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCustomersInput = {
@@ -1281,6 +1330,7 @@ export type TenantCreateWithoutCustomersInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCustomersInput = {
@@ -1301,6 +1351,7 @@ export type TenantUncheckedCreateWithoutCustomersInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCustomersInput = {
@@ -1337,6 +1388,7 @@ export type TenantUpdateWithoutCustomersInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCustomersInput = {
@@ -1357,6 +1409,7 @@ export type TenantUncheckedUpdateWithoutCustomersInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWarrantiesInput = {
@@ -1377,6 +1430,7 @@ export type TenantCreateWithoutWarrantiesInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWarrantiesInput = {
@@ -1397,6 +1451,7 @@ export type TenantUncheckedCreateWithoutWarrantiesInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWarrantiesInput = {
@@ -1433,6 +1488,7 @@ export type TenantUpdateWithoutWarrantiesInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWarrantiesInput = {
@@ -1453,6 +1509,7 @@ export type TenantUncheckedUpdateWithoutWarrantiesInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutSuppliersInput = {
@@ -1473,6 +1530,7 @@ export type TenantCreateWithoutSuppliersInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSuppliersInput = {
@@ -1493,6 +1551,7 @@ export type TenantUncheckedCreateWithoutSuppliersInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSuppliersInput = {
@@ -1529,6 +1588,7 @@ export type TenantUpdateWithoutSuppliersInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSuppliersInput = {
@@ -1549,6 +1609,7 @@ export type TenantUncheckedUpdateWithoutSuppliersInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPurchaseOrdersInput = {
@@ -1569,6 +1630,7 @@ export type TenantCreateWithoutPurchaseOrdersInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPurchaseOrdersInput = {
@@ -1589,6 +1651,7 @@ export type TenantUncheckedCreateWithoutPurchaseOrdersInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPurchaseOrdersInput = {
@@ -1625,6 +1688,7 @@ export type TenantUpdateWithoutPurchaseOrdersInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPurchaseOrdersInput = {
@@ -1645,6 +1709,7 @@ export type TenantUncheckedUpdateWithoutPurchaseOrdersInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutExpensesInput = {
@@ -1665,6 +1730,7 @@ export type TenantCreateWithoutExpensesInput = {
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutExpensesInput = {
@@ -1685,6 +1751,7 @@ export type TenantUncheckedCreateWithoutExpensesInput = {
   stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutExpensesInput = {
@@ -1721,6 +1788,7 @@ export type TenantUpdateWithoutExpensesInput = {
   stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutExpensesInput = {
@@ -1741,6 +1809,7 @@ export type TenantUncheckedUpdateWithoutExpensesInput = {
   stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutStockMovementsInput = {
@@ -1761,6 +1830,7 @@ export type TenantCreateWithoutStockMovementsInput = {
   expenses?: Prisma.ExpenseCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutStockMovementsInput = {
@@ -1781,6 +1851,7 @@ export type TenantUncheckedCreateWithoutStockMovementsInput = {
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutTenantInput
   transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutStockMovementsInput = {
@@ -1817,6 +1888,7 @@ export type TenantUpdateWithoutStockMovementsInput = {
   expenses?: Prisma.ExpenseUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutStockMovementsInput = {
@@ -1835,6 +1907,107 @@ export type TenantUncheckedUpdateWithoutStockMovementsInput = {
   suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutTenantNestedInput
   purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutTenantNestedInput
+  transfers?: Prisma.TransferUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutImportBatchesInput = {
+  id?: string
+  name: string
+  plan?: string
+  status?: string
+  createdAt?: Date | string
+  branches?: Prisma.BranchCreateNestedManyWithoutTenantInput
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  products?: Prisma.ProductCreateNestedManyWithoutTenantInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutTenantInput
+  sales?: Prisma.SaleCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  warranties?: Prisma.WarrantyCreateNestedManyWithoutTenantInput
+  suppliers?: Prisma.SupplierCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  transfers?: Prisma.TransferCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutImportBatchesInput = {
+  id?: string
+  name: string
+  plan?: string
+  status?: string
+  createdAt?: Date | string
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutTenantInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutTenantInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutTenantInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  warranties?: Prisma.WarrantyUncheckedCreateNestedManyWithoutTenantInput
+  suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  transfers?: Prisma.TransferUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutImportBatchesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutImportBatchesInput, Prisma.TenantUncheckedCreateWithoutImportBatchesInput>
+}
+
+export type TenantUpsertWithoutImportBatchesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutImportBatchesInput, Prisma.TenantUncheckedUpdateWithoutImportBatchesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutImportBatchesInput, Prisma.TenantUncheckedCreateWithoutImportBatchesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutImportBatchesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutImportBatchesInput, Prisma.TenantUncheckedUpdateWithoutImportBatchesInput>
+}
+
+export type TenantUpdateWithoutImportBatchesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  branches?: Prisma.BranchUpdateManyWithoutTenantNestedInput
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  products?: Prisma.ProductUpdateManyWithoutTenantNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutTenantNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  warranties?: Prisma.WarrantyUpdateManyWithoutTenantNestedInput
+  suppliers?: Prisma.SupplierUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  transfers?: Prisma.TransferUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutImportBatchesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutTenantNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutTenantNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutTenantNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  warranties?: Prisma.WarrantyUncheckedUpdateManyWithoutTenantNestedInput
+  suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
   transfers?: Prisma.TransferUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -1858,6 +2031,7 @@ export type TenantCountOutputType = {
   stockMovements: number
   transfers: number
   passwordResetTokens: number
+  importBatches: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1874,6 +2048,7 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   stockMovements?: boolean | TenantCountOutputTypeCountStockMovementsArgs
   transfers?: boolean | TenantCountOutputTypeCountTransfersArgs
   passwordResetTokens?: boolean | TenantCountOutputTypeCountPasswordResetTokensArgs
+  importBatches?: boolean | TenantCountOutputTypeCountImportBatchesArgs
 }
 
 /**
@@ -1977,6 +2152,13 @@ export type TenantCountOutputTypeCountPasswordResetTokensArgs<ExtArgs extends ru
   where?: Prisma.PasswordResetTokenWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountImportBatchesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ImportBatchWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1997,6 +2179,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   stockMovements?: boolean | Prisma.Tenant$stockMovementsArgs<ExtArgs>
   transfers?: boolean | Prisma.Tenant$transfersArgs<ExtArgs>
   passwordResetTokens?: boolean | Prisma.Tenant$passwordResetTokensArgs<ExtArgs>
+  importBatches?: boolean | Prisma.Tenant$importBatchesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -2039,6 +2222,7 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   stockMovements?: boolean | Prisma.Tenant$stockMovementsArgs<ExtArgs>
   transfers?: boolean | Prisma.Tenant$transfersArgs<ExtArgs>
   passwordResetTokens?: boolean | Prisma.Tenant$passwordResetTokensArgs<ExtArgs>
+  importBatches?: boolean | Prisma.Tenant$importBatchesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2060,6 +2244,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     stockMovements: Prisma.$StockMovementPayload<ExtArgs>[]
     transfers: Prisma.$TransferPayload<ExtArgs>[]
     passwordResetTokens: Prisma.$PasswordResetTokenPayload<ExtArgs>[]
+    importBatches: Prisma.$ImportBatchPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2474,6 +2659,7 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   stockMovements<T extends Prisma.Tenant$stockMovementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$stockMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transfers<T extends Prisma.Tenant$transfersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$transfersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   passwordResetTokens<T extends Prisma.Tenant$passwordResetTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$passwordResetTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  importBatches<T extends Prisma.Tenant$importBatchesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$importBatchesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ImportBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3210,6 +3396,30 @@ export type Tenant$passwordResetTokensArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.PasswordResetTokenScalarFieldEnum | Prisma.PasswordResetTokenScalarFieldEnum[]
+}
+
+/**
+ * Tenant.importBatches
+ */
+export type Tenant$importBatchesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ImportBatch
+   */
+  select?: Prisma.ImportBatchSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ImportBatch
+   */
+  omit?: Prisma.ImportBatchOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ImportBatchInclude<ExtArgs> | null
+  where?: Prisma.ImportBatchWhereInput
+  orderBy?: Prisma.ImportBatchOrderByWithRelationInput | Prisma.ImportBatchOrderByWithRelationInput[]
+  cursor?: Prisma.ImportBatchWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ImportBatchScalarFieldEnum | Prisma.ImportBatchScalarFieldEnum[]
 }
 
 /**

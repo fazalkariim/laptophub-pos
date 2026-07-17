@@ -398,3 +398,47 @@ export interface StockValuation {
   }>;
   byBranch: Array<{ branchId: string; units: number; value: number }>;
 }
+
+export interface BulkImportRow {
+  no: number;
+  location?: string | null;
+  lastScan?: string | null;
+  category?: string | null;
+  brand?: string | null;
+  trackingId?: string | null;
+  specs?: string | null;
+  costByVS?: number | null;
+  finalSale?: number | null;
+  buyer?: string | null;
+  date?: string | null;
+  status?: string | null;
+  saleAt?: string | null;
+  vendor?: string | null;
+  vendorTrackingId?: string | null;
+  receivedOn?: string | null;
+  purchase?: number | null;
+  result: 'success' | 'failed';
+  reason?: string;
+}
+
+export interface BulkImportResult {
+  imported: number;
+  failedCount: number;
+  failed: BulkImportRow[];
+  importBatchId: string;
+}
+
+export interface ImportBatchSummary {
+  id: string;
+  fileName: string;
+  uploadedAt: string;
+  uploadedByName: string;
+  totalRows: number;
+  successCount: number;
+  failedCount: number;
+}
+
+export interface ImportBatchDetail extends ImportBatchSummary {
+  uploadedBy: { name: string };
+  rows: BulkImportRow[];
+}

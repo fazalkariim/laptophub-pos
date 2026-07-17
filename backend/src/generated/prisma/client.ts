@@ -134,3 +134,8 @@ export type Expense = Prisma.ExpenseModel
  * 
  */
 export type StockMovement = Prisma.StockMovementModel
+/**
+ * Model ImportBatch
+ * 
+ */
+export type ImportBatch = Prisma.ImportBatchModel

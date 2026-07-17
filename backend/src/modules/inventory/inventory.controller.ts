@@ -12,14 +12,17 @@ import { BulkScanDto } from './dto/bulk-scan.dto';
 import { UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BadRequestException } from '@nestjs/common';
-
+import { BulkImportV2Service } from './bulk-import-v2.service';
 
 @ApiTags('inventory')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard, RolesGuard, BranchScopeGuard)  // ← BranchScopeGuard add hua
+@UseGuards(JwtAuthGuard, RolesGuard, BranchScopeGuard)
 @Controller('inventory')
 export class InventoryController {
-  constructor(private readonly inventoryService: InventoryService) {}
+  constructor(
+    private readonly inventoryService: InventoryService,
+    private readonly bulkImportV2Service: BulkImportV2Service,
+  ) {}
 
   @Get('branch/:branchId')
   @ApiOperation({ summary: 'Ek branch ka stock dekhein' })
@@ -33,12 +36,16 @@ export class InventoryController {
   addStock(@Body() dto: CreateStockDto, @CurrentUser() user: any) {
     return this.inventoryService.addStock(dto, user);
   }
+
   @Post('adjustments')
   @Roles('SUPER_ADMIN', 'BRANCH_MANAGER')
-  @ApiOperation({ summary: 'Stock adjust karein (damage, count theek karna)' })
+  @ApiOperation({
+    summary: 'Stock adjust karein (damage, count theek karna)',
+  })
   adjust(@Body() dto: AdjustStockDto, @CurrentUser() user: any) {
     return this.inventoryService.adjust(dto, user);
   }
+
   @Post('bulk/scan')
   @Roles('SUPER_ADMIN', 'BRANCH_MANAGER')
   @ApiOperation({ summary: 'Batch serial scan se bulk intake' })
@@ -46,7 +53,7 @@ export class InventoryController {
     return this.inventoryService.bulkScan(dto, user);
   }
 
-  @Post('bulk/import')
+@Post('bulk/import')
   @Roles('SUPER_ADMIN', 'BRANCH_MANAGER')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
@@ -57,30 +64,34 @@ export class InventoryController {
         file: {
           type: 'string',
           format: 'binary',
-          description: 'CSV ya Excel file',
-        },
-        branchId: {
-          type: 'string',
-          example: 'branch-main',
-        },
-        productId: {
-          type: 'string',
-          example: 'YAHAN-PRODUCT-ID',
         },
       },
     },
   })
-  @ApiOperation({ summary: 'CSV/Excel file se bulk intake' })
-  bulkImport(
+  @ApiOperation({ summary: 'Bulk import — self-describing CSV/Excel' })
+  async bulkImport(
     @UploadedFile() file: any,
-    @Body('branchId') branchId: string,
-    @Body('productId') productId: string,
     @CurrentUser() user: any,
   ) {
-    if (!file) {
-      throw new BadRequestException('File upload karein');
-    }
-    return this.inventoryService.bulkImport(branchId, productId, file.buffer, user);
+    return this.bulkImportV2Service.bulkImport(
+      file.buffer,
+      file.originalname,
+      user,
+    );
+  }
+
+  @Get('import-batches')
+  @Roles('SUPER_ADMIN', 'BRANCH_MANAGER')
+  @ApiOperation({ summary: 'Upload history (list)' })
+  listImportBatches() {
+    return this.bulkImportV2Service.listBatches();
+  }
+
+  @Get('import-batches/:id')
+  @Roles('SUPER_ADMIN', 'BRANCH_MANAGER')
+  @ApiOperation({ summary: 'Ek upload ka poora detail' })
+  getImportBatch(@Param('id') id: string) {
+    return this.bulkImportV2Service.getBatch(id);
   }
 
   @Get('branch/:branchId/low-stock')

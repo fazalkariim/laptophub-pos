@@ -29,11 +29,15 @@ export type AggregateStockItem = {
 export type StockItemAvgAggregateOutputType = {
   quantity: number | null
   costPrice: runtime.Decimal | null
+  vendorQuotedCost: runtime.Decimal | null
+  finalSalePrice: runtime.Decimal | null
 }
 
 export type StockItemSumAggregateOutputType = {
   quantity: number | null
   costPrice: runtime.Decimal | null
+  vendorQuotedCost: runtime.Decimal | null
+  finalSalePrice: runtime.Decimal | null
 }
 
 export type StockItemMinAggregateOutputType = {
@@ -46,6 +50,15 @@ export type StockItemMinAggregateOutputType = {
   status: $Enums.StockStatus | null
   costPrice: runtime.Decimal | null
   createdAt: Date | null
+  lastScan: string | null
+  vendorQuotedCost: runtime.Decimal | null
+  finalSalePrice: runtime.Decimal | null
+  buyer: string | null
+  transactionDate: Date | null
+  saleAt: string | null
+  vendorId: string | null
+  vendorTrackingId: string | null
+  receivedOn: Date | null
 }
 
 export type StockItemMaxAggregateOutputType = {
@@ -58,6 +71,15 @@ export type StockItemMaxAggregateOutputType = {
   status: $Enums.StockStatus | null
   costPrice: runtime.Decimal | null
   createdAt: Date | null
+  lastScan: string | null
+  vendorQuotedCost: runtime.Decimal | null
+  finalSalePrice: runtime.Decimal | null
+  buyer: string | null
+  transactionDate: Date | null
+  saleAt: string | null
+  vendorId: string | null
+  vendorTrackingId: string | null
+  receivedOn: Date | null
 }
 
 export type StockItemCountAggregateOutputType = {
@@ -70,6 +92,15 @@ export type StockItemCountAggregateOutputType = {
   status: number
   costPrice: number
   createdAt: number
+  lastScan: number
+  vendorQuotedCost: number
+  finalSalePrice: number
+  buyer: number
+  transactionDate: number
+  saleAt: number
+  vendorId: number
+  vendorTrackingId: number
+  receivedOn: number
   _all: number
 }
 
@@ -77,11 +108,15 @@ export type StockItemCountAggregateOutputType = {
 export type StockItemAvgAggregateInputType = {
   quantity?: true
   costPrice?: true
+  vendorQuotedCost?: true
+  finalSalePrice?: true
 }
 
 export type StockItemSumAggregateInputType = {
   quantity?: true
   costPrice?: true
+  vendorQuotedCost?: true
+  finalSalePrice?: true
 }
 
 export type StockItemMinAggregateInputType = {
@@ -94,6 +129,15 @@ export type StockItemMinAggregateInputType = {
   status?: true
   costPrice?: true
   createdAt?: true
+  lastScan?: true
+  vendorQuotedCost?: true
+  finalSalePrice?: true
+  buyer?: true
+  transactionDate?: true
+  saleAt?: true
+  vendorId?: true
+  vendorTrackingId?: true
+  receivedOn?: true
 }
 
 export type StockItemMaxAggregateInputType = {
@@ -106,6 +150,15 @@ export type StockItemMaxAggregateInputType = {
   status?: true
   costPrice?: true
   createdAt?: true
+  lastScan?: true
+  vendorQuotedCost?: true
+  finalSalePrice?: true
+  buyer?: true
+  transactionDate?: true
+  saleAt?: true
+  vendorId?: true
+  vendorTrackingId?: true
+  receivedOn?: true
 }
 
 export type StockItemCountAggregateInputType = {
@@ -118,6 +171,15 @@ export type StockItemCountAggregateInputType = {
   status?: true
   costPrice?: true
   createdAt?: true
+  lastScan?: true
+  vendorQuotedCost?: true
+  finalSalePrice?: true
+  buyer?: true
+  transactionDate?: true
+  saleAt?: true
+  vendorId?: true
+  vendorTrackingId?: true
+  receivedOn?: true
   _all?: true
 }
 
@@ -217,6 +279,15 @@ export type StockItemGroupByOutputType = {
   status: $Enums.StockStatus
   costPrice: runtime.Decimal | null
   createdAt: Date
+  lastScan: string | null
+  vendorQuotedCost: runtime.Decimal | null
+  finalSalePrice: runtime.Decimal | null
+  buyer: string | null
+  transactionDate: Date | null
+  saleAt: string | null
+  vendorId: string | null
+  vendorTrackingId: string | null
+  receivedOn: Date | null
   _count: StockItemCountAggregateOutputType | null
   _avg: StockItemAvgAggregateOutputType | null
   _sum: StockItemSumAggregateOutputType | null
@@ -252,9 +323,19 @@ export type StockItemWhereInput = {
   status?: Prisma.EnumStockStatusFilter<"StockItem"> | $Enums.StockStatus
   costPrice?: Prisma.DecimalNullableFilter<"StockItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"StockItem"> | Date | string
+  lastScan?: Prisma.StringNullableFilter<"StockItem"> | string | null
+  vendorQuotedCost?: Prisma.DecimalNullableFilter<"StockItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.DecimalNullableFilter<"StockItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.StringNullableFilter<"StockItem"> | string | null
+  transactionDate?: Prisma.DateTimeNullableFilter<"StockItem"> | Date | string | null
+  saleAt?: Prisma.StringNullableFilter<"StockItem"> | string | null
+  vendorId?: Prisma.StringNullableFilter<"StockItem"> | string | null
+  vendorTrackingId?: Prisma.StringNullableFilter<"StockItem"> | string | null
+  receivedOn?: Prisma.DateTimeNullableFilter<"StockItem"> | Date | string | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
+  vendorSupplier?: Prisma.XOR<Prisma.SupplierNullableScalarRelationFilter, Prisma.SupplierWhereInput> | null
   saleLines?: Prisma.SaleLineListRelationFilter
   warranties?: Prisma.WarrantyListRelationFilter
 }
@@ -269,9 +350,19 @@ export type StockItemOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   costPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  lastScan?: Prisma.SortOrderInput | Prisma.SortOrder
+  vendorQuotedCost?: Prisma.SortOrderInput | Prisma.SortOrder
+  finalSalePrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  buyer?: Prisma.SortOrderInput | Prisma.SortOrder
+  transactionDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  saleAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  vendorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  vendorTrackingId?: Prisma.SortOrderInput | Prisma.SortOrder
+  receivedOn?: Prisma.SortOrderInput | Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   branch?: Prisma.BranchOrderByWithRelationInput
   product?: Prisma.ProductOrderByWithRelationInput
+  vendorSupplier?: Prisma.SupplierOrderByWithRelationInput
   saleLines?: Prisma.SaleLineOrderByRelationAggregateInput
   warranties?: Prisma.WarrantyOrderByRelationAggregateInput
 }
@@ -290,9 +381,19 @@ export type StockItemWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumStockStatusFilter<"StockItem"> | $Enums.StockStatus
   costPrice?: Prisma.DecimalNullableFilter<"StockItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"StockItem"> | Date | string
+  lastScan?: Prisma.StringNullableFilter<"StockItem"> | string | null
+  vendorQuotedCost?: Prisma.DecimalNullableFilter<"StockItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.DecimalNullableFilter<"StockItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.StringNullableFilter<"StockItem"> | string | null
+  transactionDate?: Prisma.DateTimeNullableFilter<"StockItem"> | Date | string | null
+  saleAt?: Prisma.StringNullableFilter<"StockItem"> | string | null
+  vendorId?: Prisma.StringNullableFilter<"StockItem"> | string | null
+  vendorTrackingId?: Prisma.StringNullableFilter<"StockItem"> | string | null
+  receivedOn?: Prisma.DateTimeNullableFilter<"StockItem"> | Date | string | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
+  vendorSupplier?: Prisma.XOR<Prisma.SupplierNullableScalarRelationFilter, Prisma.SupplierWhereInput> | null
   saleLines?: Prisma.SaleLineListRelationFilter
   warranties?: Prisma.WarrantyListRelationFilter
 }, "id" | "tenantId_serialNumber">
@@ -307,6 +408,15 @@ export type StockItemOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   costPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  lastScan?: Prisma.SortOrderInput | Prisma.SortOrder
+  vendorQuotedCost?: Prisma.SortOrderInput | Prisma.SortOrder
+  finalSalePrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  buyer?: Prisma.SortOrderInput | Prisma.SortOrder
+  transactionDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  saleAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  vendorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  vendorTrackingId?: Prisma.SortOrderInput | Prisma.SortOrder
+  receivedOn?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.StockItemCountOrderByAggregateInput
   _avg?: Prisma.StockItemAvgOrderByAggregateInput
   _max?: Prisma.StockItemMaxOrderByAggregateInput
@@ -327,6 +437,15 @@ export type StockItemScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumStockStatusWithAggregatesFilter<"StockItem"> | $Enums.StockStatus
   costPrice?: Prisma.DecimalNullableWithAggregatesFilter<"StockItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"StockItem"> | Date | string
+  lastScan?: Prisma.StringNullableWithAggregatesFilter<"StockItem"> | string | null
+  vendorQuotedCost?: Prisma.DecimalNullableWithAggregatesFilter<"StockItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.DecimalNullableWithAggregatesFilter<"StockItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.StringNullableWithAggregatesFilter<"StockItem"> | string | null
+  transactionDate?: Prisma.DateTimeNullableWithAggregatesFilter<"StockItem"> | Date | string | null
+  saleAt?: Prisma.StringNullableWithAggregatesFilter<"StockItem"> | string | null
+  vendorId?: Prisma.StringNullableWithAggregatesFilter<"StockItem"> | string | null
+  vendorTrackingId?: Prisma.StringNullableWithAggregatesFilter<"StockItem"> | string | null
+  receivedOn?: Prisma.DateTimeNullableWithAggregatesFilter<"StockItem"> | Date | string | null
 }
 
 export type StockItemCreateInput = {
@@ -336,9 +455,18 @@ export type StockItemCreateInput = {
   status?: $Enums.StockStatus
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
   tenant: Prisma.TenantCreateNestedOneWithoutStockItemsInput
   branch: Prisma.BranchCreateNestedOneWithoutStockItemsInput
   product: Prisma.ProductCreateNestedOneWithoutStockItemsInput
+  vendorSupplier?: Prisma.SupplierCreateNestedOneWithoutVendorStockItemsInput
   saleLines?: Prisma.SaleLineCreateNestedManyWithoutStockItemInput
   warranties?: Prisma.WarrantyCreateNestedManyWithoutStockItemInput
 }
@@ -353,6 +481,15 @@ export type StockItemUncheckedCreateInput = {
   status?: $Enums.StockStatus
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorId?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
   saleLines?: Prisma.SaleLineUncheckedCreateNestedManyWithoutStockItemInput
   warranties?: Prisma.WarrantyUncheckedCreateNestedManyWithoutStockItemInput
 }
@@ -364,9 +501,18 @@ export type StockItemUpdateInput = {
   status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutStockItemsNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutStockItemsNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutStockItemsNestedInput
+  vendorSupplier?: Prisma.SupplierUpdateOneWithoutVendorStockItemsNestedInput
   saleLines?: Prisma.SaleLineUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUpdateManyWithoutStockItemNestedInput
 }
@@ -381,6 +527,15 @@ export type StockItemUncheckedUpdateInput = {
   status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   saleLines?: Prisma.SaleLineUncheckedUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUncheckedUpdateManyWithoutStockItemNestedInput
 }
@@ -395,6 +550,15 @@ export type StockItemCreateManyInput = {
   status?: $Enums.StockStatus
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorId?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
 }
 
 export type StockItemUpdateManyMutationInput = {
@@ -404,6 +568,14 @@ export type StockItemUpdateManyMutationInput = {
   status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type StockItemUncheckedUpdateManyInput = {
@@ -416,6 +588,15 @@ export type StockItemUncheckedUpdateManyInput = {
   status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type StockItemListRelationFilter = {
@@ -443,11 +624,22 @@ export type StockItemCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  lastScan?: Prisma.SortOrder
+  vendorQuotedCost?: Prisma.SortOrder
+  finalSalePrice?: Prisma.SortOrder
+  buyer?: Prisma.SortOrder
+  transactionDate?: Prisma.SortOrder
+  saleAt?: Prisma.SortOrder
+  vendorId?: Prisma.SortOrder
+  vendorTrackingId?: Prisma.SortOrder
+  receivedOn?: Prisma.SortOrder
 }
 
 export type StockItemAvgOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
+  vendorQuotedCost?: Prisma.SortOrder
+  finalSalePrice?: Prisma.SortOrder
 }
 
 export type StockItemMaxOrderByAggregateInput = {
@@ -460,6 +652,15 @@ export type StockItemMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  lastScan?: Prisma.SortOrder
+  vendorQuotedCost?: Prisma.SortOrder
+  finalSalePrice?: Prisma.SortOrder
+  buyer?: Prisma.SortOrder
+  transactionDate?: Prisma.SortOrder
+  saleAt?: Prisma.SortOrder
+  vendorId?: Prisma.SortOrder
+  vendorTrackingId?: Prisma.SortOrder
+  receivedOn?: Prisma.SortOrder
 }
 
 export type StockItemMinOrderByAggregateInput = {
@@ -472,11 +673,22 @@ export type StockItemMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  lastScan?: Prisma.SortOrder
+  vendorQuotedCost?: Prisma.SortOrder
+  finalSalePrice?: Prisma.SortOrder
+  buyer?: Prisma.SortOrder
+  transactionDate?: Prisma.SortOrder
+  saleAt?: Prisma.SortOrder
+  vendorId?: Prisma.SortOrder
+  vendorTrackingId?: Prisma.SortOrder
+  receivedOn?: Prisma.SortOrder
 }
 
 export type StockItemSumOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
+  vendorQuotedCost?: Prisma.SortOrder
+  finalSalePrice?: Prisma.SortOrder
 }
 
 export type StockItemNullableScalarRelationFilter = {
@@ -654,6 +866,48 @@ export type StockItemUpdateOneWithoutWarrantiesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StockItemUpdateToOneWithWhereWithoutWarrantiesInput, Prisma.StockItemUpdateWithoutWarrantiesInput>, Prisma.StockItemUncheckedUpdateWithoutWarrantiesInput>
 }
 
+export type StockItemCreateNestedManyWithoutVendorSupplierInput = {
+  create?: Prisma.XOR<Prisma.StockItemCreateWithoutVendorSupplierInput, Prisma.StockItemUncheckedCreateWithoutVendorSupplierInput> | Prisma.StockItemCreateWithoutVendorSupplierInput[] | Prisma.StockItemUncheckedCreateWithoutVendorSupplierInput[]
+  connectOrCreate?: Prisma.StockItemCreateOrConnectWithoutVendorSupplierInput | Prisma.StockItemCreateOrConnectWithoutVendorSupplierInput[]
+  createMany?: Prisma.StockItemCreateManyVendorSupplierInputEnvelope
+  connect?: Prisma.StockItemWhereUniqueInput | Prisma.StockItemWhereUniqueInput[]
+}
+
+export type StockItemUncheckedCreateNestedManyWithoutVendorSupplierInput = {
+  create?: Prisma.XOR<Prisma.StockItemCreateWithoutVendorSupplierInput, Prisma.StockItemUncheckedCreateWithoutVendorSupplierInput> | Prisma.StockItemCreateWithoutVendorSupplierInput[] | Prisma.StockItemUncheckedCreateWithoutVendorSupplierInput[]
+  connectOrCreate?: Prisma.StockItemCreateOrConnectWithoutVendorSupplierInput | Prisma.StockItemCreateOrConnectWithoutVendorSupplierInput[]
+  createMany?: Prisma.StockItemCreateManyVendorSupplierInputEnvelope
+  connect?: Prisma.StockItemWhereUniqueInput | Prisma.StockItemWhereUniqueInput[]
+}
+
+export type StockItemUpdateManyWithoutVendorSupplierNestedInput = {
+  create?: Prisma.XOR<Prisma.StockItemCreateWithoutVendorSupplierInput, Prisma.StockItemUncheckedCreateWithoutVendorSupplierInput> | Prisma.StockItemCreateWithoutVendorSupplierInput[] | Prisma.StockItemUncheckedCreateWithoutVendorSupplierInput[]
+  connectOrCreate?: Prisma.StockItemCreateOrConnectWithoutVendorSupplierInput | Prisma.StockItemCreateOrConnectWithoutVendorSupplierInput[]
+  upsert?: Prisma.StockItemUpsertWithWhereUniqueWithoutVendorSupplierInput | Prisma.StockItemUpsertWithWhereUniqueWithoutVendorSupplierInput[]
+  createMany?: Prisma.StockItemCreateManyVendorSupplierInputEnvelope
+  set?: Prisma.StockItemWhereUniqueInput | Prisma.StockItemWhereUniqueInput[]
+  disconnect?: Prisma.StockItemWhereUniqueInput | Prisma.StockItemWhereUniqueInput[]
+  delete?: Prisma.StockItemWhereUniqueInput | Prisma.StockItemWhereUniqueInput[]
+  connect?: Prisma.StockItemWhereUniqueInput | Prisma.StockItemWhereUniqueInput[]
+  update?: Prisma.StockItemUpdateWithWhereUniqueWithoutVendorSupplierInput | Prisma.StockItemUpdateWithWhereUniqueWithoutVendorSupplierInput[]
+  updateMany?: Prisma.StockItemUpdateManyWithWhereWithoutVendorSupplierInput | Prisma.StockItemUpdateManyWithWhereWithoutVendorSupplierInput[]
+  deleteMany?: Prisma.StockItemScalarWhereInput | Prisma.StockItemScalarWhereInput[]
+}
+
+export type StockItemUncheckedUpdateManyWithoutVendorSupplierNestedInput = {
+  create?: Prisma.XOR<Prisma.StockItemCreateWithoutVendorSupplierInput, Prisma.StockItemUncheckedCreateWithoutVendorSupplierInput> | Prisma.StockItemCreateWithoutVendorSupplierInput[] | Prisma.StockItemUncheckedCreateWithoutVendorSupplierInput[]
+  connectOrCreate?: Prisma.StockItemCreateOrConnectWithoutVendorSupplierInput | Prisma.StockItemCreateOrConnectWithoutVendorSupplierInput[]
+  upsert?: Prisma.StockItemUpsertWithWhereUniqueWithoutVendorSupplierInput | Prisma.StockItemUpsertWithWhereUniqueWithoutVendorSupplierInput[]
+  createMany?: Prisma.StockItemCreateManyVendorSupplierInputEnvelope
+  set?: Prisma.StockItemWhereUniqueInput | Prisma.StockItemWhereUniqueInput[]
+  disconnect?: Prisma.StockItemWhereUniqueInput | Prisma.StockItemWhereUniqueInput[]
+  delete?: Prisma.StockItemWhereUniqueInput | Prisma.StockItemWhereUniqueInput[]
+  connect?: Prisma.StockItemWhereUniqueInput | Prisma.StockItemWhereUniqueInput[]
+  update?: Prisma.StockItemUpdateWithWhereUniqueWithoutVendorSupplierInput | Prisma.StockItemUpdateWithWhereUniqueWithoutVendorSupplierInput[]
+  updateMany?: Prisma.StockItemUpdateManyWithWhereWithoutVendorSupplierInput | Prisma.StockItemUpdateManyWithWhereWithoutVendorSupplierInput[]
+  deleteMany?: Prisma.StockItemScalarWhereInput | Prisma.StockItemScalarWhereInput[]
+}
+
 export type StockItemCreateWithoutTenantInput = {
   id?: string
   serialNumber?: string | null
@@ -661,8 +915,17 @@ export type StockItemCreateWithoutTenantInput = {
   status?: $Enums.StockStatus
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
   branch: Prisma.BranchCreateNestedOneWithoutStockItemsInput
   product: Prisma.ProductCreateNestedOneWithoutStockItemsInput
+  vendorSupplier?: Prisma.SupplierCreateNestedOneWithoutVendorStockItemsInput
   saleLines?: Prisma.SaleLineCreateNestedManyWithoutStockItemInput
   warranties?: Prisma.WarrantyCreateNestedManyWithoutStockItemInput
 }
@@ -676,6 +939,15 @@ export type StockItemUncheckedCreateWithoutTenantInput = {
   status?: $Enums.StockStatus
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorId?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
   saleLines?: Prisma.SaleLineUncheckedCreateNestedManyWithoutStockItemInput
   warranties?: Prisma.WarrantyUncheckedCreateNestedManyWithoutStockItemInput
 }
@@ -719,6 +991,15 @@ export type StockItemScalarWhereInput = {
   status?: Prisma.EnumStockStatusFilter<"StockItem"> | $Enums.StockStatus
   costPrice?: Prisma.DecimalNullableFilter<"StockItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"StockItem"> | Date | string
+  lastScan?: Prisma.StringNullableFilter<"StockItem"> | string | null
+  vendorQuotedCost?: Prisma.DecimalNullableFilter<"StockItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.DecimalNullableFilter<"StockItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.StringNullableFilter<"StockItem"> | string | null
+  transactionDate?: Prisma.DateTimeNullableFilter<"StockItem"> | Date | string | null
+  saleAt?: Prisma.StringNullableFilter<"StockItem"> | string | null
+  vendorId?: Prisma.StringNullableFilter<"StockItem"> | string | null
+  vendorTrackingId?: Prisma.StringNullableFilter<"StockItem"> | string | null
+  receivedOn?: Prisma.DateTimeNullableFilter<"StockItem"> | Date | string | null
 }
 
 export type StockItemCreateWithoutBranchInput = {
@@ -728,8 +1009,17 @@ export type StockItemCreateWithoutBranchInput = {
   status?: $Enums.StockStatus
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
   tenant: Prisma.TenantCreateNestedOneWithoutStockItemsInput
   product: Prisma.ProductCreateNestedOneWithoutStockItemsInput
+  vendorSupplier?: Prisma.SupplierCreateNestedOneWithoutVendorStockItemsInput
   saleLines?: Prisma.SaleLineCreateNestedManyWithoutStockItemInput
   warranties?: Prisma.WarrantyCreateNestedManyWithoutStockItemInput
 }
@@ -743,6 +1033,15 @@ export type StockItemUncheckedCreateWithoutBranchInput = {
   status?: $Enums.StockStatus
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorId?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
   saleLines?: Prisma.SaleLineUncheckedCreateNestedManyWithoutStockItemInput
   warranties?: Prisma.WarrantyUncheckedCreateNestedManyWithoutStockItemInput
 }
@@ -780,8 +1079,17 @@ export type StockItemCreateWithoutProductInput = {
   status?: $Enums.StockStatus
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
   tenant: Prisma.TenantCreateNestedOneWithoutStockItemsInput
   branch: Prisma.BranchCreateNestedOneWithoutStockItemsInput
+  vendorSupplier?: Prisma.SupplierCreateNestedOneWithoutVendorStockItemsInput
   saleLines?: Prisma.SaleLineCreateNestedManyWithoutStockItemInput
   warranties?: Prisma.WarrantyCreateNestedManyWithoutStockItemInput
 }
@@ -795,6 +1103,15 @@ export type StockItemUncheckedCreateWithoutProductInput = {
   status?: $Enums.StockStatus
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorId?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
   saleLines?: Prisma.SaleLineUncheckedCreateNestedManyWithoutStockItemInput
   warranties?: Prisma.WarrantyUncheckedCreateNestedManyWithoutStockItemInput
 }
@@ -832,9 +1149,18 @@ export type StockItemCreateWithoutSaleLinesInput = {
   status?: $Enums.StockStatus
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
   tenant: Prisma.TenantCreateNestedOneWithoutStockItemsInput
   branch: Prisma.BranchCreateNestedOneWithoutStockItemsInput
   product: Prisma.ProductCreateNestedOneWithoutStockItemsInput
+  vendorSupplier?: Prisma.SupplierCreateNestedOneWithoutVendorStockItemsInput
   warranties?: Prisma.WarrantyCreateNestedManyWithoutStockItemInput
 }
 
@@ -848,6 +1174,15 @@ export type StockItemUncheckedCreateWithoutSaleLinesInput = {
   status?: $Enums.StockStatus
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorId?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
   warranties?: Prisma.WarrantyUncheckedCreateNestedManyWithoutStockItemInput
 }
 
@@ -874,9 +1209,18 @@ export type StockItemUpdateWithoutSaleLinesInput = {
   status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutStockItemsNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutStockItemsNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutStockItemsNestedInput
+  vendorSupplier?: Prisma.SupplierUpdateOneWithoutVendorStockItemsNestedInput
   warranties?: Prisma.WarrantyUpdateManyWithoutStockItemNestedInput
 }
 
@@ -890,6 +1234,15 @@ export type StockItemUncheckedUpdateWithoutSaleLinesInput = {
   status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warranties?: Prisma.WarrantyUncheckedUpdateManyWithoutStockItemNestedInput
 }
 
@@ -900,9 +1253,18 @@ export type StockItemCreateWithoutWarrantiesInput = {
   status?: $Enums.StockStatus
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
   tenant: Prisma.TenantCreateNestedOneWithoutStockItemsInput
   branch: Prisma.BranchCreateNestedOneWithoutStockItemsInput
   product: Prisma.ProductCreateNestedOneWithoutStockItemsInput
+  vendorSupplier?: Prisma.SupplierCreateNestedOneWithoutVendorStockItemsInput
   saleLines?: Prisma.SaleLineCreateNestedManyWithoutStockItemInput
 }
 
@@ -916,6 +1278,15 @@ export type StockItemUncheckedCreateWithoutWarrantiesInput = {
   status?: $Enums.StockStatus
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorId?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
   saleLines?: Prisma.SaleLineUncheckedCreateNestedManyWithoutStockItemInput
 }
 
@@ -942,9 +1313,18 @@ export type StockItemUpdateWithoutWarrantiesInput = {
   status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutStockItemsNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutStockItemsNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutStockItemsNestedInput
+  vendorSupplier?: Prisma.SupplierUpdateOneWithoutVendorStockItemsNestedInput
   saleLines?: Prisma.SaleLineUpdateManyWithoutStockItemNestedInput
 }
 
@@ -958,7 +1338,86 @@ export type StockItemUncheckedUpdateWithoutWarrantiesInput = {
   status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   saleLines?: Prisma.SaleLineUncheckedUpdateManyWithoutStockItemNestedInput
+}
+
+export type StockItemCreateWithoutVendorSupplierInput = {
+  id?: string
+  serialNumber?: string | null
+  quantity?: number
+  status?: $Enums.StockStatus
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
+  tenant: Prisma.TenantCreateNestedOneWithoutStockItemsInput
+  branch: Prisma.BranchCreateNestedOneWithoutStockItemsInput
+  product: Prisma.ProductCreateNestedOneWithoutStockItemsInput
+  saleLines?: Prisma.SaleLineCreateNestedManyWithoutStockItemInput
+  warranties?: Prisma.WarrantyCreateNestedManyWithoutStockItemInput
+}
+
+export type StockItemUncheckedCreateWithoutVendorSupplierInput = {
+  id?: string
+  tenantId: string
+  branchId: string
+  productId: string
+  serialNumber?: string | null
+  quantity?: number
+  status?: $Enums.StockStatus
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
+  saleLines?: Prisma.SaleLineUncheckedCreateNestedManyWithoutStockItemInput
+  warranties?: Prisma.WarrantyUncheckedCreateNestedManyWithoutStockItemInput
+}
+
+export type StockItemCreateOrConnectWithoutVendorSupplierInput = {
+  where: Prisma.StockItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.StockItemCreateWithoutVendorSupplierInput, Prisma.StockItemUncheckedCreateWithoutVendorSupplierInput>
+}
+
+export type StockItemCreateManyVendorSupplierInputEnvelope = {
+  data: Prisma.StockItemCreateManyVendorSupplierInput | Prisma.StockItemCreateManyVendorSupplierInput[]
+  skipDuplicates?: boolean
+}
+
+export type StockItemUpsertWithWhereUniqueWithoutVendorSupplierInput = {
+  where: Prisma.StockItemWhereUniqueInput
+  update: Prisma.XOR<Prisma.StockItemUpdateWithoutVendorSupplierInput, Prisma.StockItemUncheckedUpdateWithoutVendorSupplierInput>
+  create: Prisma.XOR<Prisma.StockItemCreateWithoutVendorSupplierInput, Prisma.StockItemUncheckedCreateWithoutVendorSupplierInput>
+}
+
+export type StockItemUpdateWithWhereUniqueWithoutVendorSupplierInput = {
+  where: Prisma.StockItemWhereUniqueInput
+  data: Prisma.XOR<Prisma.StockItemUpdateWithoutVendorSupplierInput, Prisma.StockItemUncheckedUpdateWithoutVendorSupplierInput>
+}
+
+export type StockItemUpdateManyWithWhereWithoutVendorSupplierInput = {
+  where: Prisma.StockItemScalarWhereInput
+  data: Prisma.XOR<Prisma.StockItemUpdateManyMutationInput, Prisma.StockItemUncheckedUpdateManyWithoutVendorSupplierInput>
 }
 
 export type StockItemCreateManyTenantInput = {
@@ -970,6 +1429,15 @@ export type StockItemCreateManyTenantInput = {
   status?: $Enums.StockStatus
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorId?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
 }
 
 export type StockItemUpdateWithoutTenantInput = {
@@ -979,8 +1447,17 @@ export type StockItemUpdateWithoutTenantInput = {
   status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branch?: Prisma.BranchUpdateOneRequiredWithoutStockItemsNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutStockItemsNestedInput
+  vendorSupplier?: Prisma.SupplierUpdateOneWithoutVendorStockItemsNestedInput
   saleLines?: Prisma.SaleLineUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUpdateManyWithoutStockItemNestedInput
 }
@@ -994,6 +1471,15 @@ export type StockItemUncheckedUpdateWithoutTenantInput = {
   status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   saleLines?: Prisma.SaleLineUncheckedUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUncheckedUpdateManyWithoutStockItemNestedInput
 }
@@ -1007,6 +1493,15 @@ export type StockItemUncheckedUpdateManyWithoutTenantInput = {
   status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type StockItemCreateManyBranchInput = {
@@ -1018,6 +1513,15 @@ export type StockItemCreateManyBranchInput = {
   status?: $Enums.StockStatus
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorId?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
 }
 
 export type StockItemUpdateWithoutBranchInput = {
@@ -1027,8 +1531,17 @@ export type StockItemUpdateWithoutBranchInput = {
   status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutStockItemsNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutStockItemsNestedInput
+  vendorSupplier?: Prisma.SupplierUpdateOneWithoutVendorStockItemsNestedInput
   saleLines?: Prisma.SaleLineUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUpdateManyWithoutStockItemNestedInput
 }
@@ -1042,6 +1555,15 @@ export type StockItemUncheckedUpdateWithoutBranchInput = {
   status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   saleLines?: Prisma.SaleLineUncheckedUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUncheckedUpdateManyWithoutStockItemNestedInput
 }
@@ -1055,6 +1577,15 @@ export type StockItemUncheckedUpdateManyWithoutBranchInput = {
   status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type StockItemCreateManyProductInput = {
@@ -1066,6 +1597,15 @@ export type StockItemCreateManyProductInput = {
   status?: $Enums.StockStatus
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorId?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
 }
 
 export type StockItemUpdateWithoutProductInput = {
@@ -1075,8 +1615,17 @@ export type StockItemUpdateWithoutProductInput = {
   status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutStockItemsNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutStockItemsNestedInput
+  vendorSupplier?: Prisma.SupplierUpdateOneWithoutVendorStockItemsNestedInput
   saleLines?: Prisma.SaleLineUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUpdateManyWithoutStockItemNestedInput
 }
@@ -1090,6 +1639,15 @@ export type StockItemUncheckedUpdateWithoutProductInput = {
   status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   saleLines?: Prisma.SaleLineUncheckedUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUncheckedUpdateManyWithoutStockItemNestedInput
 }
@@ -1103,6 +1661,99 @@ export type StockItemUncheckedUpdateManyWithoutProductInput = {
   status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type StockItemCreateManyVendorSupplierInput = {
+  id?: string
+  tenantId: string
+  branchId: string
+  productId: string
+  serialNumber?: string | null
+  quantity?: number
+  status?: $Enums.StockStatus
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
+}
+
+export type StockItemUpdateWithoutVendorSupplierInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
+  costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutStockItemsNestedInput
+  branch?: Prisma.BranchUpdateOneRequiredWithoutStockItemsNestedInput
+  product?: Prisma.ProductUpdateOneRequiredWithoutStockItemsNestedInput
+  saleLines?: Prisma.SaleLineUpdateManyWithoutStockItemNestedInput
+  warranties?: Prisma.WarrantyUpdateManyWithoutStockItemNestedInput
+}
+
+export type StockItemUncheckedUpdateWithoutVendorSupplierInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  productId?: Prisma.StringFieldUpdateOperationsInput | string
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
+  costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleLines?: Prisma.SaleLineUncheckedUpdateManyWithoutStockItemNestedInput
+  warranties?: Prisma.WarrantyUncheckedUpdateManyWithoutStockItemNestedInput
+}
+
+export type StockItemUncheckedUpdateManyWithoutVendorSupplierInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  productId?: Prisma.StringFieldUpdateOperationsInput | string
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
+  costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -1155,9 +1806,19 @@ export type StockItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   status?: boolean
   costPrice?: boolean
   createdAt?: boolean
+  lastScan?: boolean
+  vendorQuotedCost?: boolean
+  finalSalePrice?: boolean
+  buyer?: boolean
+  transactionDate?: boolean
+  saleAt?: boolean
+  vendorId?: boolean
+  vendorTrackingId?: boolean
+  receivedOn?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
+  vendorSupplier?: boolean | Prisma.StockItem$vendorSupplierArgs<ExtArgs>
   saleLines?: boolean | Prisma.StockItem$saleLinesArgs<ExtArgs>
   warranties?: boolean | Prisma.StockItem$warrantiesArgs<ExtArgs>
   _count?: boolean | Prisma.StockItemCountOutputTypeDefaultArgs<ExtArgs>
@@ -1173,9 +1834,19 @@ export type StockItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   status?: boolean
   costPrice?: boolean
   createdAt?: boolean
+  lastScan?: boolean
+  vendorQuotedCost?: boolean
+  finalSalePrice?: boolean
+  buyer?: boolean
+  transactionDate?: boolean
+  saleAt?: boolean
+  vendorId?: boolean
+  vendorTrackingId?: boolean
+  receivedOn?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
+  vendorSupplier?: boolean | Prisma.StockItem$vendorSupplierArgs<ExtArgs>
 }, ExtArgs["result"]["stockItem"]>
 
 export type StockItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1188,9 +1859,19 @@ export type StockItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   status?: boolean
   costPrice?: boolean
   createdAt?: boolean
+  lastScan?: boolean
+  vendorQuotedCost?: boolean
+  finalSalePrice?: boolean
+  buyer?: boolean
+  transactionDate?: boolean
+  saleAt?: boolean
+  vendorId?: boolean
+  vendorTrackingId?: boolean
+  receivedOn?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
+  vendorSupplier?: boolean | Prisma.StockItem$vendorSupplierArgs<ExtArgs>
 }, ExtArgs["result"]["stockItem"]>
 
 export type StockItemSelectScalar = {
@@ -1203,13 +1884,23 @@ export type StockItemSelectScalar = {
   status?: boolean
   costPrice?: boolean
   createdAt?: boolean
+  lastScan?: boolean
+  vendorQuotedCost?: boolean
+  finalSalePrice?: boolean
+  buyer?: boolean
+  transactionDate?: boolean
+  saleAt?: boolean
+  vendorId?: boolean
+  vendorTrackingId?: boolean
+  receivedOn?: boolean
 }
 
-export type StockItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "branchId" | "productId" | "serialNumber" | "quantity" | "status" | "costPrice" | "createdAt", ExtArgs["result"]["stockItem"]>
+export type StockItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "branchId" | "productId" | "serialNumber" | "quantity" | "status" | "costPrice" | "createdAt" | "lastScan" | "vendorQuotedCost" | "finalSalePrice" | "buyer" | "transactionDate" | "saleAt" | "vendorId" | "vendorTrackingId" | "receivedOn", ExtArgs["result"]["stockItem"]>
 export type StockItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
+  vendorSupplier?: boolean | Prisma.StockItem$vendorSupplierArgs<ExtArgs>
   saleLines?: boolean | Prisma.StockItem$saleLinesArgs<ExtArgs>
   warranties?: boolean | Prisma.StockItem$warrantiesArgs<ExtArgs>
   _count?: boolean | Prisma.StockItemCountOutputTypeDefaultArgs<ExtArgs>
@@ -1218,11 +1909,13 @@ export type StockItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
+  vendorSupplier?: boolean | Prisma.StockItem$vendorSupplierArgs<ExtArgs>
 }
 export type StockItemIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
+  vendorSupplier?: boolean | Prisma.StockItem$vendorSupplierArgs<ExtArgs>
 }
 
 export type $StockItemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1231,6 +1924,7 @@ export type $StockItemPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     tenant: Prisma.$TenantPayload<ExtArgs>
     branch: Prisma.$BranchPayload<ExtArgs>
     product: Prisma.$ProductPayload<ExtArgs>
+    vendorSupplier: Prisma.$SupplierPayload<ExtArgs> | null
     saleLines: Prisma.$SaleLinePayload<ExtArgs>[]
     warranties: Prisma.$WarrantyPayload<ExtArgs>[]
   }
@@ -1244,6 +1938,15 @@ export type $StockItemPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     status: $Enums.StockStatus
     costPrice: runtime.Decimal | null
     createdAt: Date
+    lastScan: string | null
+    vendorQuotedCost: runtime.Decimal | null
+    finalSalePrice: runtime.Decimal | null
+    buyer: string | null
+    transactionDate: Date | null
+    saleAt: string | null
+    vendorId: string | null
+    vendorTrackingId: string | null
+    receivedOn: Date | null
   }, ExtArgs["result"]["stockItem"]>
   composites: {}
 }
@@ -1641,6 +2344,7 @@ export interface Prisma__StockItemClient<T, Null = never, ExtArgs extends runtim
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   branch<T extends Prisma.BranchDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BranchDefaultArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   product<T extends Prisma.ProductDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductDefaultArgs<ExtArgs>>): Prisma.Prisma__ProductClient<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  vendorSupplier<T extends Prisma.StockItem$vendorSupplierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StockItem$vendorSupplierArgs<ExtArgs>>): Prisma.Prisma__SupplierClient<runtime.Types.Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   saleLines<T extends Prisma.StockItem$saleLinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StockItem$saleLinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SaleLinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   warranties<T extends Prisma.StockItem$warrantiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StockItem$warrantiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WarrantyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1681,6 +2385,15 @@ export interface StockItemFieldRefs {
   readonly status: Prisma.FieldRef<"StockItem", 'StockStatus'>
   readonly costPrice: Prisma.FieldRef<"StockItem", 'Decimal'>
   readonly createdAt: Prisma.FieldRef<"StockItem", 'DateTime'>
+  readonly lastScan: Prisma.FieldRef<"StockItem", 'String'>
+  readonly vendorQuotedCost: Prisma.FieldRef<"StockItem", 'Decimal'>
+  readonly finalSalePrice: Prisma.FieldRef<"StockItem", 'Decimal'>
+  readonly buyer: Prisma.FieldRef<"StockItem", 'String'>
+  readonly transactionDate: Prisma.FieldRef<"StockItem", 'DateTime'>
+  readonly saleAt: Prisma.FieldRef<"StockItem", 'String'>
+  readonly vendorId: Prisma.FieldRef<"StockItem", 'String'>
+  readonly vendorTrackingId: Prisma.FieldRef<"StockItem", 'String'>
+  readonly receivedOn: Prisma.FieldRef<"StockItem", 'DateTime'>
 }
     
 
@@ -2079,6 +2792,25 @@ export type StockItemDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Limit how many StockItems to delete.
    */
   limit?: number
+}
+
+/**
+ * StockItem.vendorSupplier
+ */
+export type StockItem$vendorSupplierArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Supplier
+   */
+  select?: Prisma.SupplierSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Supplier
+   */
+  omit?: Prisma.SupplierOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SupplierInclude<ExtArgs> | null
+  where?: Prisma.SupplierWhereInput
 }
 
 /**

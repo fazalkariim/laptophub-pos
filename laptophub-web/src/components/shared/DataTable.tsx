@@ -15,6 +15,7 @@ interface DataTableProps<T> {
   errorMessage?: string;
   emptyMessage?: string;
   rowKey: (row: T) => string;
+  onRowClick?: (row: T) => void;
 }
 
 export function DataTable<T>({
@@ -25,6 +26,7 @@ export function DataTable<T>({
   errorMessage = 'Data load nahi ho paya. Shayad aapko permission nahi hai.',
   emptyMessage = 'No records found.',
   rowKey,
+  onRowClick,
 }: DataTableProps<T>) {
   if (isLoading) {
     return (
@@ -67,7 +69,13 @@ export function DataTable<T>({
         </thead>
         <tbody>
           {data.map((row) => (
-            <tr key={rowKey(row)} className="border-t hover:bg-muted/30">
+            <tr
+              key={rowKey(row)}
+              onClick={() => onRowClick?.(row)}
+              className={`border-t hover:bg-muted/30 ${
+                onRowClick ? 'cursor-pointer' : ''
+              }`}
+            >
               {columns.map((col, i) => (
                 <td key={i} className="px-4 py-3">
                   {col.cell(row)}
