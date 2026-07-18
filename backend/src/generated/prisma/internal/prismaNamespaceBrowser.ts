@@ -243,7 +243,8 @@ export const TransferScalarFieldEnum = {
   receivedById: 'receivedById',
   note: 'note',
   createdAt: 'createdAt',
-  completedAt: 'completedAt'
+  completedAt: 'completedAt',
+  metadata: 'metadata'
 } as const
 
 export type TransferScalarFieldEnum = (typeof TransferScalarFieldEnum)[keyof typeof TransferScalarFieldEnum]

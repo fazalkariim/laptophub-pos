@@ -213,6 +213,47 @@ export class TransfersService {
     });
   }
 
+  async findOne(id: string) {
+    const transfer = await this.tenantPrisma.client.transfer.findFirst({
+      where: { id },
+      include: { lines: true },  // ← sirf lines, stockItem nahi
+    });
+    if (!transfer) {
+      throw new NotFoundException('Transfer nahi mila');
+    }
+
+    // Stock items alag se fetch karo (serialNumber ke liye chahiye)
+    const stockItemIds = (transfer as any).lines.map((l: any) => l.stockItemId);
+    const stockItems = await this.tenantPrisma.client.stockItem.findMany({
+      where: { id: { in: stockItemIds } },
+    });
+    const stockItemMap = new Map(stockItems.map((s) => [s.id, s]));
+
+    const meta = transfer.metadata as any;
+    if (meta?.visibleColumns && meta?.sourceImportBatchId) {
+      const batch = await this.tenantPrisma.client.importBatch.findFirst({
+        where: { id: meta.sourceImportBatchId },
+      });
+      const batchRows = (batch?.rows as any[]) ?? [];
+
+      const linesWithData = (transfer as any).lines.map((line: any) => {
+        const stockItem = stockItemMap.get(line.stockItemId);
+        const originalRow = batchRows.find((r) => r.trackingId === stockItem?.serialNumber);
+        let filteredRowData: any = null;
+        if (originalRow) {
+          filteredRowData = {};
+          for (const col of meta.visibleColumns) {
+            filteredRowData[col] = originalRow[col];
+          }
+        }
+        return { ...line, filteredRowData };
+      });
+
+      return { ...transfer, lines: linesWithData };
+    }
+
+    return transfer;
+  }
   // Consolidated cross-branch stock view (Super Admin) — har branch mein kitna stock
   async consolidatedStock() {
     const grouped = await this.tenantPrisma.client.stockItem.groupBy({

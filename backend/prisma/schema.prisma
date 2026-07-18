@@ -313,6 +313,7 @@ model Transfer {
   note            String?
   createdAt       DateTime       @default(now())
   completedAt     DateTime?      // received/rejected/cancelled ka waqt
+  metadata Json?
 
   tenant Tenant         @relation(fields: [tenantId], references: [id])
   lines  TransferLine[]
@@ -329,11 +330,12 @@ model TransferLine {
   transferId  String
   stockItemId String
 
-  transfer Transfer @relation(fields: [transferId], references: [id])
+  transfer  Transfer  @relation(fields: [transferId], references: [id])
+  stockItem StockItem @relation(fields: [stockItemId], references: [id])  // ← naya
 
   @@index([transferId])
   @@map("transfer_lines")
-} 
+}
 
 
 // ──────────────────────────────────────────────

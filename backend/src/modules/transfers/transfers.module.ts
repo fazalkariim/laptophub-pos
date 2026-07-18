@@ -6,5 +6,6 @@ import { TenantPrismaService } from '../../prisma/tenant-prisma.service';
 @Module({
   controllers: [TransfersController],
   providers: [TransfersService, TenantPrismaService],
+  exports: [TransfersService],  // ← ye line honi chahiye
 })
 export class TransfersModule {}

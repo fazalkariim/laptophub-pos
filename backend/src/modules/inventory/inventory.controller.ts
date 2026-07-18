@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Param,Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Param,Query, UseGuards,Patch ,UploadedFile, UseInterceptors  } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiConsumes, ApiBody } from '@nestjs/swagger';
 import { InventoryService } from './inventory.service';
 import { CreateStockDto } from './dto/create-stock.dto';
@@ -9,10 +9,9 @@ import { Roles } from '../../common/decorators/roles.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { AdjustStockDto } from './dto/adjust-stock.dto';
 import { BulkScanDto } from './dto/bulk-scan.dto';
-import { UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { BadRequestException } from '@nestjs/common';
 import { BulkImportV2Service } from './bulk-import-v2.service';
+import { EditBatchRowDto } from './dto/edit-batch-row.dto';
 
 @ApiTags('inventory')
 @ApiBearerAuth()
@@ -53,7 +52,7 @@ export class InventoryController {
     return this.inventoryService.bulkScan(dto, user);
   }
 
-@Post('bulk/import')
+  @Post('bulk/import')
   @Roles('SUPER_ADMIN', 'BRANCH_MANAGER')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
@@ -104,5 +103,28 @@ export class InventoryController {
       branchId,
       threshold ? parseInt(threshold, 10) : 5,
     );
+  }
+
+  @Patch('import-batches/:id/rows/:rowNo')
+  @Roles('SUPER_ADMIN', 'BRANCH_MANAGER')
+  @ApiOperation({ summary: 'Failed row edit karke retry karein' })
+  editRow(
+    @Param('id') id: string,
+    @Param('rowNo') rowNo: string,
+    @Body() dto: EditBatchRowDto,
+    @CurrentUser() user: any,
+  ) {
+    return this.bulkImportV2Service.editAndRetryRow(id, parseInt(rowNo, 10), dto, user);
+  }
+
+  @Post('import-batches/:id/transfer')
+  @Roles('SUPER_ADMIN')
+  @ApiOperation({ summary: 'Batch ke stock items transfer karein (visible columns ke saath)' })
+  transferFromBatch(
+    @Param('id') id: string,
+    @Body() dto: { stockItemIds: string[]; destBranchId: string; visibleColumns?: string[]; note?: string },
+    @CurrentUser() user: any,
+  ) {
+    return this.bulkImportV2Service.transferFromBatch(id, dto, user);
   }
 }

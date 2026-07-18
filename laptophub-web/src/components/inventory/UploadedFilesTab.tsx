@@ -4,11 +4,13 @@ import { useState } from 'react';
 import { useImportBatches, useImportBatchDetail } from '@/hooks/useImportBatches';
 import { DataTable, type Column } from '@/components/shared/DataTable';
 import type { ImportBatchSummary, BulkImportRow } from '@/types';
+import { EditFailedRowDialog } from '@/components/inventory/EditFailedRowDialog';
 
 export function UploadedFilesTab() {
   const { data: batches, isLoading, isError } = useImportBatches();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const { data: detail, isLoading: detailLoading } = useImportBatchDetail(selectedId);
+  const [editRow, setEditRow] = useState<BulkImportRow | null>(null);
 
   const columns: Column<ImportBatchSummary>[] = [
     { header: 'File Name', cell: (b) => b.fileName },
@@ -30,7 +32,7 @@ export function UploadedFilesTab() {
         </span>
       ),
     },
-  ];
+  ]; 
 
   return (
     <div className="space-y-4">
@@ -43,6 +45,14 @@ export function UploadedFilesTab() {
         emptyMessage="Abhi tak koi file upload nahi hui."
         onRowClick={(b) => setSelectedId(b.id)}
       />
+
+      {selectedId && (
+        <EditFailedRowDialog
+          batchId={selectedId}
+          row={editRow}
+          onOpenChange={(v) => !v && setEditRow(null)}
+        />
+      )}
 
       {selectedId && (
         <div className="rounded-lg border p-4">
@@ -63,7 +73,8 @@ export function UploadedFilesTab() {
           ) : detail ? (
             <div className="max-h-96 overflow-auto rounded-md border">
               <table className="w-full text-xs">
-                <thead className="sticky top-0 bg-muted/80 backdrop-blur">
+
+                 <thead className="sticky top-0 bg-muted/80 backdrop-blur">
                   <tr>
                     <th className="px-2 py-1.5 text-left">No</th>
                     <th className="px-2 py-1.5 text-left">Location</th>
@@ -73,9 +84,11 @@ export function UploadedFilesTab() {
                     <th className="px-2 py-1.5 text-left">Status</th>
                     <th className="px-2 py-1.5 text-left">Purchase</th>
                     <th className="px-2 py-1.5 text-left">Result</th>
+                    <th className="px-2 py-1.5 text-left">Reason</th>
+                    <th className="px-2 py-1.5 text-left"></th>
                   </tr>
                 </thead>
-                <tbody>
+                 <tbody>
                   {detail.rows.map((r: BulkImportRow) => (
                     <tr
                       key={r.no}
@@ -94,14 +107,26 @@ export function UploadedFilesTab() {
                         {r.result === 'success' ? (
                           <span className="text-green-600">Success</span>
                         ) : (
-                          <span className="text-red-600" title={r.reason}>
-                            Failed
-                          </span>
+                          <span className="text-red-600">Failed</span>
+                        )}
+                      </td>
+                      <td className="px-2 py-1.5 text-red-600">
+                        {r.reason ?? '—'}
+                      </td>
+                      <td className="px-2 py-1.5">
+                        {r.result === 'failed' && (
+                          <button
+                            onClick={() => setEditRow(r)}
+                            className="text-xs font-medium text-tertiary hover:underline"
+                          >
+                            Edit
+                          </button>
                         )}
                       </td>
                     </tr>
                   ))}
                 </tbody>
+
               </table>
             </div>
           ) : null}

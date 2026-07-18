@@ -5,8 +5,10 @@ import { TenantPrismaService } from '../../prisma/tenant-prisma.service';
 import { BulkIntakeService } from './bulk-intake.service';
 import { BulkImportService } from './bulk-import.service';
 import { BulkImportV2Service } from './bulk-import-v2.service';
+import { TransfersModule } from '../transfers/transfers.module';
 
 @Module({
+  imports: [TransfersModule],
   controllers: [InventoryController],
   providers: [
     InventoryService,

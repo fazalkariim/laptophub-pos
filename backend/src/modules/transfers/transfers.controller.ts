@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get,Param, Post, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { TransfersService } from './transfers.service';
 import { CreateTransferDto } from './dto/create-transfer.dto';
@@ -54,5 +54,11 @@ export class TransfersController {
   @ApiOperation({ summary: 'Cross-branch stock view (sirf Super Admin)' })
   consolidated() {
     return this.transfersService.consolidatedStock();
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Transfer detail' })
+  findOne(@Param('id') id: string) {
+    return this.transfersService.findOne(id);
   }
 }

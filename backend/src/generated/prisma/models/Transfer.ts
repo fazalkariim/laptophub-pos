@@ -64,6 +64,7 @@ export type TransferCountAggregateOutputType = {
   note: number
   createdAt: number
   completedAt: number
+  metadata: number
   _all: number
 }
 
@@ -108,6 +109,7 @@ export type TransferCountAggregateInputType = {
   note?: true
   createdAt?: true
   completedAt?: true
+  metadata?: true
   _all?: true
 }
 
@@ -195,6 +197,7 @@ export type TransferGroupByOutputType = {
   note: string | null
   createdAt: Date
   completedAt: Date | null
+  metadata: runtime.JsonValue | null
   _count: TransferCountAggregateOutputType | null
   _min: TransferMinAggregateOutputType | null
   _max: TransferMaxAggregateOutputType | null
@@ -230,6 +233,7 @@ export type TransferWhereInput = {
   note?: Prisma.StringNullableFilter<"Transfer"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Transfer"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"Transfer"> | Date | string | null
+  metadata?: Prisma.JsonNullableFilter<"Transfer">
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   lines?: Prisma.TransferLineListRelationFilter
 }
@@ -246,6 +250,7 @@ export type TransferOrderByWithRelationInput = {
   note?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   lines?: Prisma.TransferLineOrderByRelationAggregateInput
 }
@@ -266,6 +271,7 @@ export type TransferWhereUniqueInput = Prisma.AtLeast<{
   note?: Prisma.StringNullableFilter<"Transfer"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Transfer"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"Transfer"> | Date | string | null
+  metadata?: Prisma.JsonNullableFilter<"Transfer">
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   lines?: Prisma.TransferLineListRelationFilter
 }, "id" | "tenantId_transferNumber">
@@ -282,6 +288,7 @@ export type TransferOrderByWithAggregationInput = {
   note?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TransferCountOrderByAggregateInput
   _max?: Prisma.TransferMaxOrderByAggregateInput
   _min?: Prisma.TransferMinOrderByAggregateInput
@@ -302,6 +309,7 @@ export type TransferScalarWhereWithAggregatesInput = {
   note?: Prisma.StringNullableWithAggregatesFilter<"Transfer"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Transfer"> | Date | string
   completedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Transfer"> | Date | string | null
+  metadata?: Prisma.JsonNullableWithAggregatesFilter<"Transfer">
 }
 
 export type TransferCreateInput = {
@@ -315,6 +323,7 @@ export type TransferCreateInput = {
   note?: string | null
   createdAt?: Date | string
   completedAt?: Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   tenant: Prisma.TenantCreateNestedOneWithoutTransfersInput
   lines?: Prisma.TransferLineCreateNestedManyWithoutTransferInput
 }
@@ -331,6 +340,7 @@ export type TransferUncheckedCreateInput = {
   note?: string | null
   createdAt?: Date | string
   completedAt?: Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lines?: Prisma.TransferLineUncheckedCreateNestedManyWithoutTransferInput
 }
 
@@ -345,6 +355,7 @@ export type TransferUpdateInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   tenant?: Prisma.TenantUpdateOneRequiredWithoutTransfersNestedInput
   lines?: Prisma.TransferLineUpdateManyWithoutTransferNestedInput
 }
@@ -361,6 +372,7 @@ export type TransferUncheckedUpdateInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lines?: Prisma.TransferLineUncheckedUpdateManyWithoutTransferNestedInput
 }
 
@@ -376,6 +388,7 @@ export type TransferCreateManyInput = {
   note?: string | null
   createdAt?: Date | string
   completedAt?: Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type TransferUpdateManyMutationInput = {
@@ -389,6 +402,7 @@ export type TransferUpdateManyMutationInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type TransferUncheckedUpdateManyInput = {
@@ -403,6 +417,7 @@ export type TransferUncheckedUpdateManyInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type TransferListRelationFilter = {
@@ -432,6 +447,7 @@ export type TransferCountOrderByAggregateInput = {
   note?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
+  metadata?: Prisma.SortOrder
 }
 
 export type TransferMaxOrderByAggregateInput = {
@@ -538,6 +554,7 @@ export type TransferCreateWithoutTenantInput = {
   note?: string | null
   createdAt?: Date | string
   completedAt?: Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lines?: Prisma.TransferLineCreateNestedManyWithoutTransferInput
 }
 
@@ -552,6 +569,7 @@ export type TransferUncheckedCreateWithoutTenantInput = {
   note?: string | null
   createdAt?: Date | string
   completedAt?: Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lines?: Prisma.TransferLineUncheckedCreateNestedManyWithoutTransferInput
 }
 
@@ -596,6 +614,7 @@ export type TransferScalarWhereInput = {
   note?: Prisma.StringNullableFilter<"Transfer"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Transfer"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"Transfer"> | Date | string | null
+  metadata?: Prisma.JsonNullableFilter<"Transfer">
 }
 
 export type TransferCreateWithoutLinesInput = {
@@ -609,6 +628,7 @@ export type TransferCreateWithoutLinesInput = {
   note?: string | null
   createdAt?: Date | string
   completedAt?: Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   tenant: Prisma.TenantCreateNestedOneWithoutTransfersInput
 }
 
@@ -624,6 +644,7 @@ export type TransferUncheckedCreateWithoutLinesInput = {
   note?: string | null
   createdAt?: Date | string
   completedAt?: Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type TransferCreateOrConnectWithoutLinesInput = {
@@ -653,6 +674,7 @@ export type TransferUpdateWithoutLinesInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   tenant?: Prisma.TenantUpdateOneRequiredWithoutTransfersNestedInput
 }
 
@@ -668,6 +690,7 @@ export type TransferUncheckedUpdateWithoutLinesInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type TransferCreateManyTenantInput = {
@@ -681,6 +704,7 @@ export type TransferCreateManyTenantInput = {
   note?: string | null
   createdAt?: Date | string
   completedAt?: Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type TransferUpdateWithoutTenantInput = {
@@ -694,6 +718,7 @@ export type TransferUpdateWithoutTenantInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lines?: Prisma.TransferLineUpdateManyWithoutTransferNestedInput
 }
 
@@ -708,6 +733,7 @@ export type TransferUncheckedUpdateWithoutTenantInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lines?: Prisma.TransferLineUncheckedUpdateManyWithoutTransferNestedInput
 }
 
@@ -722,6 +748,7 @@ export type TransferUncheckedUpdateManyWithoutTenantInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 
@@ -767,6 +794,7 @@ export type TransferSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   note?: boolean
   createdAt?: boolean
   completedAt?: boolean
+  metadata?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   lines?: boolean | Prisma.Transfer$linesArgs<ExtArgs>
   _count?: boolean | Prisma.TransferCountOutputTypeDefaultArgs<ExtArgs>
@@ -784,6 +812,7 @@ export type TransferSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   note?: boolean
   createdAt?: boolean
   completedAt?: boolean
+  metadata?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["transfer"]>
 
@@ -799,6 +828,7 @@ export type TransferSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   note?: boolean
   createdAt?: boolean
   completedAt?: boolean
+  metadata?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["transfer"]>
 
@@ -814,9 +844,10 @@ export type TransferSelectScalar = {
   note?: boolean
   createdAt?: boolean
   completedAt?: boolean
+  metadata?: boolean
 }
 
-export type TransferOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "transferNumber" | "sourceBranchId" | "destBranchId" | "status" | "sentById" | "receivedById" | "note" | "createdAt" | "completedAt", ExtArgs["result"]["transfer"]>
+export type TransferOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "transferNumber" | "sourceBranchId" | "destBranchId" | "status" | "sentById" | "receivedById" | "note" | "createdAt" | "completedAt" | "metadata", ExtArgs["result"]["transfer"]>
 export type TransferInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   lines?: boolean | Prisma.Transfer$linesArgs<ExtArgs>
@@ -847,6 +878,7 @@ export type $TransferPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     note: string | null
     createdAt: Date
     completedAt: Date | null
+    metadata: runtime.JsonValue | null
   }, ExtArgs["result"]["transfer"]>
   composites: {}
 }
@@ -1283,6 +1315,7 @@ export interface TransferFieldRefs {
   readonly note: Prisma.FieldRef<"Transfer", 'String'>
   readonly createdAt: Prisma.FieldRef<"Transfer", 'DateTime'>
   readonly completedAt: Prisma.FieldRef<"Transfer", 'DateTime'>
+  readonly metadata: Prisma.FieldRef<"Transfer", 'Json'>
 }
     
 

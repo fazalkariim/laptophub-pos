@@ -26,13 +26,16 @@ export function FileImportWizardV2() {
   } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  function downloadTemplate() {
+function downloadTemplate() {
     const sampleRow = [
       '1', 'Main Branch', '', 'Laptop', 'Dell', 'TRK-001',
       '16GB RAM, 512GB SSD', '82000', '', '', '', 'IN_STOCK',
       '', 'Tech Distributors', 'INV-2026-001', '2026-07-01', '78000',
     ];
-    const csv = TEMPLATE_HEADERS.join(',') + '\n' + sampleRow.join(',') + '\n';
+    const quotedRow = sampleRow
+      .map((v) => `"${String(v).replace(/"/g, '""')}"`)
+      .join(',');
+    const csv = TEMPLATE_HEADERS.join(',') + '\n' + quotedRow + '\n';
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');

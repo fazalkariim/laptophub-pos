@@ -1,18 +1,24 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import * as XLSX from 'xlsx';
 import { TenantPrismaService } from '../../prisma/tenant-prisma.service';
 import { ParsedRow, RowResult } from './bulk-import-v2.types';
+import { TransfersService } from '../transfers/transfers.service';
 
 const VALID_STATUSES = ['IN_STOCK', 'SOLD', 'IN_TRANSIT', 'RESERVED', 'RETURNED'];
 
 interface CurrentUser {
   userId: string;
   tenantId: string;
+  branchId: string | null;
+  role: string;
 }
 
 @Injectable()
 export class BulkImportV2Service {
-  constructor(private readonly tenantPrisma: TenantPrismaService) {}
+  constructor(
+    private readonly tenantPrisma: TenantPrismaService,
+    private readonly transfersService: TransfersService,
+  ) {}
 
   // File buffer ko rows mein parse karo (headers se map karke)
   private parseFile(buffer: Buffer): ParsedRow[] {
@@ -74,6 +80,70 @@ export class BulkImportV2Service {
     return created;
   }
 
+  // Ek row validate + process karo (naya import ya retry, dono is se guzarte hain)
+  private async processRow(row: ParsedRow, branches: any[], user: CurrentUser): Promise<RowResult> {
+    const base = { ...row };
+    try {
+      const missing: string[] = [];
+      if (!row.location) missing.push('Location');
+      if (!row.category) missing.push('Category');
+      if (!row.trackingId) missing.push('Tracking ID');
+      if (!row.specs) missing.push('Specs');
+      if (row.purchase === undefined || isNaN(row.purchase)) missing.push('Purchase');
+      if (missing.length > 0) {
+        throw new Error(`Zaroori field(s) missing: ${missing.join(', ')}`);
+      }
+
+      const branch = branches.find((b) => b.name === row.location);
+      if (!branch) {
+        throw new Error(`Branch '${row.location}' nahi mili`);
+      }
+
+      let status = 'IN_STOCK';
+      if (row.status) {
+        const upper = row.status.toUpperCase();
+        if (!VALID_STATUSES.includes(upper)) {
+          throw new Error(`Status '${row.status}' invalid hai`);
+        }
+        status = upper;
+      }
+
+      const existingStock = await this.tenantPrisma.client.stockItem.findFirst({
+        where: { serialNumber: row.trackingId },
+      });
+      if (existingStock) {
+        throw new Error('Tracking ID already exists');
+      }
+
+      await this.tenantPrisma.client.$transaction(async (tx: any) => {
+        const product = await this.resolveProduct(row, tx, user.tenantId);
+        const vendorId = await this.resolveSupplier(row.vendor, tx, user.tenantId);
+        await tx.stockItem.create({
+          data: {
+            branchId: branch.id,
+            productId: product!.id,
+            serialNumber: row.trackingId,
+            status,
+            costPrice: row.purchase,
+            lastScan: row.lastScan ?? null,
+            vendorQuotedCost: row.costByVS ?? null,
+            finalSalePrice: row.finalSale ?? null,
+            buyer: row.buyer ?? null,
+            transactionDate: row.date ? new Date(row.date) : null,
+            saleAt: row.saleAt ?? null,
+            vendorId,
+            vendorTrackingId: row.vendorTrackingId ?? null,
+            receivedOn: row.receivedOn ? new Date(row.receivedOn) : null,
+          } as any,
+        });
+      });
+
+      return { ...base, result: 'success' };
+    } catch (e: any) {
+      return { ...base, result: 'failed', reason: e.message };
+    }
+  }
+
   async bulkImport(fileBuffer: Buffer, fileName: string, user: CurrentUser) {
     const rows = this.parseFile(fileBuffer);
     if (rows.length === 0) {
@@ -88,76 +158,10 @@ export class BulkImportV2Service {
     const results: RowResult[] = [];
     let successCount = 0;
 
-    // Har row ek independent operation — ek row fail ho to baaki na ruकें
     for (const row of rows) {
-      const base = { ...row };
-      try {
-        // 1. Required fields
-        const missing: string[] = [];
-        if (!row.location) missing.push('Location');
-        if (!row.category) missing.push('Category');
-        if (!row.trackingId) missing.push('Tracking ID');
-        if (!row.specs) missing.push('Specs');
-        if (row.purchase === undefined || isNaN(row.purchase)) missing.push('Purchase');
-
-        if (missing.length > 0) {
-          throw new Error(`Zaroori field(s) missing: ${missing.join(', ')}`);
-        }
-
-        // 2. Branch resolve
-        const branch = branches.find((b) => b.name === row.location);
-        if (!branch) {
-          throw new Error(`Branch '${row.location}' nahi mili`);
-        }
-
-        // 3. Status validate
-        let status = 'IN_STOCK';
-        if (row.status) {
-          const upper = row.status.toUpperCase();
-          if (!VALID_STATUSES.includes(upper)) {
-            throw new Error(`Status '${row.status}' invalid hai`);
-          }
-          status = upper;
-        }
-
-        // 4. Duplicate tracking id (serialNumber) — pehle hi check (transaction se pehle, fast-fail)
-        const existingStock = await this.tenantPrisma.client.stockItem.findFirst({
-          where: { serialNumber: row.trackingId },
-        });
-        if (existingStock) {
-          throw new Error('Tracking ID already exists');
-        }
-
-        // 5. TRANSACTION — product/supplier resolve + stock item create
-        await this.tenantPrisma.client.$transaction(async (tx: any) => {
-          const product = await this.resolveProduct(row, tx, user.tenantId);
-          const vendorId = await this.resolveSupplier(row.vendor, tx, user.tenantId);
-
-          await tx.stockItem.create({
-            data: {
-              branchId: branch.id,
-              productId: product!.id,
-              serialNumber: row.trackingId,
-              status,
-              costPrice: row.purchase,
-              lastScan: row.lastScan ?? null,
-              vendorQuotedCost: row.costByVS ?? null,
-              finalSalePrice: row.finalSale ?? null,
-              buyer: row.buyer ?? null,
-              transactionDate: row.date ? new Date(row.date) : null,
-              saleAt: row.saleAt ?? null,
-              vendorId,
-              vendorTrackingId: row.vendorTrackingId ?? null,
-              receivedOn: row.receivedOn ? new Date(row.receivedOn) : null,
-            } as any,
-          });
-        });
-
-        results.push({ ...base, result: 'success' });
-        successCount++;
-      } catch (e: any) {
-        results.push({ ...base, result: 'failed', reason: e.message });
-      }
+      const result = await this.processRow(row, branches, user);
+      results.push(result);
+      if (result.result === 'success') successCount++;
     }
 
     // ImportBatch record — hamesha banti hai, chahe sab fail hon
@@ -178,6 +182,104 @@ export class BulkImportV2Service {
       failed: results.filter((r) => r.result === 'failed'),
       importBatchId: batch.id,
     };
+  }
+
+  // Failed row edit + retry
+  async editAndRetryRow(batchId: string, rowNo: number, dto: any, user: CurrentUser) {
+    const batch = await this.tenantPrisma.client.importBatch.findFirst({
+      where: { id: batchId },
+    });
+    if (!batch) {
+      throw new NotFoundException('Import batch nahi mila');
+    }
+
+    const rows = batch.rows as any[];
+    const rowIndex = rows.findIndex((r) => r.no === rowNo);
+    if (rowIndex === -1) {
+      throw new NotFoundException('Row nahi mili');
+    }
+
+    const existingRow = rows[rowIndex];
+    if (existingRow.result === 'success') {
+      throw new BadRequestException('Ye row already successful hai, edit nahi ho sakti');
+    }
+
+    // Purane row data ke upar naye fields merge karo
+    const mergedRow: ParsedRow = { ...existingRow, ...dto, no: rowNo };
+
+    // Branches (validation ke liye)
+    const branches = await this.tenantPrisma.client.branch.findMany({
+      where: { isActive: true } as any,
+    });
+
+    // Wahi validation+creation logic dobara chalao
+    const result = await this.processRow(mergedRow, branches, user);
+
+    // Batch ke rows array mein is row ko update karo
+    rows[rowIndex] = result;
+
+    const newSuccessCount = result.result === 'success' ? batch.successCount + 1 : batch.successCount;
+    const newFailedCount = result.result === 'success' ? batch.failedCount - 1 : batch.failedCount;
+
+    await this.tenantPrisma.client.importBatch.update({
+      where: { id: batchId },
+      data: {
+        rows: rows as any,
+        successCount: newSuccessCount,
+        failedCount: newFailedCount,
+      } as any,
+    });
+
+    if (result.result === 'failed') {
+      throw new BadRequestException(result.reason);
+    }
+
+    return result;
+  }
+
+  // Batch ke stock items ko transfer karo (visible columns ke saath)
+  async transferFromBatch(
+    batchId: string,
+    dto: { stockItemIds: string[]; destBranchId: string; visibleColumns?: string[]; note?: string },
+    user: CurrentUser,
+  ) {
+    const batch = await this.tenantPrisma.client.importBatch.findFirst({ where: { id: batchId } });
+    if (!batch) {
+      throw new NotFoundException('Import batch nahi mila');
+    }
+
+    // Stock items ka current branch pata karo (source)
+    const items = await this.tenantPrisma.client.stockItem.findMany({
+      where: { id: { in: dto.stockItemIds } },
+    });
+    if (items.length === 0) {
+      throw new BadRequestException('Koi stock items nahi mile');
+    }
+    const sourceBranchId = items[0].branchId;
+
+    // Existing transfer service reuse — same rules (scoping, oversell check waghaira)
+    const transfer = await this.transfersService.createTransfer(
+      {
+        sourceBranchId,
+        destBranchId: dto.destBranchId,
+        stockItemIds: dto.stockItemIds,
+        note: dto.note,
+      },
+      user,
+    );
+
+    // Metadata (visibleColumns + batch reference) update karo
+    await this.tenantPrisma.client.transfer.update({
+      where: { id: transfer.id },
+      data: {
+        metadata: {
+          visibleColumns: dto.visibleColumns ?? [],
+          sourceImportBatchId: batchId,
+        },
+      } as any,
+    });
+
+    return transfer;
   }
 
   // List — summary fields only
