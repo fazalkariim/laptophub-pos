@@ -310,4 +310,20 @@ export class BulkImportV2Service {
     }
     return batch;
   }
+
+  // ImportBatch delete — sirf history record, StockItem ko touch nahi karta
+  async deleteBatch(id: string) {
+    const batch = await this.tenantPrisma.client.importBatch.findFirst({
+      where: { id },
+    });
+    if (!batch) {
+      throw new NotFoundException('Import batch nahi mila');
+    }
+
+    await this.tenantPrisma.client.importBatch.delete({
+      where: { id },
+    });
+
+    return { message: 'Upload history delete kar di gayi' };
+  }
 }

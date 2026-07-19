@@ -110,3 +110,18 @@ export function useTransferFromBatch(batchId: string) {
     },
   });
 }
+
+export function useDeleteImportBatch() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await apiClient.delete<{ message: string }>(
+        `/inventory/import-batches/${id}`
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['import-batches'] });
+    },
+  });
+}

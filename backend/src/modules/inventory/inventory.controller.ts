@@ -12,6 +12,7 @@ import { BulkScanDto } from './dto/bulk-scan.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BulkImportV2Service } from './bulk-import-v2.service';
 import { EditBatchRowDto } from './dto/edit-batch-row.dto';
+import { Delete } from '@nestjs/common';
 
 @ApiTags('inventory')
 @ApiBearerAuth()
@@ -126,5 +127,12 @@ export class InventoryController {
     @CurrentUser() user: any,
   ) {
     return this.bulkImportV2Service.transferFromBatch(id, dto, user);
+  }
+
+  @Delete('import-batches/:id')
+  @Roles('SUPER_ADMIN')
+  @ApiOperation({ summary: 'Upload history delete karein (StockItem affect nahi hota)' })
+  deleteBatch(@Param('id') id: string) {
+    return this.bulkImportV2Service.deleteBatch(id);
   }
 }

@@ -1,16 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { useImportBatches, useImportBatchDetail } from '@/hooks/useImportBatches';
+import { useRouter } from 'next/navigation';
+import { useImportBatches, useDeleteImportBatch } from '@/hooks/useImportBatches';
 import { DataTable, type Column } from '@/components/shared/DataTable';
-import type { ImportBatchSummary, BulkImportRow } from '@/types';
-import { EditFailedRowDialog } from '@/components/inventory/EditFailedRowDialog';
+import { DeleteImportBatchDialog } from '@/components/inventory/DeleteImportBatchDialog';
+import { Button } from '@/components/ui/button';
+import type { ImportBatchSummary } from '@/types';
 
 export function UploadedFilesTab() {
+  const router = useRouter();
   const { data: batches, isLoading, isError } = useImportBatches();
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const { data: detail, isLoading: detailLoading } = useImportBatchDetail(selectedId);
-  const [editRow, setEditRow] = useState<BulkImportRow | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<ImportBatchSummary | null>(null);
 
   const columns: Column<ImportBatchSummary>[] = [
     { header: 'File Name', cell: (b) => b.fileName },
@@ -32,10 +33,25 @@ export function UploadedFilesTab() {
         </span>
       ),
     },
-  ]; 
+    {
+      header: '',
+      cell: (b) => (
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            setDeleteTarget(b);
+          }}
+        >
+          Delete
+        </Button>
+      ),
+    },
+  ];
 
   return (
-    <div className="space-y-4">
+    <div>
       <DataTable
         columns={columns}
         data={batches}
@@ -43,95 +59,13 @@ export function UploadedFilesTab() {
         isError={isError}
         rowKey={(b) => b.id}
         emptyMessage="Abhi tak koi file upload nahi hui."
-        onRowClick={(b) => setSelectedId(b.id)}
+        onRowClick={(b) => router.push(`/inventory/import-batches/${b.id}`)}
       />
 
-      {selectedId && (
-        <EditFailedRowDialog
-          batchId={selectedId}
-          row={editRow}
-          onOpenChange={(v) => !v && setEditRow(null)}
-        />
-      )}
-
-      {selectedId && (
-        <div className="rounded-lg border p-4">
-          <div className="mb-3 flex items-center justify-between">
-            <h3 className="font-semibold">
-              {detail?.fileName ?? 'Load ho raha…'}
-            </h3>
-            <button
-              onClick={() => setSelectedId(null)}
-              className="text-xs text-muted-foreground hover:underline"
-            >
-              Band karein
-            </button>
-          </div>
-
-          {detailLoading ? (
-            <p className="text-sm text-muted-foreground">Load ho raha…</p>
-          ) : detail ? (
-            <div className="max-h-96 overflow-auto rounded-md border">
-              <table className="w-full text-xs">
-
-                 <thead className="sticky top-0 bg-muted/80 backdrop-blur">
-                  <tr>
-                    <th className="px-2 py-1.5 text-left">No</th>
-                    <th className="px-2 py-1.5 text-left">Location</th>
-                    <th className="px-2 py-1.5 text-left">Category</th>
-                    <th className="px-2 py-1.5 text-left">Brand</th>
-                    <th className="px-2 py-1.5 text-left">Tracking ID</th>
-                    <th className="px-2 py-1.5 text-left">Status</th>
-                    <th className="px-2 py-1.5 text-left">Purchase</th>
-                    <th className="px-2 py-1.5 text-left">Result</th>
-                    <th className="px-2 py-1.5 text-left">Reason</th>
-                    <th className="px-2 py-1.5 text-left"></th>
-                  </tr>
-                </thead>
-                 <tbody>
-                  {detail.rows.map((r: BulkImportRow) => (
-                    <tr
-                      key={r.no}
-                      className={`border-t ${
-                        r.result === 'failed' ? 'bg-red-50/50' : ''
-                      }`}
-                    >
-                      <td className="px-2 py-1.5">{r.no}</td>
-                      <td className="px-2 py-1.5">{r.location ?? '—'}</td>
-                      <td className="px-2 py-1.5">{r.category ?? '—'}</td>
-                      <td className="px-2 py-1.5">{r.brand ?? '—'}</td>
-                      <td className="px-2 py-1.5">{r.trackingId ?? '—'}</td>
-                      <td className="px-2 py-1.5">{r.status ?? '—'}</td>
-                      <td className="px-2 py-1.5">{r.purchase ?? '—'}</td>
-                      <td className="px-2 py-1.5">
-                        {r.result === 'success' ? (
-                          <span className="text-green-600">Success</span>
-                        ) : (
-                          <span className="text-red-600">Failed</span>
-                        )}
-                      </td>
-                      <td className="px-2 py-1.5 text-red-600">
-                        {r.reason ?? '—'}
-                      </td>
-                      <td className="px-2 py-1.5">
-                        {r.result === 'failed' && (
-                          <button
-                            onClick={() => setEditRow(r)}
-                            className="text-xs font-medium text-tertiary hover:underline"
-                          >
-                            Edit
-                          </button>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-
-              </table>
-            </div>
-          ) : null}
-        </div>
-      )}
+      <DeleteImportBatchDialog
+        batch={deleteTarget}
+        onOpenChange={(v) => !v && setDeleteTarget(null)}
+      />
     </div>
   );
 }
