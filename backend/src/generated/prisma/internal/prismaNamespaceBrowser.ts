@@ -70,7 +70,8 @@ export const ModelName = {
   POLine: 'POLine',
   Expense: 'Expense',
   StockMovement: 'StockMovement',
-  ImportBatch: 'ImportBatch'
+  ImportBatch: 'ImportBatch',
+  AuditLog: 'AuditLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -370,6 +371,25 @@ export const ImportBatchScalarFieldEnum = {
 } as const
 
 export type ImportBatchScalarFieldEnum = (typeof ImportBatchScalarFieldEnum)[keyof typeof ImportBatchScalarFieldEnum]
+
+
+export const AuditLogScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  userId: 'userId',
+  userName: 'userName',
+  userRole: 'userRole',
+  method: 'method',
+  path: 'path',
+  action: 'action',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  statusCode: 'statusCode',
+  requestBody: 'requestBody',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
 
 
 export const SortOrder = {

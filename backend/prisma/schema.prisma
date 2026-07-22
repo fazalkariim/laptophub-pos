@@ -95,6 +95,7 @@ model Tenant {
   transfers      Transfer[]
   passwordResetTokens PasswordResetToken[]
   importBatches ImportBatch[]
+  auditLogs AuditLog[]
 
   @@map("tenants")
 }
@@ -152,6 +153,7 @@ model User {
   stockMovements StockMovement[]
   passwordResetTokens PasswordResetToken[]
   importBatches ImportBatch[]
+  auditLogs AuditLog[]
 
   @@unique([tenantId, email]) // email har tenant ke andar unique
   @@index([tenantId])
@@ -234,6 +236,7 @@ model StockItem {
   vendorSupplier Supplier?  @relation(fields: [vendorId], references: [id])
   saleLines      SaleLine[]
   warranties     Warranty[]
+  transferLines  TransferLine[] 
 
   @@unique([tenantId, serialNumber])
   @@index([tenantId, branchId])
@@ -504,4 +507,31 @@ model ImportBatch {
 
   @@index([tenantId])
   @@map("import_batches")
+}
+
+// ──────────────────────────────────────────────
+// AuditLog
+// ──────────────────────────────────────────────
+model AuditLog {
+  id          String   @id @default(uuid())
+  tenantId    String
+  userId      String
+  userName    String?
+  userRole    Role
+  method      String
+  path        String
+  action      String
+  entityType  String?
+  entityId    String?
+  statusCode  Int
+  requestBody Json?
+  createdAt   DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@index([tenantId, createdAt])
+  @@index([tenantId, userId])
+  @@index([tenantId, entityType])
+  @@map("audit_logs")
 }

@@ -139,3 +139,8 @@ export type StockMovement = Prisma.StockMovementModel
  * 
  */
 export type ImportBatch = Prisma.ImportBatchModel
+/**
+ * Model AuditLog
+ * 
+ */
+export type AuditLog = Prisma.AuditLogModel

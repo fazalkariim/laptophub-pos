@@ -18,15 +18,15 @@ import { FinanceModule } from './modules/finance/finance.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { HealthModule } from './modules/health/health.module';
 import { CommonModule } from './common/common.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { AuditLogInterceptor } from './common/audit/audit-log.interceptor';
+import { AuditModule } from './modules/audit/audit.module';
 
 @Module({
-  imports: [
+imports: [
     ConfigModule.forRoot({ isGlobal: true}),
     ThrottlerModule.forRoot([
-      {
-        ttl: 60000,
-        limit: 100,
-      },
+      { ttl: 60000, limit: 100 },
     ]),
     PrismaModule,
     AuthModule,
@@ -43,12 +43,17 @@ import { CommonModule } from './common/common.module';
     ReportsModule,
     HealthModule,
     CommonModule,
+    AuditModule,
   ],
   controllers: [],
   providers: [
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: AuditLogInterceptor,
     },
   ],
 })

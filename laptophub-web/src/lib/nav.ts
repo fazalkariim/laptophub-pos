@@ -106,6 +106,12 @@ export const NAV_ITEMS: NavItem[] = [
     icon: Truck,
     allow: ['SUPER_ADMIN'],
   },
+  {
+    label: 'History',
+    href: '/settings/history',
+    icon: Settings,
+    allow: ['SUPER_ADMIN'],
+  },
 
 ];
 

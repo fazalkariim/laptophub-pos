@@ -338,6 +338,7 @@ export type StockItemWhereInput = {
   vendorSupplier?: Prisma.XOR<Prisma.SupplierNullableScalarRelationFilter, Prisma.SupplierWhereInput> | null
   saleLines?: Prisma.SaleLineListRelationFilter
   warranties?: Prisma.WarrantyListRelationFilter
+  transferLines?: Prisma.TransferLineListRelationFilter
 }
 
 export type StockItemOrderByWithRelationInput = {
@@ -365,6 +366,7 @@ export type StockItemOrderByWithRelationInput = {
   vendorSupplier?: Prisma.SupplierOrderByWithRelationInput
   saleLines?: Prisma.SaleLineOrderByRelationAggregateInput
   warranties?: Prisma.WarrantyOrderByRelationAggregateInput
+  transferLines?: Prisma.TransferLineOrderByRelationAggregateInput
 }
 
 export type StockItemWhereUniqueInput = Prisma.AtLeast<{
@@ -396,6 +398,7 @@ export type StockItemWhereUniqueInput = Prisma.AtLeast<{
   vendorSupplier?: Prisma.XOR<Prisma.SupplierNullableScalarRelationFilter, Prisma.SupplierWhereInput> | null
   saleLines?: Prisma.SaleLineListRelationFilter
   warranties?: Prisma.WarrantyListRelationFilter
+  transferLines?: Prisma.TransferLineListRelationFilter
 }, "id" | "tenantId_serialNumber">
 
 export type StockItemOrderByWithAggregationInput = {
@@ -469,6 +472,7 @@ export type StockItemCreateInput = {
   vendorSupplier?: Prisma.SupplierCreateNestedOneWithoutVendorStockItemsInput
   saleLines?: Prisma.SaleLineCreateNestedManyWithoutStockItemInput
   warranties?: Prisma.WarrantyCreateNestedManyWithoutStockItemInput
+  transferLines?: Prisma.TransferLineCreateNestedManyWithoutStockItemInput
 }
 
 export type StockItemUncheckedCreateInput = {
@@ -492,6 +496,7 @@ export type StockItemUncheckedCreateInput = {
   receivedOn?: Date | string | null
   saleLines?: Prisma.SaleLineUncheckedCreateNestedManyWithoutStockItemInput
   warranties?: Prisma.WarrantyUncheckedCreateNestedManyWithoutStockItemInput
+  transferLines?: Prisma.TransferLineUncheckedCreateNestedManyWithoutStockItemInput
 }
 
 export type StockItemUpdateInput = {
@@ -515,6 +520,7 @@ export type StockItemUpdateInput = {
   vendorSupplier?: Prisma.SupplierUpdateOneWithoutVendorStockItemsNestedInput
   saleLines?: Prisma.SaleLineUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUpdateManyWithoutStockItemNestedInput
+  transferLines?: Prisma.TransferLineUpdateManyWithoutStockItemNestedInput
 }
 
 export type StockItemUncheckedUpdateInput = {
@@ -538,6 +544,7 @@ export type StockItemUncheckedUpdateInput = {
   receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   saleLines?: Prisma.SaleLineUncheckedUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUncheckedUpdateManyWithoutStockItemNestedInput
+  transferLines?: Prisma.TransferLineUncheckedUpdateManyWithoutStockItemNestedInput
 }
 
 export type StockItemCreateManyInput = {
@@ -696,6 +703,11 @@ export type StockItemNullableScalarRelationFilter = {
   isNot?: Prisma.StockItemWhereInput | null
 }
 
+export type StockItemScalarRelationFilter = {
+  is?: Prisma.StockItemWhereInput
+  isNot?: Prisma.StockItemWhereInput
+}
+
 export type StockItemCreateNestedManyWithoutTenantInput = {
   create?: Prisma.XOR<Prisma.StockItemCreateWithoutTenantInput, Prisma.StockItemUncheckedCreateWithoutTenantInput> | Prisma.StockItemCreateWithoutTenantInput[] | Prisma.StockItemUncheckedCreateWithoutTenantInput[]
   connectOrCreate?: Prisma.StockItemCreateOrConnectWithoutTenantInput | Prisma.StockItemCreateOrConnectWithoutTenantInput[]
@@ -850,6 +862,20 @@ export type StockItemUpdateOneWithoutSaleLinesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StockItemUpdateToOneWithWhereWithoutSaleLinesInput, Prisma.StockItemUpdateWithoutSaleLinesInput>, Prisma.StockItemUncheckedUpdateWithoutSaleLinesInput>
 }
 
+export type StockItemCreateNestedOneWithoutTransferLinesInput = {
+  create?: Prisma.XOR<Prisma.StockItemCreateWithoutTransferLinesInput, Prisma.StockItemUncheckedCreateWithoutTransferLinesInput>
+  connectOrCreate?: Prisma.StockItemCreateOrConnectWithoutTransferLinesInput
+  connect?: Prisma.StockItemWhereUniqueInput
+}
+
+export type StockItemUpdateOneRequiredWithoutTransferLinesNestedInput = {
+  create?: Prisma.XOR<Prisma.StockItemCreateWithoutTransferLinesInput, Prisma.StockItemUncheckedCreateWithoutTransferLinesInput>
+  connectOrCreate?: Prisma.StockItemCreateOrConnectWithoutTransferLinesInput
+  upsert?: Prisma.StockItemUpsertWithoutTransferLinesInput
+  connect?: Prisma.StockItemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StockItemUpdateToOneWithWhereWithoutTransferLinesInput, Prisma.StockItemUpdateWithoutTransferLinesInput>, Prisma.StockItemUncheckedUpdateWithoutTransferLinesInput>
+}
+
 export type StockItemCreateNestedOneWithoutWarrantiesInput = {
   create?: Prisma.XOR<Prisma.StockItemCreateWithoutWarrantiesInput, Prisma.StockItemUncheckedCreateWithoutWarrantiesInput>
   connectOrCreate?: Prisma.StockItemCreateOrConnectWithoutWarrantiesInput
@@ -928,6 +954,7 @@ export type StockItemCreateWithoutTenantInput = {
   vendorSupplier?: Prisma.SupplierCreateNestedOneWithoutVendorStockItemsInput
   saleLines?: Prisma.SaleLineCreateNestedManyWithoutStockItemInput
   warranties?: Prisma.WarrantyCreateNestedManyWithoutStockItemInput
+  transferLines?: Prisma.TransferLineCreateNestedManyWithoutStockItemInput
 }
 
 export type StockItemUncheckedCreateWithoutTenantInput = {
@@ -950,6 +977,7 @@ export type StockItemUncheckedCreateWithoutTenantInput = {
   receivedOn?: Date | string | null
   saleLines?: Prisma.SaleLineUncheckedCreateNestedManyWithoutStockItemInput
   warranties?: Prisma.WarrantyUncheckedCreateNestedManyWithoutStockItemInput
+  transferLines?: Prisma.TransferLineUncheckedCreateNestedManyWithoutStockItemInput
 }
 
 export type StockItemCreateOrConnectWithoutTenantInput = {
@@ -1022,6 +1050,7 @@ export type StockItemCreateWithoutBranchInput = {
   vendorSupplier?: Prisma.SupplierCreateNestedOneWithoutVendorStockItemsInput
   saleLines?: Prisma.SaleLineCreateNestedManyWithoutStockItemInput
   warranties?: Prisma.WarrantyCreateNestedManyWithoutStockItemInput
+  transferLines?: Prisma.TransferLineCreateNestedManyWithoutStockItemInput
 }
 
 export type StockItemUncheckedCreateWithoutBranchInput = {
@@ -1044,6 +1073,7 @@ export type StockItemUncheckedCreateWithoutBranchInput = {
   receivedOn?: Date | string | null
   saleLines?: Prisma.SaleLineUncheckedCreateNestedManyWithoutStockItemInput
   warranties?: Prisma.WarrantyUncheckedCreateNestedManyWithoutStockItemInput
+  transferLines?: Prisma.TransferLineUncheckedCreateNestedManyWithoutStockItemInput
 }
 
 export type StockItemCreateOrConnectWithoutBranchInput = {
@@ -1092,6 +1122,7 @@ export type StockItemCreateWithoutProductInput = {
   vendorSupplier?: Prisma.SupplierCreateNestedOneWithoutVendorStockItemsInput
   saleLines?: Prisma.SaleLineCreateNestedManyWithoutStockItemInput
   warranties?: Prisma.WarrantyCreateNestedManyWithoutStockItemInput
+  transferLines?: Prisma.TransferLineCreateNestedManyWithoutStockItemInput
 }
 
 export type StockItemUncheckedCreateWithoutProductInput = {
@@ -1114,6 +1145,7 @@ export type StockItemUncheckedCreateWithoutProductInput = {
   receivedOn?: Date | string | null
   saleLines?: Prisma.SaleLineUncheckedCreateNestedManyWithoutStockItemInput
   warranties?: Prisma.WarrantyUncheckedCreateNestedManyWithoutStockItemInput
+  transferLines?: Prisma.TransferLineUncheckedCreateNestedManyWithoutStockItemInput
 }
 
 export type StockItemCreateOrConnectWithoutProductInput = {
@@ -1162,6 +1194,7 @@ export type StockItemCreateWithoutSaleLinesInput = {
   product: Prisma.ProductCreateNestedOneWithoutStockItemsInput
   vendorSupplier?: Prisma.SupplierCreateNestedOneWithoutVendorStockItemsInput
   warranties?: Prisma.WarrantyCreateNestedManyWithoutStockItemInput
+  transferLines?: Prisma.TransferLineCreateNestedManyWithoutStockItemInput
 }
 
 export type StockItemUncheckedCreateWithoutSaleLinesInput = {
@@ -1184,6 +1217,7 @@ export type StockItemUncheckedCreateWithoutSaleLinesInput = {
   vendorTrackingId?: string | null
   receivedOn?: Date | string | null
   warranties?: Prisma.WarrantyUncheckedCreateNestedManyWithoutStockItemInput
+  transferLines?: Prisma.TransferLineUncheckedCreateNestedManyWithoutStockItemInput
 }
 
 export type StockItemCreateOrConnectWithoutSaleLinesInput = {
@@ -1222,6 +1256,7 @@ export type StockItemUpdateWithoutSaleLinesInput = {
   product?: Prisma.ProductUpdateOneRequiredWithoutStockItemsNestedInput
   vendorSupplier?: Prisma.SupplierUpdateOneWithoutVendorStockItemsNestedInput
   warranties?: Prisma.WarrantyUpdateManyWithoutStockItemNestedInput
+  transferLines?: Prisma.TransferLineUpdateManyWithoutStockItemNestedInput
 }
 
 export type StockItemUncheckedUpdateWithoutSaleLinesInput = {
@@ -1243,6 +1278,115 @@ export type StockItemUncheckedUpdateWithoutSaleLinesInput = {
   vendorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warranties?: Prisma.WarrantyUncheckedUpdateManyWithoutStockItemNestedInput
+  transferLines?: Prisma.TransferLineUncheckedUpdateManyWithoutStockItemNestedInput
+}
+
+export type StockItemCreateWithoutTransferLinesInput = {
+  id?: string
+  serialNumber?: string | null
+  quantity?: number
+  status?: $Enums.StockStatus
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
+  tenant: Prisma.TenantCreateNestedOneWithoutStockItemsInput
+  branch: Prisma.BranchCreateNestedOneWithoutStockItemsInput
+  product: Prisma.ProductCreateNestedOneWithoutStockItemsInput
+  vendorSupplier?: Prisma.SupplierCreateNestedOneWithoutVendorStockItemsInput
+  saleLines?: Prisma.SaleLineCreateNestedManyWithoutStockItemInput
+  warranties?: Prisma.WarrantyCreateNestedManyWithoutStockItemInput
+}
+
+export type StockItemUncheckedCreateWithoutTransferLinesInput = {
+  id?: string
+  tenantId: string
+  branchId: string
+  productId: string
+  serialNumber?: string | null
+  quantity?: number
+  status?: $Enums.StockStatus
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  lastScan?: string | null
+  vendorQuotedCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: string | null
+  transactionDate?: Date | string | null
+  saleAt?: string | null
+  vendorId?: string | null
+  vendorTrackingId?: string | null
+  receivedOn?: Date | string | null
+  saleLines?: Prisma.SaleLineUncheckedCreateNestedManyWithoutStockItemInput
+  warranties?: Prisma.WarrantyUncheckedCreateNestedManyWithoutStockItemInput
+}
+
+export type StockItemCreateOrConnectWithoutTransferLinesInput = {
+  where: Prisma.StockItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.StockItemCreateWithoutTransferLinesInput, Prisma.StockItemUncheckedCreateWithoutTransferLinesInput>
+}
+
+export type StockItemUpsertWithoutTransferLinesInput = {
+  update: Prisma.XOR<Prisma.StockItemUpdateWithoutTransferLinesInput, Prisma.StockItemUncheckedUpdateWithoutTransferLinesInput>
+  create: Prisma.XOR<Prisma.StockItemCreateWithoutTransferLinesInput, Prisma.StockItemUncheckedCreateWithoutTransferLinesInput>
+  where?: Prisma.StockItemWhereInput
+}
+
+export type StockItemUpdateToOneWithWhereWithoutTransferLinesInput = {
+  where?: Prisma.StockItemWhereInput
+  data: Prisma.XOR<Prisma.StockItemUpdateWithoutTransferLinesInput, Prisma.StockItemUncheckedUpdateWithoutTransferLinesInput>
+}
+
+export type StockItemUpdateWithoutTransferLinesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
+  costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutStockItemsNestedInput
+  branch?: Prisma.BranchUpdateOneRequiredWithoutStockItemsNestedInput
+  product?: Prisma.ProductUpdateOneRequiredWithoutStockItemsNestedInput
+  vendorSupplier?: Prisma.SupplierUpdateOneWithoutVendorStockItemsNestedInput
+  saleLines?: Prisma.SaleLineUpdateManyWithoutStockItemNestedInput
+  warranties?: Prisma.WarrantyUpdateManyWithoutStockItemNestedInput
+}
+
+export type StockItemUncheckedUpdateWithoutTransferLinesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  productId?: Prisma.StringFieldUpdateOperationsInput | string
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumStockStatusFieldUpdateOperationsInput | $Enums.StockStatus
+  costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastScan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorQuotedCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finalSalePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  buyer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  saleLines?: Prisma.SaleLineUncheckedUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUncheckedUpdateManyWithoutStockItemNestedInput
 }
 
@@ -1266,6 +1410,7 @@ export type StockItemCreateWithoutWarrantiesInput = {
   product: Prisma.ProductCreateNestedOneWithoutStockItemsInput
   vendorSupplier?: Prisma.SupplierCreateNestedOneWithoutVendorStockItemsInput
   saleLines?: Prisma.SaleLineCreateNestedManyWithoutStockItemInput
+  transferLines?: Prisma.TransferLineCreateNestedManyWithoutStockItemInput
 }
 
 export type StockItemUncheckedCreateWithoutWarrantiesInput = {
@@ -1288,6 +1433,7 @@ export type StockItemUncheckedCreateWithoutWarrantiesInput = {
   vendorTrackingId?: string | null
   receivedOn?: Date | string | null
   saleLines?: Prisma.SaleLineUncheckedCreateNestedManyWithoutStockItemInput
+  transferLines?: Prisma.TransferLineUncheckedCreateNestedManyWithoutStockItemInput
 }
 
 export type StockItemCreateOrConnectWithoutWarrantiesInput = {
@@ -1326,6 +1472,7 @@ export type StockItemUpdateWithoutWarrantiesInput = {
   product?: Prisma.ProductUpdateOneRequiredWithoutStockItemsNestedInput
   vendorSupplier?: Prisma.SupplierUpdateOneWithoutVendorStockItemsNestedInput
   saleLines?: Prisma.SaleLineUpdateManyWithoutStockItemNestedInput
+  transferLines?: Prisma.TransferLineUpdateManyWithoutStockItemNestedInput
 }
 
 export type StockItemUncheckedUpdateWithoutWarrantiesInput = {
@@ -1348,6 +1495,7 @@ export type StockItemUncheckedUpdateWithoutWarrantiesInput = {
   vendorTrackingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   saleLines?: Prisma.SaleLineUncheckedUpdateManyWithoutStockItemNestedInput
+  transferLines?: Prisma.TransferLineUncheckedUpdateManyWithoutStockItemNestedInput
 }
 
 export type StockItemCreateWithoutVendorSupplierInput = {
@@ -1370,6 +1518,7 @@ export type StockItemCreateWithoutVendorSupplierInput = {
   product: Prisma.ProductCreateNestedOneWithoutStockItemsInput
   saleLines?: Prisma.SaleLineCreateNestedManyWithoutStockItemInput
   warranties?: Prisma.WarrantyCreateNestedManyWithoutStockItemInput
+  transferLines?: Prisma.TransferLineCreateNestedManyWithoutStockItemInput
 }
 
 export type StockItemUncheckedCreateWithoutVendorSupplierInput = {
@@ -1392,6 +1541,7 @@ export type StockItemUncheckedCreateWithoutVendorSupplierInput = {
   receivedOn?: Date | string | null
   saleLines?: Prisma.SaleLineUncheckedCreateNestedManyWithoutStockItemInput
   warranties?: Prisma.WarrantyUncheckedCreateNestedManyWithoutStockItemInput
+  transferLines?: Prisma.TransferLineUncheckedCreateNestedManyWithoutStockItemInput
 }
 
 export type StockItemCreateOrConnectWithoutVendorSupplierInput = {
@@ -1460,6 +1610,7 @@ export type StockItemUpdateWithoutTenantInput = {
   vendorSupplier?: Prisma.SupplierUpdateOneWithoutVendorStockItemsNestedInput
   saleLines?: Prisma.SaleLineUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUpdateManyWithoutStockItemNestedInput
+  transferLines?: Prisma.TransferLineUpdateManyWithoutStockItemNestedInput
 }
 
 export type StockItemUncheckedUpdateWithoutTenantInput = {
@@ -1482,6 +1633,7 @@ export type StockItemUncheckedUpdateWithoutTenantInput = {
   receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   saleLines?: Prisma.SaleLineUncheckedUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUncheckedUpdateManyWithoutStockItemNestedInput
+  transferLines?: Prisma.TransferLineUncheckedUpdateManyWithoutStockItemNestedInput
 }
 
 export type StockItemUncheckedUpdateManyWithoutTenantInput = {
@@ -1544,6 +1696,7 @@ export type StockItemUpdateWithoutBranchInput = {
   vendorSupplier?: Prisma.SupplierUpdateOneWithoutVendorStockItemsNestedInput
   saleLines?: Prisma.SaleLineUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUpdateManyWithoutStockItemNestedInput
+  transferLines?: Prisma.TransferLineUpdateManyWithoutStockItemNestedInput
 }
 
 export type StockItemUncheckedUpdateWithoutBranchInput = {
@@ -1566,6 +1719,7 @@ export type StockItemUncheckedUpdateWithoutBranchInput = {
   receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   saleLines?: Prisma.SaleLineUncheckedUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUncheckedUpdateManyWithoutStockItemNestedInput
+  transferLines?: Prisma.TransferLineUncheckedUpdateManyWithoutStockItemNestedInput
 }
 
 export type StockItemUncheckedUpdateManyWithoutBranchInput = {
@@ -1628,6 +1782,7 @@ export type StockItemUpdateWithoutProductInput = {
   vendorSupplier?: Prisma.SupplierUpdateOneWithoutVendorStockItemsNestedInput
   saleLines?: Prisma.SaleLineUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUpdateManyWithoutStockItemNestedInput
+  transferLines?: Prisma.TransferLineUpdateManyWithoutStockItemNestedInput
 }
 
 export type StockItemUncheckedUpdateWithoutProductInput = {
@@ -1650,6 +1805,7 @@ export type StockItemUncheckedUpdateWithoutProductInput = {
   receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   saleLines?: Prisma.SaleLineUncheckedUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUncheckedUpdateManyWithoutStockItemNestedInput
+  transferLines?: Prisma.TransferLineUncheckedUpdateManyWithoutStockItemNestedInput
 }
 
 export type StockItemUncheckedUpdateManyWithoutProductInput = {
@@ -1712,6 +1868,7 @@ export type StockItemUpdateWithoutVendorSupplierInput = {
   product?: Prisma.ProductUpdateOneRequiredWithoutStockItemsNestedInput
   saleLines?: Prisma.SaleLineUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUpdateManyWithoutStockItemNestedInput
+  transferLines?: Prisma.TransferLineUpdateManyWithoutStockItemNestedInput
 }
 
 export type StockItemUncheckedUpdateWithoutVendorSupplierInput = {
@@ -1734,6 +1891,7 @@ export type StockItemUncheckedUpdateWithoutVendorSupplierInput = {
   receivedOn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   saleLines?: Prisma.SaleLineUncheckedUpdateManyWithoutStockItemNestedInput
   warranties?: Prisma.WarrantyUncheckedUpdateManyWithoutStockItemNestedInput
+  transferLines?: Prisma.TransferLineUncheckedUpdateManyWithoutStockItemNestedInput
 }
 
 export type StockItemUncheckedUpdateManyWithoutVendorSupplierInput = {
@@ -1764,11 +1922,13 @@ export type StockItemUncheckedUpdateManyWithoutVendorSupplierInput = {
 export type StockItemCountOutputType = {
   saleLines: number
   warranties: number
+  transferLines: number
 }
 
 export type StockItemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   saleLines?: boolean | StockItemCountOutputTypeCountSaleLinesArgs
   warranties?: boolean | StockItemCountOutputTypeCountWarrantiesArgs
+  transferLines?: boolean | StockItemCountOutputTypeCountTransferLinesArgs
 }
 
 /**
@@ -1793,6 +1953,13 @@ export type StockItemCountOutputTypeCountSaleLinesArgs<ExtArgs extends runtime.T
  */
 export type StockItemCountOutputTypeCountWarrantiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.WarrantyWhereInput
+}
+
+/**
+ * StockItemCountOutputType without action
+ */
+export type StockItemCountOutputTypeCountTransferLinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransferLineWhereInput
 }
 
 
@@ -1821,6 +1988,7 @@ export type StockItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   vendorSupplier?: boolean | Prisma.StockItem$vendorSupplierArgs<ExtArgs>
   saleLines?: boolean | Prisma.StockItem$saleLinesArgs<ExtArgs>
   warranties?: boolean | Prisma.StockItem$warrantiesArgs<ExtArgs>
+  transferLines?: boolean | Prisma.StockItem$transferLinesArgs<ExtArgs>
   _count?: boolean | Prisma.StockItemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["stockItem"]>
 
@@ -1903,6 +2071,7 @@ export type StockItemInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
   vendorSupplier?: boolean | Prisma.StockItem$vendorSupplierArgs<ExtArgs>
   saleLines?: boolean | Prisma.StockItem$saleLinesArgs<ExtArgs>
   warranties?: boolean | Prisma.StockItem$warrantiesArgs<ExtArgs>
+  transferLines?: boolean | Prisma.StockItem$transferLinesArgs<ExtArgs>
   _count?: boolean | Prisma.StockItemCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type StockItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1927,6 +2096,7 @@ export type $StockItemPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     vendorSupplier: Prisma.$SupplierPayload<ExtArgs> | null
     saleLines: Prisma.$SaleLinePayload<ExtArgs>[]
     warranties: Prisma.$WarrantyPayload<ExtArgs>[]
+    transferLines: Prisma.$TransferLinePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2347,6 +2517,7 @@ export interface Prisma__StockItemClient<T, Null = never, ExtArgs extends runtim
   vendorSupplier<T extends Prisma.StockItem$vendorSupplierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StockItem$vendorSupplierArgs<ExtArgs>>): Prisma.Prisma__SupplierClient<runtime.Types.Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   saleLines<T extends Prisma.StockItem$saleLinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StockItem$saleLinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SaleLinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   warranties<T extends Prisma.StockItem$warrantiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StockItem$warrantiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WarrantyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transferLines<T extends Prisma.StockItem$transferLinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StockItem$transferLinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransferLinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2859,6 +3030,30 @@ export type StockItem$warrantiesArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.WarrantyScalarFieldEnum | Prisma.WarrantyScalarFieldEnum[]
+}
+
+/**
+ * StockItem.transferLines
+ */
+export type StockItem$transferLinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TransferLine
+   */
+  select?: Prisma.TransferLineSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TransferLine
+   */
+  omit?: Prisma.TransferLineOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransferLineInclude<ExtArgs> | null
+  where?: Prisma.TransferLineWhereInput
+  orderBy?: Prisma.TransferLineOrderByWithRelationInput | Prisma.TransferLineOrderByWithRelationInput[]
+  cursor?: Prisma.TransferLineWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransferLineScalarFieldEnum | Prisma.TransferLineScalarFieldEnum[]
 }
 
 /**

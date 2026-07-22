@@ -442,3 +442,30 @@ export interface ImportBatchDetail extends ImportBatchSummary {
   uploadedBy: { name: string };
   rows: BulkImportRow[];
 }
+
+export interface AuditLogEntry {
+  id: string;
+  userName: string | null;
+  userRole: string;
+  action: string;
+  entityType: string | null;
+  entityId: string | null;
+  method: string;
+  path: string;
+  statusCode: number;
+  createdAt: string;
+}
+
+export interface AuditLogDetail extends AuditLogEntry {
+  requestBody: Record<string, any> | null;
+}
+
+export interface PaginatedAuditLogs {
+  data: AuditLogEntry[];
+  meta: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
