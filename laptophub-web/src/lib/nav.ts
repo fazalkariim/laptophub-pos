@@ -8,6 +8,7 @@ import {
   BarChart3,
   Settings,
   Truck,
+  ReceiptText,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -45,6 +46,12 @@ export const NAV_ITEMS: NavItem[] = [
     href: "/finance",
     icon: Wallet,
     allow: ["SUPER_ADMIN", "BRANCH_MANAGER", "ACCOUNTANT"],
+  },
+  {
+  label: 'Bills',
+  href: '/bills',
+  icon: ReceiptText,
+  allow: ['SUPER_ADMIN'],
   },
   {
     label: "Reports",

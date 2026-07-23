@@ -470,3 +470,109 @@ export interface PaginatedAuditLogs {
     totalPages: number;
   };
 }
+
+export interface BillSaleLine {
+  id?: string;
+  quantity: number;
+  price: string | number;
+  discount?: string | number;
+  serialNumber?: string | null;
+  product?: {
+    id?: string;
+    sku?: string | null;
+    model?: string | null;
+    brand?: string | null;
+  } | null;
+  stockItem?: {
+    id?: string;
+    serialNumber?: string | null;
+    product?: {
+      id?: string;
+      sku?: string | null;
+      model?: string | null;
+      brand?: string | null;
+    } | null;
+  } | null;
+}
+
+export interface BillPayment {
+  id?: string;
+  method: string;
+  amount: string | number;
+}
+
+export interface BillSale {
+  id: string;
+  branchId: string;
+  branchName?: string;
+  invoiceNumber: string;
+  createdAt: string;
+  subtotal: string | number;
+  totalDiscount: string | number;
+  total: string | number;
+  amountPaid?: string | number;
+  paidTotal?: string | number;
+  paymentStatus: string;
+  status: string;
+
+  customer?: {
+    id?: string;
+    name?: string | null;
+    contact?: string | null;
+  } | null;
+
+  salesman?: {
+    id?: string;
+    name?: string | null;
+    email?: string | null;
+  } | null;
+
+  lines?: BillSaleLine[];
+  payments?: BillPayment[];
+}
+
+export interface BillReceipt {
+  saleId?: string;
+  invoiceNumber: string;
+  createdAt?: string;
+  status?: string;
+  paymentStatus?: string;
+
+  branch?: {
+    id?: string;
+    name?: string;
+    address?: string | null;
+  } | null;
+
+  salesman?: {
+    id?: string;
+    name?: string | null;
+    email?: string | null;
+  } | null;
+
+  customer?: {
+    id?: string;
+    name?: string | null;
+    contact?: string | null;
+  } | null;
+
+  items?: Array<{
+    name?: string;
+    model?: string;
+    brand?: string | null;
+    sku?: string | null;
+    serialNumber?: string | null;
+    quantity: number;
+    price: string | number;
+    discount?: string | number;
+    total?: string | number;
+  }>;
+
+  payments?: BillPayment[];
+
+  subtotal: string | number;
+  totalDiscount: string | number;
+  total: string | number;
+  amountPaid?: string | number;
+  paidTotal?: string | number;
+}

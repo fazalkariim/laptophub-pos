@@ -6,14 +6,10 @@ import { useBranches } from '@/hooks/useBranches';
 import {
   useBranchProfit,
   useSalesSummary,
-  useExpenses,
-  useDeleteExpense,
   useFinanceDashboard,
 } from '@/hooks/useFinance';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { DateRangePicker } from '@/components/finance/DateRangePicker';
-import { ExpenseDialog } from '@/components/finance/ExpenseDialog';
-import { Button } from '@/components/ui/button';
 import { formatMoney } from '@/lib/format';
 import { Eye, EyeOff } from 'lucide-react';
 
@@ -37,9 +33,9 @@ export default function FinancePage() {
 
   const [from, setFrom] = useState(firstOfMonth());
   const [to, setTo] = useState(today());
-  const [tab, setTab] = useState<'overview' | 'expenses' | 'consolidated'>(
-    'overview'
-  );
+  const [tab, setTab] = useState<
+    'overview' | 'consolidated'
+  >('overview');
   const [showAmounts, setShowAmounts] = useState(false);
 
   const {
@@ -53,16 +49,11 @@ export default function FinancePage() {
     isError: summaryError,
   } = useSalesSummary(branchId, from, to);
   const {
-    data: expensesData,
-    isLoading: expensesLoading,
-    isError: expensesError,
-  } = useExpenses(branchId, from, to);
-  const {
     data: dashboard,
     isLoading: dashboardLoading,
     isError: dashboardError,
   } = useFinanceDashboard(from, to);
-  const deleteExpense = useDeleteExpense();
+
 
   return (
     <div>
@@ -98,14 +89,6 @@ export default function FinancePage() {
           }`}
         >
           Overview
-        </button>
-        <button
-          onClick={() => setTab('expenses')}
-          className={`px-4 py-2 text-sm font-medium ${
-            tab === 'expenses' ? 'border-b-2 border-primary text-foreground' : 'text-muted-foreground'
-          }`}
-        >
-          Expenses
         </button>
         {isSuperAdmin && (
           <button
@@ -187,73 +170,6 @@ export default function FinancePage() {
                   )}
                 </div>
               )}
-            </div>
-          )}
-        </>
-      )}
-
-      {tab === 'expenses' && (
-        <>
-          {!branchId ? (
-            <div className="rounded-lg border p-8 text-center text-sm text-muted-foreground">
-              Dekhne ke liye branch chunein.
-            </div>
-          ) : expensesLoading ? (
-            <div className="rounded-lg border p-8 text-center text-sm text-muted-foreground">
-              Load ho raha…
-            </div>
-          ) : expensesError ? (
-            <div className="rounded-lg border p-8 text-center text-sm text-red-500">
-              Expenses load nahi ho paye. Dobara try karein.
-            </div>
-          ) : (
-            <div>
-              <div className="mb-4 flex items-center justify-between">
-                <p className="text-sm text-muted-foreground">
-                  Total: {formatMoney(expensesData?.total ?? 0)} ({expensesData?.count ?? 0} entries)
-                </p>
-                <ExpenseDialog branchId={branchId} />
-              </div>
-              <div className="overflow-hidden rounded-lg border">
-                <table className="w-full text-sm">
-                  <thead className="bg-muted/50">
-                    <tr>
-                      <th className="px-4 py-3 text-left font-medium text-muted-foreground">Category</th>
-                      <th className="px-4 py-3 text-left font-medium text-muted-foreground">Amount</th>
-                      <th className="px-4 py-3 text-left font-medium text-muted-foreground">Date</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {expensesData?.expenses.map((exp) => (
-                      <tr key={exp.id} className="border-t">
-                        <td className="px-4 py-3">{exp.category}</td>
-                        <td className="px-4 py-3">{formatMoney(exp.amount)}</td>
-                        <td className="px-4 py-3">
-                          {new Date(exp.date).toLocaleDateString()}
-                        </td>
-                        <td className="px-4 py-3 text-right">
-                          <button
-                            onClick={() =>
-                              deleteExpense.mutate(exp.id, {
-                                onSuccess: () => {},
-                              })
-                            }
-                            className="text-xs text-red-500 hover:underline"
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {expensesData?.expenses.length === 0 && (
-                  <div className="p-8 text-center text-sm text-muted-foreground">
-                    Is period mein koi expense nahi hai.
-                  </div>
-                )}
-              </div>
             </div>
           )}
         </>
