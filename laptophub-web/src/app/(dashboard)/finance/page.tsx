@@ -12,6 +12,7 @@ import { PageHeader } from '@/components/shared/PageHeader';
 import { DateRangePicker } from '@/components/finance/DateRangePicker';
 import { formatMoney } from '@/lib/format';
 import { Eye, EyeOff } from 'lucide-react';
+import { ReceivablesTab } from '@/components/finance/ReceivablesTab';
 
 function firstOfMonth() {
   const d = new Date();
@@ -34,7 +35,7 @@ export default function FinancePage() {
   const [from, setFrom] = useState(firstOfMonth());
   const [to, setTo] = useState(today());
   const [tab, setTab] = useState<
-    'overview' | 'consolidated'
+  'overview' | 'receivable' | 'consolidated'
   >('overview');
   const [showAmounts, setShowAmounts] = useState(false);
 
@@ -81,26 +82,47 @@ export default function FinancePage() {
         }
       />
 
-      <div className="mb-6 flex gap-2 border-b">
-        <button
-          onClick={() => setTab('overview')}
-          className={`px-4 py-2 text-sm font-medium ${
-            tab === 'overview' ? 'border-b-2 border-primary text-foreground' : 'text-muted-foreground'
-          }`}
-        >
-          Overview
-        </button>
-        {isSuperAdmin && (
-          <button
-            onClick={() => setTab('consolidated')}
-            className={`px-4 py-2 text-sm font-medium ${
-              tab === 'consolidated' ? 'border-b-2 border-primary text-foreground' : 'text-muted-foreground'
-            }`}
-          >
-            Consolidated (All Branches)
-          </button>
-        )}
-      </div>
+      <div className="mb-6 flex gap-2 overflow-x-auto border-b">
+  <button
+    type="button"
+    onClick={() => setTab('overview')}
+    className={`whitespace-nowrap px-4 py-2 text-sm font-medium ${
+      tab === 'overview'
+        ? 'border-b-2 border-primary text-foreground'
+        : 'text-muted-foreground hover:text-foreground'
+    }`}
+  >
+    Overview
+  </button>
+
+  {isSuperAdmin && (
+    <button
+      type="button"
+      onClick={() => setTab('receivable')}
+      className={`whitespace-nowrap px-4 py-2 text-sm font-medium ${
+        tab === 'receivable'
+          ? 'border-b-2 border-primary text-foreground'
+          : 'text-muted-foreground hover:text-foreground'
+      }`}
+    >
+      Receivable
+    </button>
+  )}
+
+  {isSuperAdmin && (
+    <button
+      type="button"
+      onClick={() => setTab('consolidated')}
+      className={`whitespace-nowrap px-4 py-2 text-sm font-medium ${
+        tab === 'consolidated'
+          ? 'border-b-2 border-primary text-foreground'
+          : 'text-muted-foreground hover:text-foreground'
+      }`}
+    >
+      Consolidated (All Branches)
+    </button>
+  )}
+</div>
 
       {tab === 'overview' && (
         <>
@@ -173,6 +195,10 @@ export default function FinancePage() {
             </div>
           )}
         </>
+      )}
+
+      {tab === 'receivable' && isSuperAdmin && (
+        <ReceivablesTab />
       )}
 
       {tab === 'consolidated' && isSuperAdmin && (

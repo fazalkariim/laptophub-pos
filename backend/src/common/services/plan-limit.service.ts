@@ -7,7 +7,9 @@ export class PlanLimitService {
   constructor(private readonly prisma: PrismaService) {}
 
   // Branch banane se pehle check — limit tak to nahi pahunche?
-  async checkBranchLimit(tenantId: string) {
+  async checkBranchLimit(tenantId: string | null) {
+    if (!tenantId) return; // safety — tenant context nahi
+
     const tenant = await this.prisma.tenant.findFirst({ where: { id: tenantId } });
     if (!tenant) return; // safety
 
@@ -24,7 +26,9 @@ export class PlanLimitService {
   }
 
   // User banane se pehle check
-  async checkUserLimit(tenantId: string) {
+  async checkUserLimit(tenantId: string | null) {
+    if (!tenantId) return; // safety — tenant context nahi
+
     const tenant = await this.prisma.tenant.findFirst({ where: { id: tenantId } });
     if (!tenant) return;
 

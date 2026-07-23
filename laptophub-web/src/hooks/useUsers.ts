@@ -38,3 +38,44 @@ export function useDeleteUser() {
     },
   });
 }
+
+export function useResetUserPassword() {
+  return useMutation({
+    mutationFn: async ({
+      userId,
+      newPassword,
+    }: {
+      userId: string;
+      newPassword: string;
+    }) => {
+      const res = await apiClient.patch<{ message: string }>(
+        '/auth/reset-password',
+        { userId, newPassword }
+      );
+      return res.data;
+    },
+  });
+}
+
+export interface UpdateUserInput {
+  name?: string;
+  role?: string;
+  branchId?: string;
+  isActive?: boolean;
+}
+
+export function useUpdateUser() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      ...input
+    }: UpdateUserInput & { id: string }) => {
+      const res = await apiClient.patch<User>(`/users/${id}`, input);
+      return res.data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: queryKeys.users });
+    },
+  });
+}

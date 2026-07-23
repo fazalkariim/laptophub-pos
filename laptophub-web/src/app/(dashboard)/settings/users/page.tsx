@@ -8,7 +8,8 @@ import { DataTable, type Column } from '@/components/shared/DataTable';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { PaginationControls } from '@/components/shared/PaginationControls';
 import { CreateUserDialog } from '@/components/users/CreateUserDialog';
-import { DeleteUserDialog } from '@/components/users/DeleteUserDialog';
+import { EditUserDialog } from '@/components/users/EditUserDialog';
+import { ResetPasswordDialog } from '@/components/users/ResetPasswordDialog';
 import { Button } from '@/components/ui/button';
 import type { User } from '@/types';
 import { useBranches } from '@/hooks/useBranches';
@@ -17,8 +18,9 @@ export default function UsersPage() {
   const { data, isLoading, isError } = useUsers();
 
   const currentUser = useAuth((s) => s.user);
-  const [deleteTarget, setDeleteTarget] = useState<User | null>(null)
-  
+  const [editTarget, setEditTarget] = useState<User | null>(null);
+  const [resetTarget, setResetTarget] = useState<User | null>(null);
+
   const { data: branches } = useBranches();
   function branchName(branchId: string | null) {
     if (!branchId) return '—';
@@ -31,42 +33,44 @@ export default function UsersPage() {
   );
 
   const columns: Column<User>[] = [
+    { header: 'Name', cell: (user) => user.name ?? '—' },
+    { header: 'Email', cell: (user) => user.email },
+    { header: 'Role', cell: (user) => user.role },
+    { header: 'Branch', cell: (user) => branchName(user.branchId) },
     {
-      header: 'Name',
-      cell: (user) => user.name ?? '—',
-    },
-    {
-      header: 'Email',
-      cell: (user) => user.email,
-    },
-    {
-      header: 'Role',
-      cell: (user) => user.role,
-    },
-    {
-      header: 'Branch',
-      cell: (user) => branchName(user.branchId),
+      header: 'Status',
+      cell: (user) => (
+        <span
+          className={
+            (user as any).isActive === false
+              ? 'text-red-600'
+              : 'text-green-600'
+          }
+        >
+          {(user as any).isActive === false ? 'Inactive' : 'Active'}
+        </span>
+      ),
     },
     {
       header: 'Actions',
       cell: (user) => {
         const isCurrentUser = user.id === currentUser?.id;
 
-        if (isCurrentUser) {
-          return (
-           
-              <span className="text-xs text-muted-foreground">
-                Current user
-              </span>
-          
-          );
-        }
-
         return (
-            <Button variant="destructive" size="sm" onClick={() => setDeleteTarget(user)}>
-              Delete
+          <div className="flex justify-end gap-2">
+            <Button variant="inverted" size="sm" onClick={() => setEditTarget(user)}>
+              Edit
             </Button>
-        
+            {!isCurrentUser && (
+              <Button
+                variant="inverted"
+                size="sm"
+                onClick={() => setResetTarget(user)}
+              >
+                Reset Password
+              </Button>
+            )}
+          </div>
         );
       },
     },
@@ -98,9 +102,13 @@ export default function UsersPage() {
         />
       )}
 
-    <DeleteUserDialog
-        user={deleteTarget}
-        onOpenChange={(v) => !v && setDeleteTarget(null)}
+      <EditUserDialog
+        user={editTarget}
+        onOpenChange={(v) => !v && setEditTarget(null)}
+      />
+      <ResetPasswordDialog
+        user={resetTarget}
+        onOpenChange={(v) => !v && setResetTarget(null)}
       />
     </div>
   );

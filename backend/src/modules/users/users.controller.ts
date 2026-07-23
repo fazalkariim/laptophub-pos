@@ -5,8 +5,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
-import { Delete, Param } from '@nestjs/common';
+import { Delete, Param, Patch } from '@nestjs/common';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @ApiTags('users')
 @ApiBearerAuth()
@@ -34,5 +35,12 @@ export class UsersController {
   @ApiOperation({ summary: 'User delete karein (soft delete, sirf Super Admin)' })
   remove(@Param('id') id: string, @CurrentUser() user: any) {
     return this.usersService.remove(id, user);
+  }
+
+  @Patch(':id')
+  @Roles('SUPER_ADMIN')
+  @ApiOperation({ summary: 'User update karein (sirf Super Admin)' })
+  update(@Param('id') id: string, @Body() dto: UpdateUserDto, @CurrentUser() user: any) {
+    return this.usersService.update(id, dto, user);
   }
 }

@@ -576,3 +576,39 @@ export interface BillReceipt {
   amountPaid?: string | number;
   paidTotal?: string | number;
 }
+
+export type PaymentMethod =
+  | 'cash'
+  | 'card'
+  | 'transfer';
+
+export interface ReceivableSale {
+  id: string;
+  branchId: string;
+  branchName?: string;
+  invoiceNumber: string;
+  createdAt: string;
+
+  total: string | number;
+  amountPaid: string | number;
+  paymentStatus: string;
+  status: string;
+
+  customer?: {
+    id?: string;
+    name?: string | null;
+    contact?: string | null;
+  } | null;
+
+  salesman?: {
+    id?: string;
+    name?: string | null;
+    email?: string | null;
+  } | null;
+}
+
+export interface AddRemainingPaymentInput {
+  saleId: string;
+  method: PaymentMethod;
+  amount: number;
+}
