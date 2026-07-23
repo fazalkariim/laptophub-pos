@@ -66,3 +66,44 @@ export function getEntityType(path: string): string | null {
   };
   return map[segment] ?? null;
 }
+
+// Route prefix -> Prisma model name (before-state lookup ke liye)
+// Sirf wahi routes jinke liye "before" state pull karna hai
+export const BEFORE_STATE_LOOKUP: Record<string, string> = {
+  '/branches': 'branch',
+  '/users': 'user',
+  '/suppliers': 'supplier',
+  '/catalog': 'product',
+  '/customers': 'customer',
+  '/expenses': 'expense',
+};
+
+// Route se model+id nikaalta hai (agar lookup table mein hai)
+export function resolveBeforeLookup(
+  method: string,
+  path: string,
+  body: any,
+): { model: string; id: string } | null {
+  const cleanPath = path.split('?')[0];
+
+  // Special case: /inventory/adjustments — id body.stockItemId se aata hai
+  if (cleanPath === '/inventory/adjustments' && method === 'POST') {
+    if (body?.stockItemId) {
+      return { model: 'stockItem', id: body.stockItemId };
+    }
+    return null;
+  }
+
+  // Sirf PATCH/DELETE jinke route mein :id ho
+  if (method !== 'PATCH' && method !== 'DELETE') return null;
+
+  const segments = cleanPath.split('/').filter(Boolean); // e.g. ['branches', 'abc-123']
+  if (segments.length < 2) return null;
+
+  const prefix = `/${segments[0]}`;
+  const id = segments[segments.length - 1];
+  const model = BEFORE_STATE_LOOKUP[prefix];
+
+  if (!model || !id) return null;
+  return { model, id };
+}

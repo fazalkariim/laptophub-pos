@@ -452,12 +452,13 @@ export interface AuditLogEntry {
   entityId: string | null;
   method: string;
   path: string;
-  statusCode: number;
   createdAt: string;
 }
 
 export interface AuditLogDetail extends AuditLogEntry {
   requestBody: Record<string, any> | null;
+  beforeData: Record<string, any> | null;
+  afterData: Record<string, any> | null;
 }
 
 export interface PaginatedAuditLogs {

@@ -3,42 +3,63 @@ import {
 } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
 import { PrismaService } from '../../prisma/prisma.service';
-import { getActionLabel, getEntityType } from './audit-actions';
+import { getActionLabel, getEntityType, resolveBeforeLookup } from './audit-actions';
 import { redactBody } from './redact';
 
 @Injectable()
 export class AuditLogInterceptor implements NestInterceptor {
   constructor(private readonly prisma: PrismaService) {}
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<any>> {
     const req = context.switchToHttp().getRequest();
     const res = context.switchToHttp().getResponse();
 
-    // Audit-log ka apna read endpoint skip karo (khud ko log na kare)
+    // GET requests kabhi log nahi
+    if (req.method === 'GET') {
+      return next.handle();
+    }
+
+    // Audit-log ka apna endpoint skip
     if (req.path?.startsWith('/audit-logs')) {
       return next.handle();
     }
 
+    // "Before" state — handler chalne se PEHLE fetch karo
+    let beforeData: any = null;
+    try {
+      const lookup = resolveBeforeLookup(req.method, req.path, req.body);
+      if (lookup) {
+        const model = (this.prisma as any)[lookup.model];
+        if (model) {
+          const row = await model.findFirst({ where: { id: lookup.id } });
+          beforeData = row ? redactBody(row) : null;
+        }
+      }
+    } catch (e) {
+      // Before-fetch fail ho to bhi request na ruke
+      beforeData = null;
+    }
+
     return next.handle().pipe(
       tap({
-        next: (responseBody) => this.logRequest(req, res, responseBody),
-        error: () => this.logRequest(req, res, null), // errors bhi log karo (statusCode se pata chalega)
+        next: (responseBody) => this.logRequest(req, res, responseBody, beforeData),
+        error: () => this.logRequest(req, res, null, beforeData),
       }),
     );
   }
 
-private logRequest(req: any, res: any, responseBody: any) {
+  private logRequest(req: any, res: any, responseBody: any, beforeData: any) {
     const user = req.user;
-
-    // User hi nahi (public route) — skip
     if (!user) return;
+    if (!user.tenantId || !user.role || !user.userId) return;
 
-    // Zaroori fields missing hain (jaise refresh-token guard ka user shape) — silently skip
-    if (!user.tenantId || !user.role || !user.userId) {
-      return;
+    // "After" state decide karo method ke hisaab se
+    let afterData: any = null;
+    if (req.method === 'POST' || req.method === 'PATCH') {
+      afterData = responseBody ? redactBody(responseBody) : null;
     }
+    // DELETE ke liye afterData hamesha null (kuch bacha hi nahi)
 
-    // FIRE-AND-FORGET — await NAHI karna, real request ko block nahi karna
     (async () => {
       try {
         const entityType = getEntityType(req.path);
@@ -57,6 +78,8 @@ private logRequest(req: any, res: any, responseBody: any) {
             entityId,
             statusCode: res.statusCode,
             requestBody: redactBody(req.body),
+            beforeData,
+            afterData,
           } as any,
         });
       } catch (e) {

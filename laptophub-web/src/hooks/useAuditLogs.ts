@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import {useQuery , useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api-client';
 import type { PaginatedAuditLogs, AuditLogDetail } from '@/types';
 
@@ -39,5 +39,20 @@ export function useAuditLogDetail(id: string | null) {
       return res.data;
     },
     enabled: !!id,
+  });
+}
+
+export function useClearHistory() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (olderThan: '7d' | '15d' | 'all') => {
+      const res = await apiClient.delete<{ message: string; deletedCount: number }>(
+        `/audit-logs?olderThan=${olderThan}`
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['audit-logs'] });
+    },
   });
 }

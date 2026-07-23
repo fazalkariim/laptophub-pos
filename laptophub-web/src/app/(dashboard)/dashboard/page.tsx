@@ -2,9 +2,15 @@
 
 import { useAuth } from '@/lib/auth';
 import { useBranches } from '@/hooks/useBranches';
-import { useFinanceDashboard } from '@/hooks/useFinance';
-import { useSalesmanPerformance, useStockValuation } from '@/hooks/useReports';
+import { useFinanceDashboard, useSalesSummary } from '@/hooks/useFinance';
+import {
+  useSalesmanPerformance,
+  useStockValuation,
+  useBestSellingProducts,
+} from '@/hooks/useReports';
+import { useLowStockCount, useAllBranchesLowStockCount } from '@/hooks/useStock';
 import { formatMoney } from '@/lib/format';
+import { useState } from 'react';
 import {
   BarChart,
   Bar,
@@ -37,6 +43,9 @@ export default function DashboardPage() {
   const isManagerOrSalesman =
     user?.role === 'BRANCH_MANAGER' || user?.role === 'SALESMAN';
 
+  // Sirf Super Admin ke liye branch-filter
+  const [selectedBranch, setSelectedBranch] = useState<string>(''); // '' = All Branches
+
   const { data: dashboard } = useFinanceDashboard(fromMonth, toToday);
   const { data: perf } = useSalesmanPerformance(
     isManagerOrSalesman ? user?.branchId ?? null : null,
@@ -47,29 +56,50 @@ export default function DashboardPage() {
     user?.role === 'BRANCH_MANAGER' ? user?.branchId ?? null : null
   );
 
+  // Total Items Sold — filter ke hisaab se
+  const { data: bestSelling } = useBestSellingProducts(
+    isSuperAdmin ? selectedBranch || null : null,
+    fromMonth,
+    toToday
+  );
+  const totalItemsSold =
+    bestSelling?.products.reduce((sum, p) => sum + p.unitsSold, 0) ?? 0;
+
+  // Amount Collected — specific branch ke liye alag call
+  const { data: branchSalesSummary } = useSalesSummary(
+    isSuperAdmin && selectedBranch ? selectedBranch : null,
+    fromMonth,
+    toToday
+  );
+
+  // Low Stock — specific branch, ya sab branches sum
+  const { data: singleBranchLowStock } = useLowStockCount(
+    isSuperAdmin && selectedBranch ? selectedBranch : null
+  );
+  const { data: allBranchesLowStock } = useAllBranchesLowStockCount(
+    isSuperAdmin && !selectedBranch ? branches?.map((b) => b.id) ?? [] : []
+  );
+
   if (!user) return null;
 
   const myPerf = perf?.salesmen.find((s) => s.salesmanId === user.id);
 
-  const cards = buildCards(user.role, {
-    todaysSales: myPerf ? formatMoney(myPerf.totalSold) : '—',
-    myTransactions: myPerf ? String(myPerf.salesCount) : '—',
-    branchStockValue: valuation ? formatMoney(valuation.summary.totalValue) : '—',
-    totalSalesAllBranches: dashboard ? formatMoney(dashboard.overall.revenue) : '—',
-    netCashPosition: dashboard ? formatMoney(dashboard.overall.netCashPosition) : '—',
-    activeBranches: branches ? String(branches.length) : '—',
-    pendingPayables: dashboard ? formatMoney(dashboard.overall.payable) : '—',
-    expensesThisMonth: dashboard ? formatMoney(dashboard.overall.expenses) : '—',
-  });
+  // Amount collected: All-branches view -> dashboard.overall; specific branch -> sales-summary
+  const amountCollected =
+    isSuperAdmin && selectedBranch
+      ? branchSalesSummary?.summary.totalCollected
+      : dashboard?.overall.collected;
 
-  // Revenue-by-branch chart data (sirf Super Admin)
-  const branchRevenueData =
-    dashboard?.perBranch.map((b) => ({
-      name: b.branchName,
-      Revenue: b.revenue,
-    })) ?? [];
+  const lowStockValue =
+    isSuperAdmin && selectedBranch ? singleBranchLowStock : allBranchesLowStock;
 
-  // Cash-position breakdown (sirf Super Admin)
+  // Revenue-by-branch chart — filter ke hisaab se
+  const branchRevenueData = (
+    selectedBranch
+      ? dashboard?.perBranch.filter((b) => b.branchId === selectedBranch)
+      : dashboard?.perBranch
+  )?.map((b) => ({ name: b.branchName, Revenue: b.revenue })) ?? [];
+
   const cashBreakdownData = dashboard
     ? [
         { name: 'Collected', value: dashboard.overall.collected },
@@ -78,22 +108,58 @@ export default function DashboardPage() {
       ].filter((d) => d.value > 0)
     : [];
 
-    const CASH_COLORS: Record<string, string> = {
+  const CASH_COLORS: Record<string, string> = {
     Collected: '#2563eb',
     Receivable: '#d97706',
     Payable: '#dc2626',
   };
 
+  const cards = buildCards(user.role, {
+    todaysSales: myPerf ? formatMoney(myPerf.totalSold) : '—',
+    myTransactions: myPerf ? String(myPerf.salesCount) : '—',
+    branchStockValue: valuation ? formatMoney(valuation.summary.totalValue) : '—',
+    totalSalesAllBranches: selectedBranch
+      ? formatMoney(
+          dashboard?.perBranch.find((b) => b.branchId === selectedBranch)
+            ?.revenue ?? 0
+        )
+      : dashboard
+        ? formatMoney(dashboard.overall.revenue)
+        : '—',
+    amountCollected: amountCollected != null ? formatMoney(amountCollected) : '—',
+    activeBranches: branches ? String(branches.length) : '—',
+    pendingPayables: dashboard ? formatMoney(dashboard.overall.payable) : '—',
+    expensesThisMonth: dashboard ? formatMoney(dashboard.overall.expenses) : '—',
+    totalItemsSold: String(totalItemsSold),
+    lowStockItems: lowStockValue != null ? String(lowStockValue) : '—',
+  });
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold">
-          Welcome back, {(user.name ?? user.email).split(' ')[0]}
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Here's what's happening in your workspace.
-        </p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold">
+            Welcome back, {(user.name ?? user.email).split(' ')[0]}
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Here's what's happening in your workspace.
+          </p>
+        </div>
+
+        {isSuperAdmin && (
+          <select
+            value={selectedBranch}
+            onChange={(e) => setSelectedBranch(e.target.value)}
+            className="rounded-md border px-3 py-2 text-sm"
+          >
+            <option value="">Sab Branches</option>
+            {branches?.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.name}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -107,7 +173,6 @@ export default function DashboardPage() {
 
       {isSuperAdmin && dashboard && (
         <div className="grid gap-4 lg:grid-cols-2">
-          {/* Revenue by Branch */}
           <div className="rounded-lg border p-4">
             <h3 className="mb-4 text-center text-sm font-medium text-muted-foreground">
               Revenue by Branch (This Month)
@@ -139,84 +204,96 @@ export default function DashboardPage() {
             )}
           </div>
 
-         {/* Cash Position Breakdown */}
           <div className="rounded-lg border p-4">
             <h3 className="mb-4 text-center text-sm font-medium text-muted-foreground">
               Cash Position Breakdown
             </h3>
-            {cashBreakdownData.length === 0 ? (
-              <p className="py-8 text-center text-sm text-muted-foreground">
-                Is mahine koi cash-position data nahi hai.
-              </p>
-            ) : (
-              <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:justify-center">
-                {/* Donut chart with center total */}
-                <div className="relative h-[220px] w-[220px] shrink-0">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={cashBreakdownData}
-                        dataKey="value"
-                        nameKey="name"
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={65}
-                        outerRadius={95}
-                        paddingAngle={2}
-                        stroke="none"
-                      >
-                        {cashBreakdownData.map((entry, i) => (
-                          <Cell key={i} fill={CASH_COLORS[entry.name] ?? '#a1a1aa'} />
-                        ))}
-                      </Pie>
-                      <Tooltip
-                        formatter={(value) => formatMoney(Number(value ?? 0))}
-                        contentStyle={{
-                          borderRadius: 8,
-                          border: '1px solid #e4e4e7',
-                          fontSize: 12,
-                        }}
-                      />
-                    </PieChart>
-                  </ResponsiveContainer>
-                  {/* Center label overlay */}
-                  <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-xs text-muted-foreground">Net Position</span>
-                    <span className="text-lg font-semibold">
-                      {formatMoney(dashboard?.overall.netCashPosition ?? 0)}
-                    </span>
+            {(() => {
+              // Branch-specific: sirf Collected+Receivable (Payable per-branch nahi hai)
+              const branchEntry = selectedBranch
+                ? dashboard?.perBranch.find((b) => b.branchId === selectedBranch)
+                : null;
+
+              const data = selectedBranch
+                ? [
+                    { name: 'Collected', value: branchEntry?.collected ?? 0 },
+                    { name: 'Receivable', value: branchEntry?.receivable ?? 0 },
+                  ].filter((d) => d.value > 0)
+                : cashBreakdownData;
+
+              const centerLabel = selectedBranch ? 'Net Profit' : 'Net Position';
+              const centerValue = selectedBranch
+                ? branchEntry?.netProfit ?? 0
+                : dashboard?.overall.netCashPosition ?? 0;
+
+              if (data.length === 0) {
+                return (
+                  <p className="py-8 text-center text-sm text-muted-foreground">
+                    Is mahine koi cash-position data nahi hai.
+                  </p>
+                );
+              }
+
+              return (
+                <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:justify-center">
+                  <div className="relative h-[220px] w-[220px] shrink-0">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={data}
+                          dataKey="value"
+                          nameKey="name"
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={65}
+                          outerRadius={95}
+                          paddingAngle={2}
+                          stroke="none"
+                        >
+                          {data.map((entry, i) => (
+                            <Cell key={i} fill={CASH_COLORS[entry.name] ?? '#a1a1aa'} />
+                          ))}
+                        </Pie>
+                        <Tooltip formatter={(value) => formatMoney(Number(value ?? 0))} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                    <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="text-xs text-muted-foreground">{centerLabel}</span>
+                      <span className="text-lg font-semibold">
+                        {formatMoney(centerValue)}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="w-full space-y-2 sm:w-auto sm:min-w-[180px]">
+                    {data.map((entry) => {
+                      const total = data.reduce((s, d) => s + d.value, 0);
+                      const pct = total > 0 ? Math.round((entry.value / total) * 100) : 0;
+                      return (
+                        <div
+                          key={entry.name}
+                          className="flex items-center justify-between gap-3 text-sm"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span
+                              className="h-2.5 w-2.5 rounded-full"
+                              style={{
+                                backgroundColor: CASH_COLORS[entry.name] ?? '#a1a1aa',
+                              }}
+                            />
+                            <span className="text-muted-foreground">{entry.name}</span>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-medium">{formatMoney(entry.value)}</div>
+                            <div className="text-xs text-muted-foreground">{pct}%</div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
-
-                {/* Custom legend */}
-                <div className="w-full space-y-2 sm:w-auto sm:min-w-[180px]">
-                  {cashBreakdownData.map((entry) => {
-                    const total = cashBreakdownData.reduce((s, d) => s + d.value, 0);
-                    const pct = total > 0 ? Math.round((entry.value / total) * 100) : 0;
-                    return (
-                      <div
-                        key={entry.name}
-                        className="flex items-center justify-between gap-3 text-sm"
-                      >
-                        <div className="flex items-center gap-2">
-                          <span
-                            className="h-2.5 w-2.5 rounded-full"
-                            style={{
-                              backgroundColor: CASH_COLORS[entry.name] ?? '#a1a1aa',
-                            }}
-                          />
-                          <span className="text-muted-foreground">{entry.name}</span>
-                        </div>
-                        <div className="text-right">
-                          <div className="font-medium">{formatMoney(entry.value)}</div>
-                          <div className="text-xs text-muted-foreground">{pct}%</div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+              );
+            })()}
           </div>
         </div>
       )}
@@ -229,10 +306,12 @@ interface CardValues {
   myTransactions: string;
   branchStockValue: string;
   totalSalesAllBranches: string;
-  netCashPosition: string;
+  amountCollected: string;
   activeBranches: string;
   pendingPayables: string;
   expensesThisMonth: string;
+  totalItemsSold: string;
+  lowStockItems: string;
 }
 
 function buildCards(role: string, v: CardValues) {
@@ -243,16 +322,17 @@ function buildCards(role: string, v: CardValues) {
   const manager = [
     ...salesman,
     { title: 'Branch Stock Value', value: v.branchStockValue },
-    { title: 'Low Stock Items', value: '—' },
+    { title: 'Low Stock Items', value: v.lowStockItems },
   ];
   const admin = [
-    { title: 'Total Sales (All Branches)', value: v.totalSalesAllBranches },
-    { title: 'Net Cash Position', value: v.netCashPosition },
+    { title: 'Total Sales', value: v.totalSalesAllBranches },
+    { title: 'Amount Collected', value: v.amountCollected },
     { title: 'Active Branches', value: v.activeBranches },
-    { title: 'Low Stock Items', value: '—' },
+    { title: 'Low Stock Items', value: v.lowStockItems },
+    { title: 'Total Items Sold', value: v.totalItemsSold },
   ];
   const accountant = [
-    { title: 'Net Cash Position', value: v.netCashPosition },
+    { title: 'Amount Collected', value: v.amountCollected },
     { title: 'Pending Payables', value: v.pendingPayables },
     { title: 'Expenses (This Month)', value: v.expensesThisMonth },
   ];

@@ -525,6 +525,8 @@ model AuditLog {
   entityId    String?
   statusCode  Int
   requestBody Json?
+  beforeData  Json?    // ← naya
+  afterData   Json?    // ← naya
   createdAt   DateTime @default(now())
 
   tenant Tenant @relation(fields: [tenantId], references: [id])

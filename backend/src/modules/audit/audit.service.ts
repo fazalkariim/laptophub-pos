@@ -61,4 +61,25 @@ export class AuditService {
     }
     return log; // requestBody yahan included (poora record)
   }
+
+  // Time-scoped hard delete
+  async deleteOld(tenantId: string, olderThan: string) {
+    const where: any = { tenantId };
+
+    if (olderThan === '7d') {
+      where.createdAt = { lt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) };
+    } else if (olderThan === '15d') {
+      where.createdAt = { lt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000) };
+    } else if (olderThan !== 'all') {
+      // Galat value — safety default: kuch delete na karo
+      where.id = 'never-matches';
+    }
+    // 'all' → sirf tenantId filter, sab delete
+
+    const result = await this.prisma.auditLog.deleteMany({ where });
+    return {
+      message: `${result.count} history entries permanently delete kar di gayin`,
+      deletedCount: result.count,
+    };
+  }
 }

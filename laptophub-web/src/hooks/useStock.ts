@@ -114,3 +114,39 @@ export function useBulkScan(branchId: string | null) {
     },
   });
 }
+
+function extractCount(payload: any): number {
+  if (Array.isArray(payload)) return payload.length;
+  if (Array.isArray(payload?.data)) return payload.data.length;
+  if (typeof payload?.count === 'number') return payload.count;
+  return 0;
+}
+
+export function useLowStockCount(branchId: string | null) {
+  return useQuery({
+    queryKey: ['low-stock', branchId],
+    queryFn: async () => {
+      const res = await apiClient.get(`/inventory/branch/${branchId}/low-stock`);
+      return extractCount(res.data);
+    },
+    enabled: !!branchId,
+  });
+}
+
+export function useAllBranchesLowStockCount(branchIds: string[]) {
+  return useQuery({
+    queryKey: ['low-stock', 'all', branchIds],
+    queryFn: async () => {
+      const results = await Promise.all(
+        branchIds.map((id) =>
+          apiClient
+            .get(`/inventory/branch/${id}/low-stock`)
+            .then((res) => extractCount(res.data))
+            .catch(() => 0)
+        )
+      );
+      return results.reduce((sum, c) => sum + c, 0);
+    },
+    enabled: branchIds.length > 0,
+  });
+}

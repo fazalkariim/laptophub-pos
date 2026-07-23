@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards,Delete } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { AuditService } from './audit.service';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
@@ -38,5 +38,12 @@ export class AuditController {
   @ApiOperation({ summary: 'Ek audit log ka poora detail (requestBody samet)' })
   findOne(@Param('id') id: string, @CurrentUser() user: any) {
     return this.auditService.findOne(id, user.tenantId);
+  }
+
+  @Delete()
+  @Roles('SUPER_ADMIN')
+  @ApiOperation({ summary: 'History entries permanently delete karein (time-scoped)' })
+  deleteOld(@CurrentUser() user: any, @Query('olderThan') olderThan: string) {
+    return this.auditService.deleteOld(user.tenantId, olderThan ?? 'all');
   }
 }
